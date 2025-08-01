@@ -13,13 +13,16 @@
                 -->
                 <set-variable name="signed-client-assertion" value="@{
                     var certificate = context.Deployment.Certificates.First().Value;
-                    var rsa = certificate.GetRSAPrivateKey();
+                    
+                    // Get SHA256 thumbprint of the certificate
+                    var sha256 = SHA256.Create();
+                    byte[] hash = sha256.ComputeHash(certificate.RawData);
 
                     var header = new JObject
                     {
                         { "alg", "PS256" },
                         { "typ", "JWT" },
-                        { "x5t#S256", ConvertToBase64Url2(certificate.GetCertHash()) }
+                        { "x5t#S256", ConvertToBase64Url2(hash) }
                     };
 
                     var jwtLifetimeInSeconds = 600; // Ten minutes
@@ -45,6 +48,7 @@
                     var bytesToSign = System.Text.Encoding.UTF8.GetBytes(stringToSign);
                     
                     // Sign the data using the certificate's private key with PSS padding
+                    var rsa = certificate.GetRSAPrivateKey();
                     var signature = rsa.SignData(bytesToSign, System.Security.Cryptography.HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pss);
                     var signatureBase64UrlEncoded = ConvertToBase64Url2(signature);
                     
@@ -62,9 +66,9 @@
                         // The JWT spec requires Base64Url encoding, which is similar to Base64 
                         // but uses '-' and '_' instead of '+' and '/' and omits padding characters ('=').
                         return Convert.ToBase64String(bytes)
-                            .Split('=').First() // Remove == padding at the end of the string
                             .Replace("+", "-")
-                            .Replace("/", "_");
+                            .Replace("/", "_")
+                            .TrimEnd('=');
                     }
                 }" />
 
