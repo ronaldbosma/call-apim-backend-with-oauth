@@ -150,6 +150,6 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
 
   dependsOn: [
     apimGatewayUrlNamedValue
-    oauthTargetResourceNamedValue
+    oauthScopeNamedValue
   ]
 }
