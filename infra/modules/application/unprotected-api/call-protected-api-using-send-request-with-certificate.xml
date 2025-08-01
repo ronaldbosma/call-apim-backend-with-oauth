@@ -1,0 +1,84 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Get access token from cache if it exists-->
+        <cache-lookup-value key="access-token-from-certificate" variable-name="access-token" />
+
+        <choose>
+            <!-- Retrieve new access token from Entra ID if it was not found in the cache. -->
+            <when condition="@(!context.Variables.ContainsKey("access-token"))">
+                <set-variable name="signed-client-assertion" value="@{
+                    return "";
+                }" />
+
+                <send-request mode="new" timeout="20" response-variable-name="get-access-token-response" ignore-error="false">
+                    <set-url>https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/x-www-form-urlencoded</value>
+                    </set-header>
+                    <set-body>@{
+                        var clientId = "{{client-id}}";
+                        var clientAssertion = (string)context.Variables["signed-client-assertion"];
+                        var clientAssertionType = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
+                        var scope = "{{oauth-scope}}";
+                        var grantType = "client_credentials";
+
+                        return $"client_id={clientId}&client_assertion_type={clientAssertionType}&client_assertion={clientAssertion}&scope={scope}&grant_type={grantType}";
+                    }</set-body>
+                </send-request>
+
+                <set-variable name="get-access-token-response-body" value="@(((IResponse)context.Variables["get-access-token-response"])?.Body?.As<JObject>())" />
+
+                <choose>
+                    <!-- If access token retrieval succeeds (HTTP 200), extract the access token and cache it -->
+                    <when condition="@(((IResponse)context.Variables["get-access-token-response"])?.StatusCode == 200)">
+                        <set-variable name="access-token" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<string>("access_token"))" />
+                        <set-variable name="access-token-expires-in" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<int>("expires_in"))" />
+                        <cache-store-value key="access-token-from-certificate" value="@((string)context.Variables["access-token"])" 
+                                           duration="@((int)(0.9 * (int)context.Variables["access-token-expires-in"]))" />
+                    </when>
+
+                    <!-- If access token retrieval fails, log error and return a 500 Internal Server Error -->
+                    <otherwise>
+                        <trace source="getAccessTokenUsingCertificate" severity="error">
+                            <message>Retrieval of access token failed</message>
+                            <metadata name="ResponseBody" value="@{
+                                // To prevent exceptions, ensure the message is never null or empty by always providing a value.
+                                var body = ((JObject)context.Variables["get-access-token-response-body"])?.ToString();
+                                return !string.IsNullOrWhiteSpace(body) ? body : "<empty>";
+                            }" />
+                            <metadata name="ResponseStatusCode" value="@{
+                                // To prevent exceptions, ensure the status code is never null or empty by always providing a value.
+                                var statusCode = ((IResponse)context.Variables["get-access-token-response"])?.StatusCode.ToString();
+                                return !string.IsNullOrWhiteSpace(statusCode) ? statusCode : "<empty>";
+                            }" />
+                        </trace>
+
+                        <return-response>
+                            <set-status code="500" reason="Internal Server Error" />
+                            <set-body />
+                        </return-response>
+                    </otherwise>
+                </choose>
+            </when>
+        </choose>
+
+        <set-header name="Authorization" exists-action="override">
+            <value>@("Bearer " + (string)context.Variables["access-token"])</value>
+        </set-header>
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+</policies>

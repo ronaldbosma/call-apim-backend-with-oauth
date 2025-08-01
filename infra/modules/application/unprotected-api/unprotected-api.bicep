@@ -145,6 +145,24 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
+  // Operation that will call the protected API using the send-request policy with a certificate (client_assertion)
+  resource callProtectedApiUsingSendRequestWithCertificate 'operations' = {
+    name: 'call-protected-api-using-send-request-with-certificate'
+    properties: {
+      displayName: 'Call Protected API using Send Request with Certificate'
+      method: 'GET'
+      urlTemplate: '/call-protected-api-using-send-request-with-certificate'
+    }
+  
+    resource policies 'policies' = {
+      name: 'policy'
+      properties: {
+        format: 'rawxml'
+        value: loadTextContent('call-protected-api-using-send-request-with-certificate.xml')
+      }
+    }
+  }
+
   dependsOn: [
     apimGatewayUrlNamedValue
     oauthScopeNamedValue
