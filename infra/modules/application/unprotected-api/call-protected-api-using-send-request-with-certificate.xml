@@ -28,7 +28,21 @@
                         { "nbf", nbf.ToString() },
                         { "sub", "{{client-id}}" }
                     };
-                    return claims.ToString();
+
+                    var headerBase64UrlEncoded = ConvertToBase64Url(header.ToString(Newtonsoft.Json.Formatting.None));
+                    var claimsBase64UrlEncoded = ConvertToBase64Url(claims.ToString(Newtonsoft.Json.Formatting.None));
+                    return string.Concat(headerBase64UrlEncoded, ".", claimsBase64UrlEncoded);
+
+                    string ConvertToBase64Url(string input)
+                    {
+                        var bytes = System.Text.Encoding.UTF8.GetBytes(input);
+                        // The JWT spec requires Base64Url encoding, which is similar to Base64 
+                        // but uses '-' and '_' instead of '+' and '/' and omits padding characters ('=').
+                        return Convert.ToBase64String(bytes)
+                            .Split('=').First() // Remove == padding at the end of the string
+                            .Replace("+", "-")
+                            .Replace("/", "_");
+                    }
                 }" />
                 <return-response>
                     <set-status code="200" />
