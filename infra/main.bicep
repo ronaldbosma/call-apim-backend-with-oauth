@@ -137,6 +137,18 @@ module apiManagement 'modules/services/api-management.bicep' = {
   ]
 }
 
+module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
+  scope: resourceGroup
+  params: {
+    principalId: deployer().objectId
+    isAdmin: true
+    keyVaultName: keyVaultName
+  }
+  dependsOn: [
+    keyVault
+  ]
+}
+
 //=============================================================================
 // Application Resources
 //=============================================================================
