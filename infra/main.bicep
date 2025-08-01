@@ -52,7 +52,7 @@ var appInsightsSettings = {
 }
 
 var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
-var clientSecretName = 'client-secret-${instanceId}'
+var clientSecretName = '${clientAppRegistrationName}-secret'
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
 
