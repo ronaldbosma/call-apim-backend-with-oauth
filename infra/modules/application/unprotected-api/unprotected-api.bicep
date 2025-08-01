@@ -35,6 +35,10 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
   name: apiManagementServiceName
 }
 
+resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
+  name: keyVaultName
+}
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -65,6 +69,19 @@ resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06
   properties: {
     displayName: 'client-id'
     value: clientId
+  }
+}
+
+// The actual client secret is created in a postprovision hook, but in order to reference it in the named value,
+// we need to create a placeholder secret in Key Vault.
+// The @onlyIfNotExists() decorator will ensure that the value is not overwritten if it already exists.
+@onlyIfNotExists()
+resource clientSecretSecret 'Microsoft.KeyVault/vaults/secrets@2024-11-01' = {
+  name: clientSecretName
+  parent: keyVault
+  properties: {
+    contentType: 'text/plain'
+    value: '...placeholder...'
   }
 }
 
