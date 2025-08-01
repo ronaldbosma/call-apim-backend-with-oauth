@@ -147,7 +147,7 @@ module apiManagement 'modules/services/api-management.bicep' = {
 // Application Resources
 //=============================================================================
 
-module protectedApi 'modules/application/protected-api.bicep' = {
+module protectedApi 'modules/application/protected-api/protected-api.bicep' = {
   name: 'protectedApi'
   scope: resourceGroup
   params: {
