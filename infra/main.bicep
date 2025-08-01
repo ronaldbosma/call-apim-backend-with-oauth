@@ -176,5 +176,6 @@ output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
 output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsName
+output AZURE_KEY_VAULT_NAME string = keyVaultName
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = appInsightsSettings.logAnalyticsWorkspaceName
 output AZURE_RESOURCE_GROUP string = resourceGroupName
