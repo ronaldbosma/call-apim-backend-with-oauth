@@ -6,6 +6,11 @@
         <choose>
             <!-- Retrieve new access token from Entra ID if it was not found in the cache. -->
             <when condition="@(!context.Variables.ContainsKey("access-token"))">
+                <!--
+                    Create a JWT assertion signed with the client's certificate.
+                    Documentation: https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials
+                    Code based on: https://github.com/Azure/api-management-policy-snippets/blob/0161da51fe54d4a0f199c1d995ad2656c90951c7/examples/Get%20OAuth2%20access%20token%20from%20AAD%20using%20client%20id%20and%20certificate%20using%20key%20vault%20manage%20identity.xml
+                -->
                 <set-variable name="signed-client-assertion" value="@{
                     var certificate = context.Deployment.Certificates.First().Value;
                     var header = new JObject
