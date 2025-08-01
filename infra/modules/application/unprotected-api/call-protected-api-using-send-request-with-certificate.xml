@@ -14,7 +14,21 @@
                         { "typ", "JWT" },
                         { "x5t#S256", certificate.Thumbprint }
                     };
-                    return header.ToString();
+
+                    var jwtLifetimeInSeconds = 600; // Ten minutes
+                    var nbf = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
+                    var exp = (DateTimeOffset.UtcNow + TimeSpan.FromSeconds(jwtLifetimeInSeconds)).ToUnixTimeSeconds().ToString();
+
+                    var claims = new JObject
+                    {
+                        { "aud", "https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token" },
+                        { "exp", exp.ToString() },
+                        { "iss", "{{client-id}}" },
+                        { "jti", Guid.NewGuid().ToString() },
+                        { "nbf", nbf.ToString() },
+                        { "sub", "{{client-id}}" }
+                    };
+                    return claims.ToString();
                 }" />
                 <return-response>
                     <set-status code="200" />
