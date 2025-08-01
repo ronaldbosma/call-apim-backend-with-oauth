@@ -19,7 +19,7 @@
                     {
                         { "alg", "PS256" },
                         { "typ", "JWT" },
-                        { "x5t#S256", certificate.Thumbprint }
+                        { "x5t#S256", ConvertToBase64Url2(certificate.GetCertHash()) }
                     };
 
                     var jwtLifetimeInSeconds = 600; // Ten minutes
