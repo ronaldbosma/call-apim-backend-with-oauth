@@ -13,34 +13,52 @@
                 -->
                 <set-variable name="signed-client-assertion" value="@{
                     var certificate = context.Deployment.Certificates.First().Value;
+                    var rsa = certificate.GetRSAPrivateKey();
+
                     var header = new JObject
                     {
-                        { "alg", "RS256" },
+                        { "alg", "PS256" },
                         { "typ", "JWT" },
                         { "x5t#S256", certificate.Thumbprint }
                     };
 
                     var jwtLifetimeInSeconds = 600; // Ten minutes
-                    var nbf = DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString();
-                    var exp = (DateTimeOffset.UtcNow + TimeSpan.FromSeconds(jwtLifetimeInSeconds)).ToUnixTimeSeconds().ToString();
+                    var nbf = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    var exp = (DateTimeOffset.UtcNow + TimeSpan.FromSeconds(jwtLifetimeInSeconds)).ToUnixTimeSeconds();
 
                     var claims = new JObject
                     {
                         { "aud", "https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token" },
-                        { "exp", exp.ToString() },
+                        { "exp", exp },
                         { "iss", "{{client-id}}" },
                         { "jti", Guid.NewGuid().ToString() },
-                        { "nbf", nbf.ToString() },
-                        { "sub", "{{client-id}}" }
+                        { "nbf", nbf },
+                        { "sub", "{{client-id}}" },
+                        { "iat", nbf }
                     };
 
                     var headerBase64UrlEncoded = ConvertToBase64Url(header.ToString(Newtonsoft.Json.Formatting.None));
                     var claimsBase64UrlEncoded = ConvertToBase64Url(claims.ToString(Newtonsoft.Json.Formatting.None));
-                    return string.Concat(headerBase64UrlEncoded, ".", claimsBase64UrlEncoded);
+                    
+                    // Create the string to be signed: header.payload
+                    var stringToSign = string.Concat(headerBase64UrlEncoded, ".", claimsBase64UrlEncoded);
+                    var bytesToSign = System.Text.Encoding.UTF8.GetBytes(stringToSign);
+                    
+                    // Sign the data using the certificate's private key with PSS padding
+                    var signature = rsa.SignData(bytesToSign, System.Security.Cryptography.HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pss);
+                    var signatureBase64UrlEncoded = ConvertToBase64Url2(signature);
+                    
+                    // Return the complete JWT: header.payload.signature
+                    return string.Concat(stringToSign, ".", signatureBase64UrlEncoded);
 
                     string ConvertToBase64Url(string input)
                     {
                         var bytes = System.Text.Encoding.UTF8.GetBytes(input);
+                        return ConvertToBase64Url2(bytes);
+                    }
+                            
+                    string ConvertToBase64Url2(byte[] bytes)
+                    {
                         // The JWT spec requires Base64Url encoding, which is similar to Base64 
                         // but uses '-' and '_' instead of '+' and '/' and omits padding characters ('=').
                         return Convert.ToBase64String(bytes)
