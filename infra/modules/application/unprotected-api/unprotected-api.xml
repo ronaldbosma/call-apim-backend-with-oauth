@@ -1,0 +1,29 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Forward requests to the Protected API. -->
+        <set-backend-service base-url="{{apim-gateway-url}}/protected" />
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <!-- 
+            Return info about the error so we can see why it happened.
+            Don't do this in a real world scenario, as it might reveal too much information.
+        -->
+        <set-header name="Content-Type" exists-action="override">
+            <value>application/json</value>
+        </set-header>
+        <set-body>@(JsonConvert.SerializeObject(context.LastError))</set-body>
+
+        <base />
+    </on-error>
+</policies>
