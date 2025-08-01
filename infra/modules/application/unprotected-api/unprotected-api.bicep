@@ -63,6 +63,15 @@ resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedVal
   }
 }
 
+resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'oauth-scope'
+  parent: apiManagementService
+  properties: {
+    displayName: 'oauth-scope'
+    value: '${oauthTargetResource}/.default'
+  }
+}
+
 resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
   name: 'client-id'
   parent: apiManagementService
