@@ -73,6 +73,16 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
+  // Operation that will call the protected API without any authentication
+  resource callProtectedApiWithoutAuthentication 'operations' = {
+    name: 'call-protected-api-without-authentication'
+    properties: {
+      displayName: 'Call Protected API without Authentication'
+      method: 'GET'
+      urlTemplate: '/call-protected-api-without-authentication'
+    }
+  }
+
   // Operation that will call the protected API using the send-request policy with a secret
   resource callProtectedApiUsingSendRequestWithSecret 'operations' = {
     name: 'call-protected-api-using-send-request-with-secret'

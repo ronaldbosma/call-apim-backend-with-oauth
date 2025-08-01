@@ -2,6 +2,12 @@
 # Test requests for the Unprotected API
 #=============================================================================
 
+# Operation that will call the protected API without any authentication (should fail)
+GET https://{{apimHostname}}/unprotected/call-protected-api-without-authentication HTTP/1.1
+
+###
+
+
 # Operation that will call the protected API using the send-request policy with a secret
 GET https://{{apimHostname}}/unprotected/call-protected-api-using-send-request-with-secret HTTP/1.1
 
