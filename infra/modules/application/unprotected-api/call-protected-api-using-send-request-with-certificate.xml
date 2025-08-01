@@ -1,16 +1,25 @@
 <policies>
     <inbound>
         <base />
-
         <!-- Get access token from cache if it exists-->
         <cache-lookup-value key="access-token-from-certificate" variable-name="access-token" />
-
         <choose>
             <!-- Retrieve new access token from Entra ID if it was not found in the cache. -->
             <when condition="@(!context.Variables.ContainsKey("access-token"))">
                 <set-variable name="signed-client-assertion" value="@{
-                    return "";
+                    var certificate = context.Deployment.Certificates.First().Value;
+                    var header = new JObject
+                    {
+                        { "alg", "RS256" },
+                        { "typ", "JWT" },
+                        { "x5t#S256", certificate.Thumbprint }
+                    };
+                    return header.ToString();
                 }" />
+                <return-response>
+                    <set-status code="200" />
+                    <set-body>@((string)context.Variables["signed-client-assertion"])</set-body>
+                </return-response>
 
                 <send-request mode="new" timeout="20" response-variable-name="get-access-token-response" ignore-error="false">
                     <set-url>https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token</set-url>
@@ -39,7 +48,7 @@
                         <cache-store-value key="access-token-from-certificate" value="@((string)context.Variables["access-token"])" 
                                            duration="@((int)(0.9 * (int)context.Variables["access-token-expires-in"]))" />
                     </when>
-
+                    
                     <!-- If access token retrieval fails, log error and return a 500 Internal Server Error -->
                     <otherwise>
                         <trace source="getAccessTokenUsingCertificate" severity="error">
@@ -56,15 +65,18 @@
                             }" />
                         </trace>
 
+                        <!-- We're returning the response of the failed token retrieval. Don't do this in production as it will expose sensitive information. -->
                         <return-response>
                             <set-status code="500" reason="Internal Server Error" />
-                            <set-body />
+                            <set-header name="Content-Type" exists-action="override">
+                                <value>application/json</value>
+                            </set-header>
+                            <set-body>@(((JObject)context.Variables["get-access-token-response-body"])?.ToString())</set-body>
                         </return-response>
                     </otherwise>
                 </choose>
             </when>
         </choose>
-
         <set-header name="Authorization" exists-action="override">
             <value>@("Bearer " + (string)context.Variables["access-token"])</value>
         </set-header>
