@@ -15,10 +15,11 @@ $secretDisplayName = "Client Secret"
 $secretExpirationMonths = 3
 
 
-# Check if the client secret already exists in Key Vault and stop if it does
-$existingSecret = az keyvault secret show --vault-name $keyVaultName --name $secretName --query "value" --output tsv 2>$null
-if ($LASTEXITCODE -eq 0 -and $existingSecret) {
-    Write-Host "Client secret '$secretName' already exists in Key Vault. Skipping creation."
+# Check if the app registration already has a client secret and stop if it does
+$credentials = az ad app credential list --id $clientAppId | ConvertFrom-Json
+$existingSecret = $credentials | Where-Object { $_.displayName -eq $secretDisplayName }
+if ($existingSecret.Count -gt 0) {
+    Write-Host "App registration '$clientAppId' already has a client secret with display name '$secretDisplayName'. Skipping creation."
     exit 0
 }
 
