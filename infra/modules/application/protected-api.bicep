@@ -78,24 +78,6 @@ resource protectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' 
     }
   }
 
-  resource postOperation 'operations' = {
-    name: 'post'
-    properties: {
-      displayName: 'Post'
-      method: 'POST'
-      urlTemplate: '/'
-    }
-  }
-
-  resource deleteOperation 'operations' = {
-    name: 'delete'
-    properties: {
-      displayName: 'Delete'
-      method: 'DELETE'
-      urlTemplate: '/'
-    }
-  }
-
   dependsOn: [
     tenantIdNamedValue
     oauthAudienceNamedValue

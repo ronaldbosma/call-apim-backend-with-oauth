@@ -2,19 +2,6 @@
     <inbound>
         <base />
 
-        <!-- Set the role that the client should have assigned based on the HTTP method of the operation. -->
-        <choose>
-            <when condition="@(context.Request.Method == "GET")">
-                <set-variable name="role" value="Sample.Read" />
-            </when>
-            <when condition="@(context.Request.Method == "DELETE")">
-                <set-variable name="role" value="Sample.Delete" />
-            </when>
-            <otherwise>
-                <set-variable name="role" value="Sample.Write" />
-            </otherwise>
-        </choose>
-
         <!-- 
             Verify that the JWT token was issued by the correct tenant and app registration (audience)
             and that the client has the correct role in the roles claim.
@@ -26,7 +13,7 @@
             </audiences>
             <required-claims>
                 <claim name="roles" match="any">
-                    <value>@((string)context.Variables["role"])</value>
+                    <value>Sample.Read</value>
                 </claim>
             </required-claims>
         </validate-jwt>
