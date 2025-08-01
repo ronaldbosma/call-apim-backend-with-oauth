@@ -1,5 +1,5 @@
 //=============================================================================
-// Protect API Management with OAuth
+// Call API Management backend with OAuth
 // Source: https://github.com/ronaldbosma/call-apim-backend-with-oauth
 //=============================================================================
 
