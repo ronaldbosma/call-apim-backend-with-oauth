@@ -1,28 +1,8 @@
 #=============================================================================
-# Test requests for the Protected API
+# Test requests for the Unprotected API
 #=============================================================================
 
-# Get a token from Entra ID
-# @name getToken
-POST https://login.microsoftonline.com/{{tenantId}}/oauth2/v2.0/token HTTP/1.1
-Content-Type: application/x-www-form-urlencoded
-
-client_id={{clientId}}&client_secret={{clientSecret}}&grant_type=client_credentials&scope={{clientScope}}
+# Operation that will call the protected API using the send-request policy with a secret
+GET https://{{apimHostname}}/unprotected/call-protected-api-using-send-request-with-secret HTTP/1.1
 
 ###
-
-# Call GET on Protected API with token
-GET https://{{apimHostname}}/protected HTTP/1.1
-Authorization: Bearer {{getToken.response.body.access_token}}
-
-###
-
-# Call POST on Protected API with token
-POST https://{{apimHostname}}/protected HTTP/1.1
-Authorization: Bearer {{getToken.response.body.access_token}}
-
-###
-
-# Call DELETE on Protected API with token (this should fail because the client is not assigned the Sample.Delete role)
-DELETE https://{{apimHostname}}/protected HTTP/1.1
-Authorization: Bearer {{getToken.response.body.access_token}}
