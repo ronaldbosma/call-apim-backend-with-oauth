@@ -1,5 +1,5 @@
-# This script generates a client secret for the client app registration in Entra ID
-# and stores it securely in Azure Key Vault.
+# This script generates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault.
+# If the client app registration already has a client secret with the same display name, it will not create a new one.
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
 az account set --subscription $env:AZURE_SUBSCRIPTION_ID
