@@ -3,7 +3,7 @@
     "extensibility": true
   },
   "extensions": {
-    "microsoftGraphV1": "br:mcr.microsoft.com/bicep/extensions/microsoftgraph/v1.0:0.2.0-preview"
+    "microsoftGraphV1": "br:mcr.microsoft.com/bicep/extensions/microsoftgraph/v1.0:1.0.0"
   },
   "analyzers": {
     "core": {
