@@ -49,7 +49,7 @@
                     
                     // Sign the data using the certificate's private key with PSS padding
                     var rsa = certificate.GetRSAPrivateKey();
-                    var signature = rsa.SignData(bytesToSign, System.Security.Cryptography.HashAlgorithmName.SHA256, System.Security.Cryptography.RSASignaturePadding.Pss);
+                    var signature = rsa.SignData(bytesToSign, HashAlgorithmName.SHA256, RSASignaturePadding.Pss);
                     var signatureBase64UrlEncoded = ConvertToBase64Url2(signature);
                     
                     // Return the complete JWT: header.payload.signature
