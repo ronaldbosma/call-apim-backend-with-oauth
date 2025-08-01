@@ -22,7 +22,7 @@
                     {
                         { "alg", "PS256" },
                         { "typ", "JWT" },
-                        { "x5t#S256", ConvertToBase64Url2(hash) }
+                        { "x5t#S256", ConvertBytesToBase64Url(hash) }
                     };
 
                     var jwtLifetimeInSeconds = 600; // Ten minutes
@@ -40,8 +40,8 @@
                         { "iat", nbf }
                     };
 
-                    var headerBase64UrlEncoded = ConvertToBase64Url(header.ToString(Newtonsoft.Json.Formatting.None));
-                    var claimsBase64UrlEncoded = ConvertToBase64Url(claims.ToString(Newtonsoft.Json.Formatting.None));
+                    var headerBase64UrlEncoded = ConvertJObjectToBase64Url(header);
+                    var claimsBase64UrlEncoded = ConvertJObjectToBase64Url(claims);
                     
                     // Create the string to be signed: header.payload
                     var stringToSign = string.Concat(headerBase64UrlEncoded, ".", claimsBase64UrlEncoded);
@@ -50,18 +50,21 @@
                     // Sign the data using the certificate's private key with PSS padding
                     var rsa = certificate.GetRSAPrivateKey();
                     var signature = rsa.SignData(bytesToSign, HashAlgorithmName.SHA256, RSASignaturePadding.Pss);
-                    var signatureBase64UrlEncoded = ConvertToBase64Url2(signature);
+                    var signatureBase64UrlEncoded = ConvertBytesToBase64Url(signature);
                     
                     // Return the complete JWT: header.payload.signature
                     return string.Concat(stringToSign, ".", signatureBase64UrlEncoded);
 
-                    string ConvertToBase64Url(string input)
+
+                    // Helper methods to convert data to Base64Url encoded string
+                    string ConvertJObjectToBase64Url(JObject input)
                     {
-                        var bytes = System.Text.Encoding.UTF8.GetBytes(input);
-                        return ConvertToBase64Url2(bytes);
+                        var jsonString = input.ToString(Newtonsoft.Json.Formatting.None);
+                        var bytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
+                        return ConvertBytesToBase64Url(bytes);
                     }
                             
-                    string ConvertToBase64Url2(byte[] bytes)
+                    string ConvertBytesToBase64Url(byte[] bytes)
                     {
                         // The JWT spec requires Base64Url encoding, which is similar to Base64 
                         // but uses '-' and '_' instead of '+' and '/' and omits padding characters ('=').
