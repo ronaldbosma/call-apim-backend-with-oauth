@@ -4,6 +4,7 @@
 
         <!-- Forward requests to the Protected API. -->
         <set-backend-service base-url="{{apim-gateway-url}}/protected" />
+        <rewrite-uri template="/" />
     </inbound>
 
     <backend>
