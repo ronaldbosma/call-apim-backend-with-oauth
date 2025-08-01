@@ -57,22 +57,6 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
       allowedMemberTypes: [ 'Application' ]
       isEnabled: true
     }
-    {
-      id: guid(tenantId, 'Sample.Write')
-      description: 'Sample write application role'
-      displayName: 'Sample.Write'
-      value: 'Sample.Write'
-      allowedMemberTypes: [ 'Application' ]
-      isEnabled: true
-    }
-    {
-      id: guid(tenantId, 'Sample.Delete')
-      description: 'Sample delete application role'
-      displayName: 'Sample.Delete'
-      value: 'Sample.Delete'
-      allowedMemberTypes: [ 'Application' ]
-      isEnabled: true
-    }
   ]
 
   owners: {

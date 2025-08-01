@@ -56,9 +56,3 @@ resource assignSampleRead 'Microsoft.Graph/appRoleAssignedTo@v1.0' = {
   appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, 'Sample.Read')
   principalId: clientServicePrincipal.id
 }
-
-resource assignSampleWrite 'Microsoft.Graph/appRoleAssignedTo@v1.0' = {
-  resourceId: apimServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, 'Sample.Write')
-  principalId: clientServicePrincipal.id
-}
