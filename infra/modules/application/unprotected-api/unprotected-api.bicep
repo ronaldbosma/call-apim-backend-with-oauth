@@ -24,9 +24,6 @@ param keyVaultName string
 @description('The ID of the client used for connecting to the protected API.')
 param clientId string
 
-@description('The name of the client secret in Key Vault used for connecting to the protected API')
-param clientSecretName string
-
 //=============================================================================
 // Existing resources
 //=============================================================================
@@ -77,7 +74,7 @@ resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06
 // The @onlyIfNotExists() decorator will ensure that the value is not overwritten if it already exists.
 @onlyIfNotExists()
 resource clientSecretSecret 'Microsoft.KeyVault/vaults/secrets@2024-11-01' = {
-  name: clientSecretName
+  name: 'client-secret'
   parent: keyVault
   properties: {
     contentType: 'text/plain'
@@ -91,7 +88,7 @@ resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@202
   properties: {
     displayName: 'client-secret'
     keyVault: {
-      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, clientSecretName)
+      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, clientSecretSecret.name)
     }
     secret: true    
   }

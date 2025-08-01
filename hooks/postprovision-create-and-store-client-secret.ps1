@@ -1,4 +1,5 @@
 # This script generates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault.
+# It will also refresh the client secret named value in API Management to ensure the latest secret is used.
 # If the client app registration already has a client secret with the same display name, it will not create a new one.
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
@@ -10,7 +11,7 @@ if ($LASTEXITCODE -ne 0) {
 
 $clientAppId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID
 $keyVaultName = $env:AZURE_KEY_VAULT_NAME
-$secretName = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_SECRET_NAME
+$secretName = "client-secret"
 $secretDisplayName = "Client Secret"
 $secretExpirationMonths = 3
 
@@ -42,3 +43,11 @@ if ($LASTEXITCODE -ne 0) {
 
 Write-Host "Client secret stored successfully in Key Vault as: $secretName"
 
+
+# Update the client secret named value in API Management to force a refresh of the secret
+# If we don't do this, the initial placeholder value will be used instead of the actual secret
+az apim nv update --named-value-id $secretName --resource-group $env:AZURE_RESOURCE_GROUP --service-name $env:AZURE_API_MANAGEMENT_NAME --output none
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to refresh client secret named value in API Management."
+}
+Write-Host "Refreshed client secret named value in API Management successfully."

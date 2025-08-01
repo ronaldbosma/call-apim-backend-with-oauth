@@ -52,7 +52,6 @@ var appInsightsSettings = {
 }
 
 var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
-var clientSecretName = '${clientAppRegistrationName}-secret'
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
 
@@ -172,7 +171,6 @@ module unprotectedApi 'modules/application/unprotected-api/unprotected-api.bicep
     oauthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
     keyVaultName: keyVaultName
     clientId: clientAppRegistration.outputs.appId
-    clientSecretName: clientSecretName
   }
   dependsOn: [
     apiManagement
@@ -188,7 +186,6 @@ output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appReg
 output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
 output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
 output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId
-output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_SECRET_NAME string = clientSecretName
 
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
