@@ -6,7 +6,6 @@
 // Imports
 //=============================================================================
 
-import * as helpers from '../../functions/helpers.bicep'
 import { apiManagementSettingsType } from '../../types/settings.bicep'
 
 //=============================================================================
