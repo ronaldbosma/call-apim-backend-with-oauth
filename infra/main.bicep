@@ -52,6 +52,7 @@ var appInsightsSettings = {
 }
 
 var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
+var clientSecretName = 'client-secret-${instanceId}'
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
 
@@ -172,6 +173,7 @@ output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appReg
 output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
 output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
 output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId
+output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_SECRET_NAME string = clientSecretName
 
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
