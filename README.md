@@ -1,4 +1,4 @@
-# Protect API Management with OAuth
+# Call API Management backend with OAuth
 
 > [!IMPORTANT]  
 > This azd template is still under development.
@@ -29,10 +29,10 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.  
 
     ```cmd
-    azd init --template ronaldbosma/protect-apim-with-oauth
+    azd init --template ronaldbosma/call-apim-backend-with-oauth
     ```
 
-    When prompted, specify the name of the environment, for example, `oauth`. The maximum length is 32 characters.
+    When prompted, specify the name of the environment, for example, `oauthbackend`. The maximum length is 32 characters.
 
 1. Run the `azd auth login` command to authenticate to your Azure subscription _(if you haven't already)_.
 
@@ -82,12 +82,12 @@ If you've previously deployed this template and deleted the resources, you may e
 ```json
 {
     "code": "DeploymentFailed",
-    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauth-sdc-wiyuo/providers/Microsoft.Resources/deployments/apiManagement",
+    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/apiManagement",
     "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
     "details": [
         {
             "code": "ServiceAlreadyExistsInSoftDeletedState",
-            "message": "Api service apim-oauth-sdc-wiyuo was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
+            "message": "Api service apim-oauthbackend-sdc-wiyuo was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
         }
     ]
 }
@@ -96,5 +96,5 @@ If you've previously deployed this template and deleted the resources, you may e
 Use the [az apim deletedservice list](https://learn.microsoft.com/en-us/cli/azure/apim/deletedservice?view=azure-cli-latest#az-apim-deletedservice-list) Azure CLI command to list all deleted API Management services in your subscription. Locate the service that is in a soft-deleted state and purge it using the [purge](https://learn.microsoft.com/en-us/cli/azure/apim/deletedservice?view=azure-cli-latest#az-apim-deletedservice-purge) command. See the following example:
 
 ```cmd
-az apim deletedservice purge --location "swedencentral" --service-name "apim-oauth-sdc-wiyuo"
+az apim deletedservice purge --location "swedencentral" --service-name "apim-oauthbackend-sdc-wiyuo"
 ```

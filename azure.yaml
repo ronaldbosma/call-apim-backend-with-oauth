@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
 
-name: protect-apim-with-oauth
+name: call-apim-backend-with-oauth
 metadata:
-  template: protect-apim-with-oauth@0.0.1
+  template: call-apim-backend-with-oauth@0.0.1
 hooks:
   predown:
     - shell: pwsh

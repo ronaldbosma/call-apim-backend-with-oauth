@@ -1,6 +1,6 @@
 //=============================================================================
 // Protect API Management with OAuth
-// Source: https://github.com/ronaldbosma/protect-apim-with-oauth
+// Source: https://github.com/ronaldbosma/call-apim-backend-with-oauth
 //=============================================================================
 
 targetScope = 'subscription'
@@ -57,7 +57,7 @@ var invalidClientAppRegistrationName = getResourceName('appRegistration', enviro
 
 var tags = {
   'azd-env-name': environmentName
-  'azd-template': 'ronaldbosma/protect-apim-with-oauth'
+  'azd-template': 'ronaldbosma/call-apim-backend-with-oauth'
 }
 
 //=============================================================================
