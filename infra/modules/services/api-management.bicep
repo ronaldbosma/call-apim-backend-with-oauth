@@ -24,6 +24,9 @@ param apiManagementSettings apiManagementSettingsType
 @description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
 
+@description('The name of the Key Vault that will contain the secrets')
+param keyVaultName string
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -60,6 +63,17 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
   }
   identity: {
     type: 'SystemAssigned'
+  }
+}
+
+// Assign roles to system-assigned identity of API Management
+
+module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
+  name: 'assignRolesToApimSystemAssignedIdentity'
+  params: {
+    principalId: apiManagementService.identity.principalId
+    principalType: 'ServicePrincipal'
+    keyVaultName: keyVaultName
   }
 }
 

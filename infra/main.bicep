@@ -53,6 +53,8 @@ var appInsightsSettings = {
 
 var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
 
+var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
+
 var tags = {
   'azd-env-name': environmentName
   'azd-template': 'ronaldbosma/call-apim-backend-with-oauth'
@@ -104,6 +106,16 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
   tags: tags
 }
 
+module keyVault 'modules/services/key-vault.bicep' = {
+  name: 'keyVault'
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    keyVaultName: keyVaultName
+  }
+}
+
 module appInsights 'modules/services/app-insights.bicep' = {
   name: 'appInsights'
   scope: resourceGroup
@@ -122,9 +134,11 @@ module apiManagement 'modules/services/api-management.bicep' = {
     tags: tags
     apiManagementSettings: apiManagementSettings
     appInsightsName: appInsightsSettings.appInsightsName
+    keyVaultName: keyVaultName
   }
   dependsOn: [
     appInsights
+    keyVault
   ]
 }
 
