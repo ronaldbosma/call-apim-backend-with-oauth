@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/Azure/azure-dev/main/schemas/v1.0/azure.yaml.json
+
+name: protect-apim-with-oauth
+metadata:
+  template: protect-apim-with-oauth@0.0.1
+hooks:
+  predown:
+    - shell: pwsh
+      run: ./hooks/predown-remove-app-registrations.ps1
+      interactive: true
+    - shell: pwsh
+      run: ./hooks/predown-remove-law.ps1
+      interactive: true
+requiredVersions: 
+  azd: ">= 1.12.0"  # azd version 1.12.0 or later is required because of the use of the Bicep deployer() function

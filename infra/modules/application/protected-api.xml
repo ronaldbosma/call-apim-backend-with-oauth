@@ -1,0 +1,70 @@
+<policies>
+    <inbound>
+        <base />
+
+        <!-- Set the role that the client should have assigned based on the HTTP method of the operation. -->
+        <choose>
+            <when condition="@(context.Request.Method == "GET")">
+                <set-variable name="role" value="Sample.Read" />
+            </when>
+            <when condition="@(context.Request.Method == "DELETE")">
+                <set-variable name="role" value="Sample.Delete" />
+            </when>
+            <otherwise>
+                <set-variable name="role" value="Sample.Write" />
+            </otherwise>
+        </choose>
+
+        <!-- 
+            Verify that the JWT token was issued by the correct tenant and app registration (audience)
+            and that the client has the correct role in the roles claim.
+        -->
+        <validate-jwt header-name="Authorization">
+            <openid-config url="https://login.microsoftonline.com/{{tenant-id}}/v2.0/.well-known/openid-configuration" />
+            <audiences>
+                <audience>{{oauth-audience}}</audience>
+            </audiences>
+            <required-claims>
+                <claim name="roles" match="any">
+                    <value>@((string)context.Variables["role"])</value>
+                </claim>
+            </required-claims>
+        </validate-jwt>
+
+        <!-- 
+            Return the JWT token that was received in the Authorization header.
+            Don't do this in a real world scenario, as it would expose the token to the client.
+         -->
+        <return-response>
+            <set-status code="200" />
+            <set-header name="Content-Type" exists-action="override">
+                <value>application/json</value>
+            </set-header>
+            <set-body>@{
+                var jwt = context.Request.Headers.GetValueOrDefault("Authorization").AsJwt();
+                return JsonConvert.SerializeObject(jwt);
+            }</set-body>
+        </return-response>
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <!-- 
+            Return info about the error so we can see why it was raised.
+            Don't do this in a real world scenario, as it might reveal too much information.
+        -->
+        <set-header name="Content-Type" exists-action="override">
+            <value>application/json</value>
+        </set-header>
+        <set-body>@(JsonConvert.SerializeObject(context.LastError))</set-body>
+
+        <base />
+    </on-error>
+</policies>
