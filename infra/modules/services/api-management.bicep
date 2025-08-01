@@ -24,7 +24,7 @@ param apiManagementSettings apiManagementSettingsType
 @description('The name of the App Insights instance that will be used by API Management')
 param appInsightsName string
 
-@description('The name of the Key Vault that will contain the secrets')
+@description('The name of the Key Vault that contains the secrets')
 param keyVaultName string
 
 //=============================================================================

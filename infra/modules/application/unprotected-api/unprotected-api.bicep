@@ -18,6 +18,15 @@ param apiManagementServiceName string
 @description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
 param oauthTargetResource string
 
+@description('The name of the Key Vault that contains the secrets')
+param keyVaultName string
+
+@description('The ID of the client used for connecting to the protected API.')
+param clientId string
+
+@description('The name of the client secret in Key Vault used for connecting to the protected API')
+param clientSecretName string
+
 //=============================================================================
 // Existing resources
 //=============================================================================
@@ -47,6 +56,27 @@ resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedVal
   properties: {
     displayName: 'oauth-target-resource'
     value: oauthTargetResource
+  }
+}
+
+resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-id'
+  parent: apiManagementService
+  properties: {
+    displayName: 'client-id'
+    value: clientId
+  }
+}
+
+resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-secret'
+  parent: apiManagementService
+  properties: {
+    displayName: 'client-secret'
+    keyVault: {
+      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, clientSecretName)
+    }
+    secret: true    
   }
 }
 

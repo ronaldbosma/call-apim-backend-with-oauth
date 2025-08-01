@@ -170,6 +170,9 @@ module unprotectedApi 'modules/application/unprotected-api/unprotected-api.bicep
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
     oauthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
+    keyVaultName: keyVaultName
+    clientId: clientAppRegistration.outputs.appId
+    clientSecretName: clientSecretName
   }
   dependsOn: [
     apiManagement
