@@ -4,6 +4,10 @@ name: call-apim-backend-with-oauth
 metadata:
   template: call-apim-backend-with-oauth@0.0.1
 hooks:
+  postprovision:
+    - shell: pwsh
+      run: ./hooks/postprovision-create-and-store-client-secret.ps1
+      interactive: true
   predown:
     - shell: pwsh
       run: ./hooks/predown-remove-app-registrations.ps1

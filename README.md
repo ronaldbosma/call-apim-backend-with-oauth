@@ -62,6 +62,11 @@ azd down --purge
 
 This template has several hooks that are executed at different stages of the deployment process. The following hooks are included:
 
+- [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1): 
+  This PowerShell script is executed after the resources are provisioned. 
+  It creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+  Currently, we can't create secrets for an app registration with Bicep.
+
 - [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
   This PowerShell script is executed before the resources are removed. 
   It removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
