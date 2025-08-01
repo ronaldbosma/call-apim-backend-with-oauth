@@ -67,10 +67,6 @@
                             .Replace("/", "_");
                     }
                 }" />
-                <return-response>
-                    <set-status code="200" />
-                    <set-body>@((string)context.Variables["signed-client-assertion"])</set-body>
-                </return-response>
 
                 <send-request mode="new" timeout="20" response-variable-name="get-access-token-response" ignore-error="false">
                     <set-url>https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token</set-url>
@@ -121,6 +117,9 @@
                             <set-status code="500" reason="Internal Server Error" />
                             <set-header name="Content-Type" exists-action="override">
                                 <value>application/json</value>
+                            </set-header>
+                            <set-header name="Signed-Client-Assertion" exists-action="override">
+                                <value>@((string)context.Variables["signed-client-assertion"])</value>
                             </set-header>
                             <set-body>@(((JObject)context.Variables["get-access-token-response-body"])?.ToString())</set-body>
                         </return-response>
