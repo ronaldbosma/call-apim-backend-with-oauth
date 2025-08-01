@@ -8,10 +8,10 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 
-$appId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID
+$clientAppId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID
 $keyVaultName = $env:AZURE_KEY_VAULT_NAME
 $secretName = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_SECRET_NAME
-$displayName = "Client Secret"
+$secretDisplayName = "Client Secret"
 $secretExpirationMonths = 3
 
 
@@ -25,12 +25,12 @@ if ($LASTEXITCODE -eq 0 -and $existingSecret) {
 
 # Create client secret for the app registration
 $endDate = (Get-Date).AddMonths($secretExpirationMonths).ToString("yyyy-MM-ddTHH:mm:ssZ")
-$secretResult = az ad app credential reset --id $appId --display-name $displayName --end-date $endDate --query "password" --output tsv
+$secretResult = az ad app credential reset --id $clientAppId --display-name $secretDisplayName --end-date $endDate --query "password" --output tsv
 if ($LASTEXITCODE -ne 0) {
-    throw "Failed to create client secret for app registration: $appId"
+    throw "Failed to create client secret for app registration: $clientAppId"
 }
 
-Write-Host "Client secret created successfully for app registration: $appId (valid for $secretExpirationMonths months)"
+Write-Host "Client secret created successfully for app registration: $clientAppId (valid for $secretExpirationMonths months)"
 
 
 # Store the client secret in Key Vault
