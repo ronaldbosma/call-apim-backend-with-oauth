@@ -51,7 +51,7 @@ var appInsightsSettings = {
   retentionInDays: 30
 }
 
-var validClientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'validclient-${instanceId}')
+var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
 
 var tags = {
   'azd-env-name': environmentName
@@ -72,27 +72,26 @@ module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
   }
 }
 
-// This client is 'valid' because it will have app roles assigned to it.
-module validClientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
-  name: 'validClientAppRegistration'
+module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
+  name: 'clientAppRegistration'
   params: {
     tags: tags
-    name: validClientAppRegistrationName
+    name: clientAppRegistrationName
   }
   dependsOn: [
     apimAppRegistration
   ]
 }
 
-module assignAppRolesToValidClient 'modules/entra-id/assign-app-roles.bicep' = {
-  name: 'assignAppRolesToValidClient'
+module assignAppRolesToClient 'modules/entra-id/assign-app-roles.bicep' = {
+  name: 'assignAppRolesToClient'
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
-    clientAppRegistrationName: validClientAppRegistrationName
+    clientAppRegistrationName: clientAppRegistrationName
   }
   dependsOn: [
     apimAppRegistration
-    validClientAppRegistration
+    clientAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
     apiManagement 
@@ -165,8 +164,8 @@ module unprotectedApi 'modules/application/unprotected-api/unprotected-api.bicep
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
 output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
-output ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_NAME string = validClientAppRegistrationName
-output ENTRA_ID_VALID_CLIENT_APP_REGISTRATION_CLIENT_ID string = validClientAppRegistration.outputs.appId
+output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
+output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId
 
 // Return the names of the resources
 output AZURE_API_MANAGEMENT_NAME string = apiManagementSettings.serviceName
