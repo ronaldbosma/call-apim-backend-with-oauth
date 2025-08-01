@@ -69,7 +69,6 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 // Assign roles to system-assigned identity of API Management
 
 module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-principal.bicep' = {
-  name: 'assignRolesToApimSystemAssignedIdentity'
   params: {
     principalId: apiManagementService.identity.principalId
     principalType: 'ServicePrincipal'

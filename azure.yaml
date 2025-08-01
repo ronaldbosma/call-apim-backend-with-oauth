@@ -12,4 +12,4 @@ hooks:
       run: ./hooks/predown-remove-law.ps1
       interactive: true
 requiredVersions: 
-  azd: ">= 1.12.0"  # azd version 1.12.0 or later is required because of the use of the Bicep deployer() function
+  azd: ">= 1.16.0"  # azd version 1.16.0 or later is required because of the use modules without names which was introduced in Bicep 0.34.1.

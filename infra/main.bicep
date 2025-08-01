@@ -65,7 +65,6 @@ var tags = {
 //=============================================================================
 
 module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
-  name: 'apimAppRegistration'
   params: {
     tenantId: subscription().tenantId
     tags: tags
@@ -75,7 +74,6 @@ module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
 }
 
 module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
-  name: 'clientAppRegistration'
   params: {
     tags: tags
     name: clientAppRegistrationName
@@ -86,7 +84,6 @@ module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = 
 }
 
 module assignAppRolesToClient 'modules/entra-id/assign-app-roles.bicep' = {
-  name: 'assignAppRolesToClient'
   params: {
     apimAppRegistrationName: apiManagementSettings.appRegistrationName
     clientAppRegistrationName: clientAppRegistrationName
@@ -107,7 +104,6 @@ resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
 }
 
 module keyVault 'modules/services/key-vault.bicep' = {
-  name: 'keyVault'
   scope: resourceGroup
   params: {
     location: location
@@ -117,7 +113,6 @@ module keyVault 'modules/services/key-vault.bicep' = {
 }
 
 module appInsights 'modules/services/app-insights.bicep' = {
-  name: 'appInsights'
   scope: resourceGroup
   params: {
     location: location
@@ -127,7 +122,6 @@ module appInsights 'modules/services/app-insights.bicep' = {
 }
 
 module apiManagement 'modules/services/api-management.bicep' = {
-  name: 'apiManagement'
   scope: resourceGroup
   params: {
     location: location
@@ -147,7 +141,6 @@ module apiManagement 'modules/services/api-management.bicep' = {
 //=============================================================================
 
 module protectedApi 'modules/application/protected-api/protected-api.bicep' = {
-  name: 'protectedApi'
   scope: resourceGroup
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
@@ -160,7 +153,6 @@ module protectedApi 'modules/application/protected-api/protected-api.bicep' = {
 }
 
 module unprotectedApi 'modules/application/unprotected-api/unprotected-api.bicep' = {
-  name: 'unprotectedApi'
   scope: resourceGroup
   params: {
     apiManagementServiceName: apiManagementSettings.serviceName
