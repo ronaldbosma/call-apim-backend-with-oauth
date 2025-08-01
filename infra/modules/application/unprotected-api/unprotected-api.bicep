@@ -54,15 +54,6 @@ resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2
   }
 }
 
-resource oauthTargetResourceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
-  name: 'oauth-target-resource'
-  parent: apiManagementService
-  properties: {
-    displayName: 'oauth-target-resource'
-    value: oauthTargetResource
-  }
-}
-
 resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
   name: 'oauth-scope'
   parent: apiManagementService
