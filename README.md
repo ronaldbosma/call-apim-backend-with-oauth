@@ -64,14 +64,14 @@ This template has several hooks that are executed at different stages of the dep
 
 ### Post-provision hooks
 
-- [postprovision-1-create-and-store-client-secret.ps1](hooks/postprovision-1-create-and-store-client-secret.ps1): 
+- [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1): 
   This PowerShell script is executed after the resources are provisioned. 
   It creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
   It will also refresh the client secret named value in API Management to ensure the latest secret is used. 
   If the app registration already has a client secret, it will not create a new one.
   Currently, we can't create secrets for an app registration with Bicep.
 
-- [postprovision-3-deploy-apis.ps1](hooks/postprovision-3-deploy-apis.ps1): 
+- [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
   This PowerShell script deploys APIs to Azure API Management after the infrastructure has been provisioned.
   The APIs has been split of in a separete module from the infra because we need 
   the client secret and certificate to be stored in Key Vault.
