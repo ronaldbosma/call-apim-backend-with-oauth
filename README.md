@@ -83,10 +83,10 @@ These PowerShell scripts are executed after the infra resources are provisioned.
   If the client secret already exists in Key Vault, it will not create a new one.
 
 - [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
-  It deploys [the APIs](src/apis/apis.bicep) to Azure API Management.
-  The APIs are defined in a separate module from the infrastructure because the client secret 
-  and certificate must be stored in Key Vault before deployment of the APIs,
-  These secrets are created in a post-provision script, which runs after the infra resources are deployed.
+  The APIs are defined in a [separate module](src/apis/apis.bicep) from the infrastructure 
+  because the client secret and certificate must exist in Key Vault before deployment of the APIs.
+  This script deploys the APIs to Azure API Management after the hooks that generate 
+  the client secret and certificate have completed.
 
 ### Pre-down hooks
 
