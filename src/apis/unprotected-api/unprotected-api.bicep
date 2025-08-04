@@ -36,6 +36,19 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 // Resources
 //=============================================================================
 
+// Certificates
+
+resource clientCertificate 'Microsoft.ApiManagement/service/certificates@2024-06-01-preview' = {
+  name: 'client-certificate'
+  parent: apiManagementService
+  properties: {
+    keyVault: {
+      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, 'client-certificate')
+    }
+  }
+}
+
+
 // Named Values
 
 resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
@@ -76,6 +89,18 @@ resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@202
     secret: true    
   }
 }
+
+// The client certificate thumbprint is used to retrieve the certificate from the 'context.Deployment.Certificates' dictionary.
+// So, we store the thumbprint in a named value.
+resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-certificate-thumbprint'
+  parent: apiManagementService
+  properties: {
+    displayName: 'client-certificate-thumbprint'
+    value: clientCertificate.properties.thumbprint
+  }
+}
+
 
 // API
 
