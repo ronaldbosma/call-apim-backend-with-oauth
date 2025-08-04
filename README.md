@@ -80,9 +80,9 @@ This template has several hooks that are executed at different stages of the dep
 - [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
   This PowerShell script is executed after the infra resources are provisioned. 
   It deploys [the APIs](src/apis/apis.bicep) to Azure API Management.
-  The APIs has been split of in a separate module from the infra because we need 
-  the client secret and certificate to be stored in Key Vault before we can deploy the APIs.
-  They are created in a postprovision script after the infra resources are created.
+  The APIs are defined in a separate module from the infrastructure because the client secret 
+  and certificate must be stored in Key Vault before deployment of the APIs,
+  These secrets are created in a post-provision script, which runs after the infra resources are deployed.
 
 ### Pre-down hooks
 - [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
