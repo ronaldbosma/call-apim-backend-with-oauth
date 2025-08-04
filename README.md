@@ -70,35 +70,34 @@ This template has several hooks that are executed at different stages of the dep
 
 ### Post-provision hooks
 
+These PowerShell scripts are executed after the infra resources are provisioned.
+
 - [postprovision-create-and-store-client-certificate.ps1](hooks/postprovision-create-and-store-client-certificate.ps1): 
-  This PowerShell script is executed after the infra resources are provisioned. 
   Currently, we can't create certificates for an app registration with Bicep.
   This script creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
   If the client certificate already exists in Key Vault, it will not create a new one.
-  
 
 - [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1): 
-  This PowerShell script is executed after the infra resources are provisioned. 
   Currently, we can't create secrets for an app registration with Bicep.
   This script creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
   If the client secret already exists in Key Vault, it will not create a new one.
 
 - [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
-  This PowerShell script is executed after the infra resources are provisioned. 
   It deploys [the APIs](src/apis/apis.bicep) to Azure API Management.
   The APIs are defined in a separate module from the infrastructure because the client secret 
   and certificate must be stored in Key Vault before deployment of the APIs,
   These secrets are created in a post-provision script, which runs after the infra resources are deployed.
 
 ### Pre-down hooks
+
+These PowerShell scripts are executed before the resources are removed.
+
 - [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
-  This PowerShell script is executed before the resources are removed. 
   It removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
   See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
   We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
   
 - [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
-  This PowerShell script is executed before the resources are removed. 
   It permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
   Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
   A predown hook is used and not a postdown hook because permanent deletion of the workspace doesn't work
