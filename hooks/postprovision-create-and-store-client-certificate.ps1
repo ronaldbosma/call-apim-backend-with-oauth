@@ -1,5 +1,6 @@
 # This script generates a client certificate in Azure Key Vault and uploads it to the client app registration in Entra ID.
-# It creates a new certificate in Key Vault, downloads it temporarily, and then adds it as a credential to the app registration.
+# It uses the Azure CLI's integrated certificate creation functionality to create the certificate directly in Key Vault
+# and add it as a credential to the app registration in a single operation.
 # If the certificate already exists in Key Vault, the script will exit without creating a new one.
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
@@ -15,7 +16,7 @@ $certificateName = "client-certificate"
 $certificateDisplayName = "Client Certificate"
 
 
-# Step 1: Check if certificate exists and exit if it does
+# Check if certificate exists and exit if it does
 $existingCert = az keyvault certificate show `
     --vault-name $keyVaultName `
     --name $certificateName `
@@ -28,76 +29,19 @@ if ($existingCert) {
 }
 
 
-# Step 2: Generate new certificate in Key Vault
-Write-Host "Creating new certificate '$certificateName' in Key Vault '$keyVaultName'..."
-$defaultPolicyPath = [System.IO.Path]::GetTempFileName()
-az keyvault certificate get-default-policy | Out-File -Encoding utf8 $defaultPolicyPath
-
-try {
-    az keyvault certificate create `
-        --vault-name $keyVaultName `
-        --name $certificateName `
-        --policy @$defaultPolicyPath `
-        --output none
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "Failed to create certificate '$certificateName' in Key Vault '$keyVaultName'."
-    }
-} finally {
-    Remove-Item $defaultPolicyPath -Force
-}
-
-# Step 3: Wait for certificate to be fully created
-$maxRetries = 30
-$retryDelaySeconds = 1
-$retryCount = 0
-$certReady = $false
-
-while ($retryCount -lt $maxRetries) {
-    $certStatus = az keyvault certificate pending show --vault-name $keyVaultName --name $certificateName --query "status" --output tsv 2>$null
-    if ($certStatus -eq "completed") {
-        $certReady = $true
-        break
-    }
-
-    Write-Host "Certificate status: '$certStatus'. Waiting for certificate to be ready..."
-    Start-Sleep -Seconds $retryDelaySeconds
-    $retryCount++
-}
-
-if (-not $certReady) {
-    throw "Certificate '$certificateName' was not ready after $($maxRetries * $retryDelaySeconds) seconds."
-}
-
-
-# Step 4: Export certificate in .cer format
-$cerPath = Join-Path -Path ([System.IO.Path]::GetTempPath()) -ChildPath ("client-certificate-$([guid]::NewGuid()).cer")
-Write-Host "Downloading certificate to '$cerPath'..."
-az keyvault certificate download `
-    --vault-name $keyVaultName `
-    --name $certificateName `
-    --file $cerPath `
-    --encoding PEM
+# Create certificate in Key Vault and add to App Registration in one operation
+Write-Host "Creating certificate '$certificateName' in Key Vault '$keyVaultName' and adding to App Registration '$clientAppId'..."
+az ad app credential reset `
+    --id $clientAppId `
+    --create-cert `
+    --keyvault $keyVaultName `
+    --cert $certificateName `
+    --display-name $certificateDisplayName `
+    --append `
+    --output none
 
 if ($LASTEXITCODE -ne 0) {
-    throw "Failed to download certificate '$certificateName' from Key Vault '$keyVaultName'."
+    throw "Failed to create certificate '$certificateName' in Key Vault '$keyVaultName' and add to app registration '$clientAppId'."
 }
 
-try { 
-    # Step 5: Upload certificate to App Registration
-    Write-Host "Uploading certificate to App Registration '$clientAppId'..."
-    az ad app credential reset `
-        --id $clientAppId `
-        --cert @$cerPath `
-        --append `
-        --display-name $certificateDisplayName `
-        --output none
-
-    if ($LASTEXITCODE -ne 0) {
-        throw "Failed to add certificate to app registration '$clientAppId'."
-    }
-
-    Write-Host "Successfully added certificate '$certificateName' to app registration '$clientAppId'."
-} finally {
-    #Remove-Item $cerPath -Force
-}
+Write-Host "Successfully created certificate '$certificateName' in Key Vault and added to app registration '$clientAppId'."
