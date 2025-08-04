@@ -35,6 +35,10 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
   name: apiManagementServiceName
 }
 
+resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
+  name: keyVaultName
+}
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -107,43 +111,12 @@ resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/
 
 // Credential Manager
 
-// Create a Credential Provider that will be used to retrieve the access token for the protected API.
-resource credentialProvider 'Microsoft.ApiManagement/service/authorizationProviders@2024-06-01-preview' = {
-  parent: apiManagementService
-  name: 'credential-provider'
-  properties: {
-    displayName: 'Credential Provider'
-    identityProvider: 'aad'
-    oauth2: {
-      grantTypes: {
-        clientCredentials: {
-          resourceUri: oauthTargetResource
-          tenantId: subscription().tenantId
-        }
-      }
-    }
-  }
-
-  // Add a connection to the Credential Provider for our client
-  resource clientConnection 'authorizations' = {
-    name: 'client-connection'
-    properties: {
-      authorizationType: 'OAuth2'
-      oauth2grantType: 'ClientCredentials'
-      parameters: {
-        clientId: clientId
-        clientSecret: '...SECRET...'
-      }
-    }
-
-    // Give the system-assigned managed identity of API Management permission to use the connection
-    resource accessPolicies 'accessPolicies' = {
-      name: 'client-connection-access-policy-apim-managed-identity'
-      properties: {
-        objectId: apiManagementService.identity.principalId
-        tenantId: apiManagementService.identity.tenantId
-      }
-    }
+module credentialManager 'credential-manager.bicep' = {
+  params: {
+    apiManagementServiceName: apiManagementServiceName
+    oauthTargetResource: oauthTargetResource
+    clientId: clientId
+    clientSecret: keyVault.getSecret('client-secret')
   }
 }
 
@@ -238,6 +211,6 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
   dependsOn: [
     apimGatewayUrlNamedValue
     oauthScopeNamedValue
-    credentialProvider
+    credentialManager
   ]
 }
