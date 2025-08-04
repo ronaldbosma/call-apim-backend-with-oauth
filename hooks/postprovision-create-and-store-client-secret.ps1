@@ -1,6 +1,7 @@
-# This script generates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault.
-# It will also refresh the client secret named value in API Management to ensure the latest secret is used.
-# If the client app registration already has a client secret with the same display name, it will not create a new one.
+# This PowerShell script is executed after the infra resources are provisioned. 
+# It creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+# If the app registration already has a client secret, it will not create a new one.
+# Currently, we can't create secrets for an app registration with Bicep.
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
 az account set --subscription $env:AZURE_SUBSCRIPTION_ID
@@ -13,41 +14,47 @@ $clientAppId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID
 $keyVaultName = $env:AZURE_KEY_VAULT_NAME
 $secretName = "client-secret"
 $secretDisplayName = "Client Secret"
-$secretExpirationMonths = 3
 
 
-# Check if the app registration already has a client secret and stop if it does
-$credentials = az ad app credential list --id $clientAppId | ConvertFrom-Json
-$existingSecret = $credentials | Where-Object { $_.displayName -eq $secretDisplayName }
-if ($existingSecret.Count -gt 0) {
-    Write-Host "App registration '$clientAppId' already has a client secret with display name '$secretDisplayName'. Skipping creation."
+# Check if the secret already exists in Key Vault and stop if it does
+Write-Host "Checking if secret '$secretName' exists in Key Vault '$keyVaultName'"
+$existingSecret = az keyvault secret show `
+    --vault-name $keyVaultName `
+    --name $secretName `
+    --query "value" `
+    --output tsv 2>$null
+    
+if ($LASTEXITCODE -eq 0 -and ![string]::IsNullOrEmpty($existingSecret)) {
+    Write-Host "Secret already exists. Skipping creation."
     exit 0
 }
 
 
 # Create client secret for the app registration
-$endDate = (Get-Date).AddMonths($secretExpirationMonths).ToString("yyyy-MM-ddTHH:mm:ssZ")
-$secretResult = az ad app credential reset --id $clientAppId --display-name $secretDisplayName --end-date $endDate --query "password" --output tsv
+Write-Host "Creating client secret for app registration '$clientAppId'"
+$secretResult = az ad app credential reset `
+    --id $clientAppId `
+    --display-name $secretDisplayName `
+    --query "password" `
+    --output tsv
+
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to create client secret for app registration: $clientAppId"
 }
 
-Write-Host "Client secret created successfully for app registration: $clientAppId (valid for $secretExpirationMonths months)"
+Write-Host "Client secret created successfully"
 
 
 # Store the client secret in Key Vault
-az keyvault secret set --vault-name $keyVaultName --name $secretName --value $secretResult --output none
+Write-Host "Storing client secret in Key Vault '$keyVaultName'"
+az keyvault secret set `
+    --vault-name $keyVaultName `
+    --name $secretName `
+    --value $secretResult `
+    --output none
+
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to store client secret in Key Vault: $keyVaultName"
 }
 
-Write-Host "Client secret stored successfully in Key Vault as: $secretName"
-
-
-# Update the client secret named value in API Management to force a refresh of the secret
-# If we don't do this, the initial placeholder value will be used instead of the actual secret
-az apim nv update --named-value-id $secretName --resource-group $env:AZURE_RESOURCE_GROUP --service-name $env:AZURE_API_MANAGEMENT_NAME --output none
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to refresh client secret named value in API Management."
-}
-Write-Host "Refreshed client secret named value in API Management successfully."
+Write-Host "Client secret stored successfully"

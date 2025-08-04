@@ -1,7 +1,4 @@
 {
-  "experimentalFeaturesEnabled": {
-    "onlyIfNotExists": true
-  },
   "extensions": {
     "microsoftGraphV1": "br:mcr.microsoft.com/bicep/extensions/microsoftgraph/v1.0:1.0.0"
   },
@@ -58,6 +55,9 @@
           "level": "error"
         },
         "no-unused-existing-resources": {
+          "level": "error"
+        },
+        "no-unused-imports": {
           "level": "error"
         },
         "no-unused-params": {

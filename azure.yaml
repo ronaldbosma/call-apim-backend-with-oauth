@@ -6,7 +6,13 @@ metadata:
 hooks:
   postprovision:
     - shell: pwsh
+      run: ./hooks/postprovision-create-and-store-client-certificate.ps1
+      interactive: true
+    - shell: pwsh
       run: ./hooks/postprovision-create-and-store-client-secret.ps1
+      interactive: true
+    - shell: pwsh
+      run: ./hooks/postprovision-deploy-apis.ps1
       interactive: true
   predown:
     - shell: pwsh
@@ -16,4 +22,4 @@ hooks:
       run: ./hooks/predown-remove-law.ps1
       interactive: true
 requiredVersions: 
-  azd: ">= 1.16.0"  # azd version 1.16.0 or later is required because of the use modules without names which was introduced in Bicep 0.34.1.
+  azd: ">= 1.17.0"  # azd version 1.17.0 or later is required because of Microsoft.Graph Bicep extension v1.0.0 and removal of the extensibility feature flag.

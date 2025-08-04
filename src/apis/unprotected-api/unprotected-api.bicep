@@ -1,12 +1,15 @@
 //=============================================================================
 // Unprotected API in API Management
+//
+// The operations of this API demonstrate different ways to call a backend API
+// that is protected by OAuth. The protected API is used as the backend.
 //=============================================================================
 
 //=============================================================================
 // Imports
 //=============================================================================
 
-import * as helpers from '../../../functions/helpers.bicep'
+import * as helpers from '../../../infra/functions/helpers.bicep'
 
 //=============================================================================
 // Parameters
@@ -32,13 +35,22 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
   name: apiManagementServiceName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
-  name: keyVaultName
-}
-
 //=============================================================================
 // Resources
 //=============================================================================
+
+// Certificates
+
+resource clientCertificate 'Microsoft.ApiManagement/service/certificates@2024-06-01-preview' = {
+  name: 'client-certificate'
+  parent: apiManagementService
+  properties: {
+    keyVault: {
+      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, 'client-certificate')
+    }
+  }
+}
+
 
 // Named Values
 
@@ -69,30 +81,29 @@ resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06
   }
 }
 
-// The actual client secret is created in a postprovision hook, but in order to reference it in the named value,
-// we need to create a placeholder secret in Key Vault.
-// The @onlyIfNotExists() decorator will ensure that the value is not overwritten if it already exists.
-@onlyIfNotExists()
-resource clientSecretSecret 'Microsoft.KeyVault/vaults/secrets@2024-11-01' = {
-  name: 'client-secret'
-  parent: keyVault
-  properties: {
-    contentType: 'text/plain'
-    value: '...placeholder...'
-  }
-}
-
 resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
   name: 'client-secret'
   parent: apiManagementService
   properties: {
     displayName: 'client-secret'
     keyVault: {
-      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, clientSecretSecret.name)
+      secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, 'client-secret')
     }
     secret: true    
   }
 }
+
+// The client certificate thumbprint is used to retrieve the certificate from the 'context.Deployment.Certificates' dictionary.
+// So, we store the thumbprint in a named value.
+resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-certificate-thumbprint'
+  parent: apiManagementService
+  properties: {
+    displayName: 'client-certificate-thumbprint'
+    value: clientCertificate.properties.thumbprint
+  }
+}
+
 
 // API
 
@@ -141,6 +152,24 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       properties: {
         format: 'rawxml'
         value: loadTextContent('call-protected-api-using-send-request-with-secret.xml')
+      }
+    }
+  }
+
+  // Operation that will call the protected API using the send-request policy with a certificate (client_assertion)
+  resource callProtectedApiUsingSendRequestWithCertificate 'operations' = {
+    name: 'call-protected-api-using-send-request-with-certificate'
+    properties: {
+      displayName: 'Call Protected API using Send Request with Certificate'
+      method: 'GET'
+      urlTemplate: '/call-protected-api-using-send-request-with-certificate'
+    }
+  
+    resource policies 'policies' = {
+      name: 'policy'
+      properties: {
+        format: 'rawxml'
+        value: loadTextContent('call-protected-api-using-send-request-with-certificate.xml')
       }
     }
   }

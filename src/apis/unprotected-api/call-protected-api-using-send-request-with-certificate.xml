@@ -1,0 +1,153 @@
+<policies>
+    <inbound>
+        <base />
+        <!-- Get access token from cache if it exists-->
+        <cache-lookup-value key="access-token-from-certificate" variable-name="access-token" />
+        <choose>
+            <!-- Retrieve new access token from Entra ID if it was not found in the cache. -->
+            <when condition="@(!context.Variables.ContainsKey("access-token"))">
+                <!--
+                    Create a JWT assertion signed with the client's certificate.
+                    Documentation: https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials
+                    Code based on: https://github.com/Azure/api-management-policy-snippets/blob/0161da51fe54d4a0f199c1d995ad2656c90951c7/examples/Get%20OAuth2%20access%20token%20from%20AAD%20using%20client%20id%20and%20certificate%20using%20key%20vault%20manage%20identity.xml
+                -->
+                <set-variable name="signed-client-assertion" value="@{
+                    var certificate = context.Deployment.Certificates["{{client-certificate-thumbprint}}"];
+                    
+                    // Get SHA256 thumbprint of the certificate
+                    var sha256 = SHA256.Create();
+                    byte[] hash = sha256.ComputeHash(certificate.RawData);
+
+                    var header = new JObject
+                    {
+                        { "alg", "PS256" },
+                        { "typ", "JWT" },
+                        { "x5t#S256", ConvertBytesToBase64Url(hash) }
+                    };
+
+                    var jwtLifetimeInSeconds = 600; // Ten minutes
+                    var nbf = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+                    var exp = (DateTimeOffset.UtcNow + TimeSpan.FromSeconds(jwtLifetimeInSeconds)).ToUnixTimeSeconds();
+
+                    var claims = new JObject
+                    {
+                        { "aud", "https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token" },
+                        { "exp", exp },
+                        { "iss", "{{client-id}}" },
+                        { "jti", Guid.NewGuid().ToString() },
+                        { "nbf", nbf },
+                        { "sub", "{{client-id}}" },
+                        { "iat", nbf }
+                    };
+
+                    var headerBase64UrlEncoded = ConvertJObjectToBase64Url(header);
+                    var claimsBase64UrlEncoded = ConvertJObjectToBase64Url(claims);
+                    
+                    // Create the string to be signed: header.payload
+                    var stringToSign = string.Concat(headerBase64UrlEncoded, ".", claimsBase64UrlEncoded);
+                    var bytesToSign = System.Text.Encoding.UTF8.GetBytes(stringToSign);
+                    
+                    // Sign the data using the certificate's private key with PSS padding
+                    var rsa = certificate.GetRSAPrivateKey();
+                    var signature = rsa.SignData(bytesToSign, HashAlgorithmName.SHA256, RSASignaturePadding.Pss);
+                    var signatureBase64UrlEncoded = ConvertBytesToBase64Url(signature);
+                    
+                    // Return the complete JWT: header.payload.signature
+                    return string.Concat(stringToSign, ".", signatureBase64UrlEncoded);
+
+
+                    // Helper methods to convert data to Base64Url encoded string
+                    string ConvertJObjectToBase64Url(JObject input)
+                    {
+                        var jsonString = input.ToString(Newtonsoft.Json.Formatting.None);
+                        var bytes = System.Text.Encoding.UTF8.GetBytes(jsonString);
+                        return ConvertBytesToBase64Url(bytes);
+                    }
+                            
+                    string ConvertBytesToBase64Url(byte[] bytes)
+                    {
+                        // The JWT spec requires Base64Url encoding, which is similar to Base64 
+                        // but uses '-' and '_' instead of '+' and '/' and omits padding characters ('=').
+                        return Convert.ToBase64String(bytes)
+                            .Replace("+", "-")
+                            .Replace("/", "_")
+                            .TrimEnd('=');
+                    }
+                }" />
+
+                <send-request mode="new" timeout="20" response-variable-name="get-access-token-response" ignore-error="false">
+                    <set-url>https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token</set-url>
+                    <set-method>POST</set-method>
+                    <set-header name="Content-Type" exists-action="override">
+                        <value>application/x-www-form-urlencoded</value>
+                    </set-header>
+                    <set-body>@{
+                        var clientId = "{{client-id}}";
+                        var clientAssertion = (string)context.Variables["signed-client-assertion"];
+                        var clientAssertionType = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
+                        var scope = "{{oauth-scope}}";
+                        var grantType = "client_credentials";
+
+                        return $"client_id={clientId}&client_assertion_type={clientAssertionType}&client_assertion={clientAssertion}&scope={scope}&grant_type={grantType}";
+                    }</set-body>
+                </send-request>
+
+                <set-variable name="get-access-token-response-body" value="@(((IResponse)context.Variables["get-access-token-response"])?.Body?.As<JObject>())" />
+
+                <choose>
+                    <!-- If access token retrieval succeeded (HTTP 200), extract the access token and cache it -->
+                    <when condition="@(((IResponse)context.Variables["get-access-token-response"])?.StatusCode == 200)">
+                        <set-variable name="access-token" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<string>("access_token"))" />
+                        <set-variable name="access-token-expires-in" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<int>("expires_in"))" />
+                        <cache-store-value key="access-token-from-certificate" value="@((string)context.Variables["access-token"])" 
+                                           duration="@((int)(0.9 * (int)context.Variables["access-token-expires-in"]))" />
+                    </when>
+                    
+                    <!-- If access token retrieval failed, log error and return a 500 Internal Server Error -->
+                    <otherwise>
+                        <trace source="getAccessTokenUsingCertificate" severity="error">
+                            <message>Retrieval of access token failed</message>
+                            <metadata name="ResponseBody" value="@{
+                                // To prevent exceptions, ensure the message is never null or empty by always providing a value.
+                                var body = ((JObject)context.Variables["get-access-token-response-body"])?.ToString();
+                                return !string.IsNullOrWhiteSpace(body) ? body : "<empty>";
+                            }" />
+                            <metadata name="ResponseStatusCode" value="@{
+                                // To prevent exceptions, ensure the status code is never null or empty by always providing a value.
+                                var statusCode = ((IResponse)context.Variables["get-access-token-response"])?.StatusCode.ToString();
+                                return !string.IsNullOrWhiteSpace(statusCode) ? statusCode : "<empty>";
+                            }" />
+                        </trace>
+
+                        <!-- We're returning the response of the failed token retrieval. Don't do this in production as it will expose sensitive information. -->
+                        <return-response>
+                            <set-status code="500" reason="Internal Server Error" />
+                            <set-header name="Content-Type" exists-action="override">
+                                <value>application/json</value>
+                            </set-header>
+                            <set-header name="Signed-Client-Assertion" exists-action="override">
+                                <value>@((string)context.Variables["signed-client-assertion"])</value>
+                            </set-header>
+                            <set-body>@(((JObject)context.Variables["get-access-token-response-body"])?.ToString())</set-body>
+                        </return-response>
+                    </otherwise>
+                </choose>
+            </when>
+        </choose>
+        <set-header name="Authorization" exists-action="override">
+            <value>@("Bearer " + (string)context.Variables["access-token"])</value>
+        </set-header>
+    </inbound>
+
+    <backend>
+        <base />
+    </backend>
+
+    <outbound>
+        <base />
+    </outbound>
+
+    <on-error>
+        <base />
+    </on-error>
+</policies>
