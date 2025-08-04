@@ -24,7 +24,7 @@ $existingCert = az keyvault certificate show `
     --output tsv 2>$null
 
 if ($existingCert) {
-    Write-Host "Certificate '$certificateName' already exists in Key Vault '$keyVaultName'. Exiting."
+    Write-Host "Certificate '$certificateName' already exists in Key Vault '$keyVaultName'. Skipping creation."
     exit 0
 }
 
