@@ -8,6 +8,9 @@ hooks:
     - shell: pwsh
       run: ./hooks/postprovision-1-create-and-store-client-secret.ps1
       interactive: true
+    - shell: pwsh
+      run: ./hooks/postprovision-3-deploy-apis.ps1
+      interactive: true
   predown:
     - shell: pwsh
       run: ./hooks/predown-remove-app-registrations.ps1

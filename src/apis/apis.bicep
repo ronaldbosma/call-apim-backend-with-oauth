@@ -13,14 +13,14 @@
 @description('The name of the API Management service')
 param apiManagementServiceName string
 
+@description('The name of the Key Vault that contains the secrets')
+param keyVaultName string
+
 @description('The expected OAuth audience for the JWT token')
 param oauthAudience string
 
 @description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
 param oauthTargetResource string
-
-@description('The name of the Key Vault that contains the secrets')
-param keyVaultName string
 
 @description('The ID of the client used for connecting to the protected API.')
 param clientId string

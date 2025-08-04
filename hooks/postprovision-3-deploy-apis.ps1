@@ -1,0 +1,30 @@
+# This script deploys APIs to Azure API Management after the infrastructure has been provisioned.
+# The APIs has been split of in a separete module from the infra because we need 
+# the client secret and certificate to be stored in Key Vault.
+# They are created in a postprovision script after the infra is created.
+
+
+# First, ensure the Azure CLI is logged in and set to the correct subscription
+az account set --subscription $env:AZURE_SUBSCRIPTION_ID
+if ($LASTEXITCODE -ne 0) {
+    throw "Unable to set the Azure subscription. Please make sure that you're logged into the Azure CLI with the same credentials as the Azure Developer CLI."
+}
+
+# Deploy the APIs to API Management
+az deployment group create `
+  --resource-group $env:AZURE_RESOURCE_GROUP `
+  --name "${$env:AZURE_ENV_NAME}-apis-$(Get-Date -UFormat %s)" `
+  --template-file "../src/apis/apis.bicep" `
+  --parameters `
+      apiManagementServiceName=$env:AZURE_API_MANAGEMENT_NAME `
+      keyVaultName=$env:AZURE_KEY_VAULT_NAME `
+      oauthAudience=$env:ENTRA_ID_APIM_APP_REGISTRATION_APP_ID `
+      oauthTargetResource=$env:ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI `
+      clientId=$env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID `
+  --verbose
+
+if ($LASTEXITCODE -ne 0) {
+    throw "Failed to deploy APIs to API Management"
+}
+
+Write-Host "APIs deployed successfully to API Management" -ForegroundColor Green
