@@ -30,7 +30,7 @@ if ($existingCert) {
 }
 
 
-# Create certificate in Key Vault and add to App Registration in one operation
+# Create certificate in Key Vault and add to App Registration
 Write-Host "Creating certificate '$certificateName' in Key Vault and adding to app registration '$clientAppId'"
 az ad app credential reset `
     --id $clientAppId `
