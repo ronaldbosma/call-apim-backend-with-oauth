@@ -1,6 +1,7 @@
-# This script generates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault.
-# It will also refresh the client secret named value in API Management to ensure the latest secret is used.
-# If the client app registration already has a client secret with the same display name, it will not create a new one.
+# This PowerShell script is executed after the infra resources are provisioned. 
+# It creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+# If the app registration already has a client secret, it will not create a new one.
+# Currently, we can't create secrets for an app registration with Bicep.
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
 az account set --subscription $env:AZURE_SUBSCRIPTION_ID

@@ -64,18 +64,24 @@ This template has several hooks that are executed at different stages of the dep
 
 ### Post-provision hooks
 
+- [postprovision-create-and-store-client-certificate.ps1](hooks/postprovision-create-and-store-client-certificate.ps1): 
+  This PowerShell script is executed after the infra resources are provisioned. 
+  It creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+  If the client certificate already exists in Key Vault, it will not create a new one.
+  Currently, we can't create certificates for an app registration with Bicep.
+
 - [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1): 
-  This PowerShell script is executed after the resources are provisioned. 
+  This PowerShell script is executed after the infra resources are provisioned. 
   It creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-  It will also refresh the client secret named value in API Management to ensure the latest secret is used. 
   If the app registration already has a client secret, it will not create a new one.
   Currently, we can't create secrets for an app registration with Bicep.
 
 - [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
-  This PowerShell script deploys APIs to Azure API Management after the infrastructure has been provisioned.
-  The APIs has been split of in a separete module from the infra because we need 
-  the client secret and certificate to be stored in Key Vault.
-  They are created in a postprovision script after the infra is created.
+  This PowerShell script is executed after the infra resources are provisioned. 
+  It deploys [the APIs](src/apis/apis.bicep) to Azure API Management.
+  The APIs has been split of in a separate module from the infra because we need 
+  the client secret and certificate to be stored in Key Vault before we can deploy the APIs.
+  They are created in a postprovision script after the infra resources are created.
 
 ### Pre-down hooks
 - [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 

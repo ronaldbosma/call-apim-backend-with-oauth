@@ -1,8 +1,8 @@
-# This script deploys APIs to Azure API Management after the infrastructure has been provisioned.
-# The APIs has been split of in a separete module from the infra because we need 
-# the client secret and certificate to be stored in Key Vault.
-# They are created in a postprovision script after the infra is created.
-
+# This PowerShell script is executed after the infra resources are provisioned. 
+# It deploys the APIs (src/apis/apis.bicep) to Azure API Management.
+# The APIs has been split of in a separate module from the infra because we need 
+# the client secret and certificate to be stored in Key Vault before we can deploy the APIs.
+# They are created in a postprovision script after the infra resources are created.
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
 az account set --subscription $env:AZURE_SUBSCRIPTION_ID
