@@ -1,6 +1,6 @@
 # Call API Management backend with OAuth
 
-An `azd` template using Bicep that provides multiple examples of how to call a backend API protected with OAuth via Azure API Management.
+An `azd` template using Bicep that provides the following examples of how to call a backend API protected with OAuth via Azure API Management:
 
 1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
    See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [call-protected-api-using-credential-manager.xml](src/apis/unprotected-api/call-protected-api-using-credential-manager.xml) on how to use it in an API Management policy.
