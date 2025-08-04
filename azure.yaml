@@ -6,7 +6,7 @@ metadata:
 hooks:
   postprovision:
     - shell: pwsh
-      run: ./hooks/postprovision-create-and-store-client-secret.ps1
+      run: ./hooks/postprovision-1-create-and-store-client-secret.ps1
       interactive: true
   predown:
     - shell: pwsh
