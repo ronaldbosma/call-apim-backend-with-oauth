@@ -42,12 +42,3 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Client secret stored successfully in Key Vault as: $secretName"
-
-
-# Update the client secret named value in API Management to force a refresh of the secret
-# If we don't do this, the initial placeholder value will be used instead of the actual secret
-az apim nv update --named-value-id $secretName --resource-group $env:AZURE_RESOURCE_GROUP --service-name $env:AZURE_API_MANAGEMENT_NAME --output none
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to refresh client secret named value in API Management."
-}
-Write-Host "Refreshed client secret named value in API Management successfully."
