@@ -89,11 +89,14 @@ This template has several hooks that are executed at different stages of the dep
   This PowerShell script is executed before the resources are removed. 
   It removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
   See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
+  We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
   
 - [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
   This PowerShell script is executed before the resources are removed. 
   It permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
   Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
+  A predown hook is used and not a postdown hook because permanent deletion of the workspace doesn't work
+  if it's already in the soft-deleted state after azd has removed it.
 
 
 ## Troubleshooting

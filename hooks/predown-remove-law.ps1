@@ -1,11 +1,10 @@
-# Permanently delete the Log Analytics workspace to prevent issues with the next deployment.
-#
-# Sometimes the requests and traces don't show up in Application Insights & Log Analytics. 
-# I've had this happen when I'd taken down an environment and redeployed it with the same name.
-# Permanently deleting the Log Analytics workspace seems to fix this issue.
-#
-# A predown hook is used and not a postdown hook because permanent deletion of the workspace doesn't work
-#   if it's already in the soft-deleted state after azd has removed it.
+<#
+  This PowerShell script is executed before the resources are removed. 
+  It permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
+  Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
+  A predown hook is used and not a postdown hook because permanent deletion of the workspace doesn't work
+  if it's already in the soft-deleted state after azd has removed it.
+#>
 
 param(
     [Parameter(Mandatory = $false)]
