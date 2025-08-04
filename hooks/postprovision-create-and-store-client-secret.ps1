@@ -17,27 +17,30 @@ $secretExpirationMonths = 3
 
 
 # Check if the secret already exists in Key Vault and stop if it does
+Write-Host "Checking if secret '$secretName' exists in Key Vault '$keyVaultName'"
 $existingSecret = az keyvault secret show --vault-name $keyVaultName --name $secretName --query "value" --output tsv 2>$null
 if ($LASTEXITCODE -eq 0 -and ![string]::IsNullOrEmpty($existingSecret)) {
-    Write-Host "Client secret '$secretName' already exists in Key Vault '$keyVaultName'. Skipping creation."
+    Write-Host "Secret already exists. Skipping creation."
     exit 0
 }
 
 
 # Create client secret for the app registration
 $endDate = (Get-Date).AddMonths($secretExpirationMonths).ToString("yyyy-MM-ddTHH:mm:ssZ")
+Write-Host "Creating client secret for app registration '$clientAppId'"
 $secretResult = az ad app credential reset --id $clientAppId --display-name $secretDisplayName --end-date $endDate --query "password" --output tsv
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to create client secret for app registration: $clientAppId"
 }
 
-Write-Host "Client secret created successfully for app registration: $clientAppId (valid for $secretExpirationMonths months)"
+Write-Host "Client secret created successfully"
 
 
 # Store the client secret in Key Vault
+Write-Host "Storing client secret in Key Vault '$keyVaultName'"
 az keyvault secret set --vault-name $keyVaultName --name $secretName --value $secretResult --output none
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to store client secret in Key Vault: $keyVaultName"
 }
 
-Write-Host "Client secret stored successfully in Key Vault as: $secretName"
+Write-Host "Client secret stored successfully"

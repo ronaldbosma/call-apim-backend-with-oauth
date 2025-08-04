@@ -17,6 +17,7 @@ $certificateDisplayName = "Client Certificate"
 
 
 # Check if certificate exists and exit if it does
+Write-Host "Checking if certificate '$certificateName' exists in Key Vault '$keyVaultName'"
 $existingCert = az keyvault certificate show `
     --vault-name $keyVaultName `
     --name $certificateName `
@@ -24,13 +25,13 @@ $existingCert = az keyvault certificate show `
     --output tsv 2>$null
 
 if ($existingCert) {
-    Write-Host "Certificate '$certificateName' already exists in Key Vault '$keyVaultName'. Skipping creation."
+    Write-Host "Certificate already exists. Skipping creation."
     exit 0
 }
 
 
 # Create certificate in Key Vault and add to App Registration in one operation
-Write-Host "Creating certificate '$certificateName' in Key Vault '$keyVaultName' and adding to App Registration '$clientAppId'..."
+Write-Host "Creating certificate '$certificateName' in Key Vault and adding to app registration '$clientAppId'"
 az ad app credential reset `
     --id $clientAppId `
     --create-cert `
@@ -44,4 +45,4 @@ if ($LASTEXITCODE -ne 0) {
     throw "Failed to create certificate '$certificateName' in Key Vault '$keyVaultName' and add to app registration '$clientAppId'."
 }
 
-Write-Host "Successfully created certificate '$certificateName' in Key Vault and added to app registration '$clientAppId'."
+Write-Host "Certificate created and added successfully"
