@@ -75,7 +75,7 @@ This template has several hooks that are executed at different stages of the dep
   This PowerShell script is executed after the infra resources are provisioned. 
   Currently, we can't create secrets for an app registration with Bicep.
   This script creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-  If the app registration already has a client secret, it will not create a new one.
+  If the client secret already exists in Key Vault, it will not create a new one.
 
 - [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
   This PowerShell script is executed after the infra resources are provisioned. 
