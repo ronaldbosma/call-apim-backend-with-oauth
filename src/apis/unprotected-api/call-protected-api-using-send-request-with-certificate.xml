@@ -95,7 +95,7 @@
                 <set-variable name="get-access-token-response-body" value="@(((IResponse)context.Variables["get-access-token-response"])?.Body?.As<JObject>())" />
 
                 <choose>
-                    <!-- If access token retrieval succeeds (HTTP 200), extract the access token and cache it -->
+                    <!-- If access token retrieval succeeded (HTTP 200), extract the access token and cache it -->
                     <when condition="@(((IResponse)context.Variables["get-access-token-response"])?.StatusCode == 200)">
                         <set-variable name="access-token" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<string>("access_token"))" />
                         <set-variable name="access-token-expires-in" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<int>("expires_in"))" />
@@ -103,7 +103,7 @@
                                            duration="@((int)(0.9 * (int)context.Variables["access-token-expires-in"]))" />
                     </when>
                     
-                    <!-- If access token retrieval fails, log error and return a 500 Internal Server Error -->
+                    <!-- If access token retrieval failed, log error and return a 500 Internal Server Error -->
                     <otherwise>
                         <trace source="getAccessTokenUsingCertificate" severity="error">
                             <message>Retrieval of access token failed</message>
