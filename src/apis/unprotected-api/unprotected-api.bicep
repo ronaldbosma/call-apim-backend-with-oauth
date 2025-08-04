@@ -105,6 +105,49 @@ resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/
 }
 
 
+// Credential Manager
+
+// Create a Credential Provider that will be used to retrieve the access token for the protected API.
+resource credentialProvider 'Microsoft.ApiManagement/service/authorizationProviders@2024-06-01-preview' = {
+  parent: apiManagementService
+  name: 'credential-provider'
+  properties: {
+    displayName: 'Credential Provider'
+    identityProvider: 'aad'
+    oauth2: {
+      grantTypes: {
+        clientCredentials: {
+          resourceUri: oauthTargetResource
+          tenantId: subscription().tenantId
+        }
+      }
+    }
+  }
+
+  // Add a connection to the Credential Provider for our client
+  resource clientConnection 'authorizations' = {
+    name: 'client-connection'
+    properties: {
+      authorizationType: 'OAuth2'
+      oauth2grantType: 'ClientCredentials'
+      parameters: {
+        clientId: clientId
+        clientSecret: '...SECRET...'
+      }
+    }
+
+    // Give the system-assigned managed identity of API Management permission to use the connection
+    resource accessPolicies 'accessPolicies' = {
+      name: 'client-connection-access-policy-apim-managed-identity'
+      properties: {
+        objectId: apiManagementService.identity.principalId
+        tenantId: apiManagementService.identity.tenantId
+      }
+    }
+  }
+}
+
+
 // API
 
 resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' = {
@@ -135,6 +178,24 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       displayName: 'Call Protected API without Authentication'
       method: 'GET'
       urlTemplate: '/call-protected-api-without-authentication'
+    }
+  }
+
+  // Operation that will call the protected API using the Credential Manager
+  resource callProtectedApiUsingCredentialManager 'operations' = {
+    name: 'call-protected-api-using-credential-manager'
+    properties: {
+      displayName: 'Call Protected API using Credential Manager'
+      method: 'GET'
+      urlTemplate: '/call-protected-api-using-credential-manager'
+    }
+  
+    resource policies 'policies' = {
+      name: 'policy'
+      properties: {
+        format: 'rawxml'
+        value: loadTextContent('call-protected-api-using-credential-manager.xml')
+      }
     }
   }
 
@@ -177,5 +238,6 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
   dependsOn: [
     apimGatewayUrlNamedValue
     oauthScopeNamedValue
+    credentialProvider
   ]
 }

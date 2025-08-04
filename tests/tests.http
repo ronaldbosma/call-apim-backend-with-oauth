@@ -8,6 +8,12 @@ GET https://{{apimHostname}}/unprotected/call-protected-api-without-authenticati
 ###
 
 
+# Operation that will call the protected API using the Credential Manager
+GET https://{{apimHostname}}/unprotected/call-protected-api-using-credential-manager HTTP/1.1
+
+###
+
+
 # Operation that will call the protected API using the send-request policy with a secret
 GET https://{{apimHostname}}/unprotected/call-protected-api-using-send-request-with-secret HTTP/1.1
 
