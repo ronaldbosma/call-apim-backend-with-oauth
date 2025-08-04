@@ -10,11 +10,14 @@ if ($LASTEXITCODE -ne 0) {
     throw "Unable to set the Azure subscription. Please make sure that you're logged into the Azure CLI with the same credentials as the Azure Developer CLI."
 }
 
+$scriptDirectory = Split-Path -Parent $MyInvocation.MyCommand.Definition
+
 # Deploy the APIs to API Management
+Write-Host "Deploying APIs to API Management..."
 az deployment group create `
+  --name "$($env:AZURE_ENV_NAME)-apis-$(Get-Date -UFormat %s)" `
   --resource-group $env:AZURE_RESOURCE_GROUP `
-  --name "${$env:AZURE_ENV_NAME}-apis-$(Get-Date -UFormat %s)" `
-  --template-file "../src/apis/apis.bicep" `
+  --template-file "$scriptDirectory/../src/apis/apis.bicep" `
   --parameters `
       apiManagementServiceName=$env:AZURE_API_MANAGEMENT_NAME `
       keyVaultName=$env:AZURE_KEY_VAULT_NAME `
