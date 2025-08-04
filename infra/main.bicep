@@ -149,40 +149,12 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
 }
 
 //=============================================================================
-// Application Resources
-//=============================================================================
-
-module protectedApi 'modules/application/protected-api/protected-api.bicep' = {
-  scope: resourceGroup
-  params: {
-    apiManagementServiceName: apiManagementSettings.serviceName
-    tenantId: subscription().tenantId
-    oauthAudience: apimAppRegistration.outputs.appId
-  }
-  dependsOn: [
-    apiManagement
-  ]
-}
-
-module unprotectedApi 'modules/application/unprotected-api/unprotected-api.bicep' = {
-  scope: resourceGroup
-  params: {
-    apiManagementServiceName: apiManagementSettings.serviceName
-    oauthTargetResource: apiManagementSettings.appRegistrationIdentifierUri
-    keyVaultName: keyVaultName
-    clientId: clientAppRegistration.outputs.appId
-  }
-  dependsOn: [
-    apiManagement
-  ]
-}
-
-//=============================================================================
 // Outputs
 //=============================================================================
 
 // Return names of the Entra ID resources
 output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
+output ENTRA_ID_APIM_APP_REGISTRATION_APP_ID string = apimAppRegistration.outputs.appId
 output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
 output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
 output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId

@@ -6,7 +6,7 @@
 // Imports
 //=============================================================================
 
-import * as helpers from '../../../functions/helpers.bicep'
+import * as helpers from '../../../infra/functions/helpers.bicep'
 
 //=============================================================================
 // Parameters
