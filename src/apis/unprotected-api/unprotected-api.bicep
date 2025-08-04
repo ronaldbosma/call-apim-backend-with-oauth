@@ -1,5 +1,8 @@
 //=============================================================================
 // Unprotected API in API Management
+//
+// The operations of this API demonstrate different ways to call a backend API
+// that is protected by OAuth. The protected API is used as the backend.
 //=============================================================================
 
 //=============================================================================
