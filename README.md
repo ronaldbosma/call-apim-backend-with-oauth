@@ -66,15 +66,16 @@ This template has several hooks that are executed at different stages of the dep
 
 - [postprovision-create-and-store-client-certificate.ps1](hooks/postprovision-create-and-store-client-certificate.ps1): 
   This PowerShell script is executed after the infra resources are provisioned. 
-  It creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-  If the client certificate already exists in Key Vault, it will not create a new one.
   Currently, we can't create certificates for an app registration with Bicep.
+  This script creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+  If the client certificate already exists in Key Vault, it will not create a new one.
+  
 
 - [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1): 
   This PowerShell script is executed after the infra resources are provisioned. 
-  It creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-  If the app registration already has a client secret, it will not create a new one.
   Currently, we can't create secrets for an app registration with Bicep.
+  This script creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+  If the app registration already has a client secret, it will not create a new one.
 
 - [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
   This PowerShell script is executed after the infra resources are provisioned. 

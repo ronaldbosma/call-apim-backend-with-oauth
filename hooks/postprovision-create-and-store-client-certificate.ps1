@@ -1,7 +1,7 @@
 # This PowerShell script is executed after the infra resources are provisioned. 
-# It creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-# If the client certificate already exists in Key Vault, it will not create a new one.
 # Currently, we can't create certificates for an app registration with Bicep.
+# This script creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+# If the client certificate already exists in Key Vault, it will not create a new one.
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
 az account set --subscription $env:AZURE_SUBSCRIPTION_ID
