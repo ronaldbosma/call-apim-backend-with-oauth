@@ -30,6 +30,10 @@ An API Management service is deployed with two APIs:
     See [call-protected-api-using-send-request-with-certificate.xml](src/apis/unprotected-api/call-protected-api-using-send-request-with-certificate.xml) for the implementation of this policy. 
     [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.
 
+
+> TODO: mention key vault and add it to overview diagram
+
+
 ## Getting Started
 
 ### Prerequisites  
