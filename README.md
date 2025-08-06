@@ -1,16 +1,34 @@
 # Call API Management backend with OAuth
 
-An `azd` template using Bicep that provides the following examples of how to call a backend API protected with OAuth via Azure API Management:
+An `azd` template using Bicep that provides the multiple examples of how to call a backend API protected with OAuth via Azure API Management. 
+The scenarios included are: using the Credential Manager, the send-request policy with a client secret and the send-request policy with a certificate (client assertion).
 
-1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
-   See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [call-protected-api-using-credential-manager.xml](src/apis/unprotected-api/call-protected-api-using-credential-manager.xml) on how to use it in an API Management policy.
+## Overview
 
-1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a client secret.
-   See [call-protected-api-using-send-request-with-secret.xml](src/apis/unprotected-api/call-protected-api-using-send-request-with-secret.xml) for the implementation of this policy.
+This template deploys the following resources:
 
-1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a certificate (client assertion).  
-   See [call-protected-api-using-send-request-with-certificate.xml](src/apis/unprotected-api/call-protected-api-using-send-request-with-certificate.xml) for the implementation of this policy. 
-  [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.
+![Overview of the template](images/diagrams-overview.png)
+
+App registrations in Entra ID are created using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension) that represent the backend and the client.
+
+An API Management service is deployed with two APIs:
+
+- **Protected API**: A backend API that is protected with OAuth. 
+  It requires an access token to be retrieved from Entra ID (formerly Azure AD) before it can be called.  
+  _(We've used an API in the same API Management service, but this can be any API that requires OAuth authentication.)_
+
+- **Unprotected API**: An API that is not protected with OAuth. 
+  It can be called without an access token. This API is used to demonstrate how to call the protected API using the following methods:
+
+  1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
+    See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [call-protected-api-using-credential-manager.xml](src/apis/unprotected-api/call-protected-api-using-credential-manager.xml) on how to use it in an API Management policy.
+
+  1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a client secret.
+    See [call-protected-api-using-send-request-with-secret.xml](src/apis/unprotected-api/call-protected-api-using-send-request-with-secret.xml) for the implementation of this policy.
+
+  1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a certificate (client assertion).  
+    See [call-protected-api-using-send-request-with-certificate.xml](src/apis/unprotected-api/call-protected-api-using-send-request-with-certificate.xml) for the implementation of this policy. 
+    [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.
 
 ## Getting Started
 
