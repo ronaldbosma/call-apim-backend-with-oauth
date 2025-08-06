@@ -10,7 +10,7 @@ param(
     [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$ApimAppRegistrationName = $env:ENTRA_ID_APIM_APP_REGISTRATION_NAME,
+    [string]$BackendAppRegistrationName = $env:ENTRA_ID_BACKEND_APP_REGISTRATION_NAME,
     
     [Parameter(Mandatory = $false)]
     [string]$ClientAppRegistrationName = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_NAME
@@ -65,5 +65,5 @@ function Remove-ApplicationAndServicePrincipal($uniqueName){
 }
 
 
-Remove-ApplicationAndServicePrincipal $ApimAppRegistrationName
+Remove-ApplicationAndServicePrincipal $BackendAppRegistrationName
 Remove-ApplicationAndServicePrincipal $ClientAppRegistrationName

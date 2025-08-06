@@ -1,5 +1,5 @@
 //=============================================================================
-// API Management App Registration with App roles & Service Principal
+// Backend App Registration with App roles & Service Principal
 //=============================================================================
 
 targetScope = 'subscription'
@@ -36,7 +36,7 @@ param identifierUri string
 // Resources
 //=============================================================================
 
-resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
+resource backendAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   tags: helpers.flattenTags(tags)
   
   uniqueName: name
@@ -66,8 +66,8 @@ resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   }
 }
 
-resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
-  appId: apimAppRegistration.appId
+resource backendServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
+  appId: backendAppRegistration.appId
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
 }
 
@@ -75,4 +75,4 @@ resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
 // Outputs
 //=============================================================================
 
-output appId string = apimAppRegistration.appId
+output appId string = backendAppRegistration.appId

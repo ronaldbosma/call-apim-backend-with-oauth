@@ -23,10 +23,10 @@ param(
     [string]$KeyVaultName = $env:AZURE_KEY_VAULT_NAME,
     
     [Parameter(Mandatory = $false)]
-    [string]$OAuthAudience = $env:ENTRA_ID_APIM_APP_REGISTRATION_APP_ID,
+    [string]$OAuthAudience = $env:ENTRA_ID_BACKEND_APP_REGISTRATION_APP_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$OAuthTargetResource = $env:ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI,
+    [string]$OAuthTargetResource = $env:ENTRA_ID_BACKEND_APP_REGISTRATION_IDENTIFIER_URI,
     
     [Parameter(Mandatory = $false)]
     [string]$ClientId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID
@@ -54,11 +54,11 @@ if ([string]::IsNullOrEmpty($KeyVaultName)) {
 }
 
 if ([string]::IsNullOrEmpty($OAuthAudience)) {
-    throw "OAuthAudience parameter is required. Please provide it as a parameter or set the ENTRA_ID_APIM_APP_REGISTRATION_APP_ID environment variable."
+    throw "OAuthAudience parameter is required. Please provide it as a parameter or set the ENTRA_ID_BACKEND_APP_REGISTRATION_APP_ID environment variable."
 }
 
 if ([string]::IsNullOrEmpty($OAuthTargetResource)) {
-    throw "OAuthTargetResource parameter is required. Please provide it as a parameter or set the ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI environment variable."
+    throw "OAuthTargetResource parameter is required. Please provide it as a parameter or set the ENTRA_ID_BACKEND_APP_REGISTRATION_IDENTIFIER_URI environment variable."
 }
 
 if ([string]::IsNullOrEmpty($ClientId)) {

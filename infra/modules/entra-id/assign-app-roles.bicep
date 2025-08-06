@@ -14,8 +14,8 @@ extension microsoftGraphV1
 // Parameters
 //=============================================================================
 
-@description('The name of the API Management app registration')
-param apimAppRegistrationName string
+@description('The name of the backend app registration')
+param backendAppRegistrationName string
 
 @description('The name of the client app registration')
 param clientAppRegistrationName string
@@ -24,12 +24,12 @@ param clientAppRegistrationName string
 // Existing Resources
 //=============================================================================
 
-resource apimAppRegistration 'Microsoft.Graph/applications@v1.0' existing = {
-  uniqueName: apimAppRegistrationName
+resource backendAppRegistration 'Microsoft.Graph/applications@v1.0' existing = {
+  uniqueName: backendAppRegistrationName
 }
 
-resource apimServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
-  appId: apimAppRegistration.appId
+resource backendServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' existing = {
+  appId: backendAppRegistration.appId
 }
 
 resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' existing = {
@@ -52,7 +52,7 @@ func getAppRoleIdByValue(appRoles array, value string) string =>
 //=============================================================================
 
 resource assignSampleRead 'Microsoft.Graph/appRoleAssignedTo@v1.0' = {
-  resourceId: apimServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, 'Sample.Read')
+  resourceId: backendServicePrincipal.id
+  appRoleId: getAppRoleIdByValue(backendAppRegistration.appRoles, 'Sample.Read')
   principalId: clientServicePrincipal.id
 }

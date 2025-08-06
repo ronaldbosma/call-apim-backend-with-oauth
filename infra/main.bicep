@@ -41,14 +41,17 @@ var apiManagementSettings = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   publisherName: 'admin@example.org'
   publisherEmail: 'admin@example.org'
-  appRegistrationName: getResourceName('appRegistration', environmentName, location, 'apim-${instanceId}')
-  appRegistrationIdentifierUri: 'api://${getResourceName('apiManagement', environmentName, location, instanceId)}'
 }
 
 var appInsightsSettings = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
   logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
+}
+
+var backendAppRegistrationSettings = {
+  appRegistrationName: getResourceName('appRegistration', environmentName, location, 'backend-${instanceId}')
+  appRegistrationIdentifierUri: 'api://${getResourceName('appRegistration', environmentName, location, 'backend-${instanceId}')}'
 }
 
 var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
@@ -64,12 +67,12 @@ var tags = {
 // Resources
 //=============================================================================
 
-module apimAppRegistration 'modules/entra-id/apim-app-registration.bicep' = {
+module backendAppRegistration 'modules/entra-id/backend-app-registration.bicep' = {
   params: {
     tenantId: subscription().tenantId
     tags: tags
-    name: apiManagementSettings.appRegistrationName
-    identifierUri: apiManagementSettings.appRegistrationIdentifierUri
+    name: backendAppRegistrationSettings.appRegistrationName
+    identifierUri: backendAppRegistrationSettings.appRegistrationIdentifierUri
   }
 }
 
@@ -79,17 +82,17 @@ module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = 
     name: clientAppRegistrationName
   }
   dependsOn: [
-    apimAppRegistration
+    backendAppRegistration
   ]
 }
 
 module assignAppRolesToClient 'modules/entra-id/assign-app-roles.bicep' = {
   params: {
-    apimAppRegistrationName: apiManagementSettings.appRegistrationName
+    backendAppRegistrationName: backendAppRegistrationSettings.appRegistrationName
     clientAppRegistrationName: clientAppRegistrationName
   }
   dependsOn: [
-    apimAppRegistration
+    backendAppRegistration
     clientAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
@@ -153,9 +156,9 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
 //=============================================================================
 
 // Return names of the Entra ID resources
-output ENTRA_ID_APIM_APP_REGISTRATION_NAME string = apiManagementSettings.appRegistrationName
-output ENTRA_ID_APIM_APP_REGISTRATION_APP_ID string = apimAppRegistration.outputs.appId
-output ENTRA_ID_APIM_APP_REGISTRATION_IDENTIFIER_URI string = apiManagementSettings.appRegistrationIdentifierUri
+output ENTRA_ID_BACKEND_APP_REGISTRATION_NAME string = backendAppRegistrationSettings.appRegistrationName
+output ENTRA_ID_BACKEND_APP_REGISTRATION_APP_ID string = backendAppRegistration.outputs.appId
+output ENTRA_ID_BACKEND_APP_REGISTRATION_IDENTIFIER_URI string = backendAppRegistrationSettings.appRegistrationIdentifierUri
 output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
 output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId
 
