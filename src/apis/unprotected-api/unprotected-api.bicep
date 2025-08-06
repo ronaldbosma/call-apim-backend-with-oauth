@@ -146,64 +146,64 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
 
   // Operation that will call the protected API without any authentication
   resource callProtectedApiWithoutAuthentication 'operations' = {
-    name: 'call-protected-api-without-authentication'
+    name: 'without-authentication'
     properties: {
-      displayName: 'Call Protected API without Authentication'
+      displayName: 'Without Authentication'
       method: 'GET'
-      urlTemplate: '/call-protected-api-without-authentication'
+      urlTemplate: '/without-authentication'
     }
   }
 
   // Operation that will call the protected API using the Credential Manager
   resource callProtectedApiUsingCredentialManager 'operations' = {
-    name: 'call-protected-api-using-credential-manager'
+    name: 'credential-manager'
     properties: {
-      displayName: 'Call Protected API using Credential Manager'
+      displayName: 'Use Credential Manager'
       method: 'GET'
-      urlTemplate: '/call-protected-api-using-credential-manager'
+      urlTemplate: '/credential-manager'
     }
   
     resource policies 'policies' = {
       name: 'policy'
       properties: {
         format: 'rawxml'
-        value: loadTextContent('call-protected-api-using-credential-manager.xml')
+        value: loadTextContent('credential-manager.xml')
       }
     }
   }
 
   // Operation that will call the protected API using the send-request policy with a secret
   resource callProtectedApiUsingSendRequestWithSecret 'operations' = {
-    name: 'call-protected-api-using-send-request-with-secret'
+    name: 'send-request-with-secret'
     properties: {
-      displayName: 'Call Protected API using Send Request with Secret'
+      displayName: 'Use Send Request with Secret'
       method: 'GET'
-      urlTemplate: '/call-protected-api-using-send-request-with-secret'
+      urlTemplate: '/send-request-with-secret'
     }
   
     resource policies 'policies' = {
       name: 'policy'
       properties: {
         format: 'rawxml'
-        value: loadTextContent('call-protected-api-using-send-request-with-secret.xml')
+        value: loadTextContent('send-request-with-secret.xml')
       }
     }
   }
 
   // Operation that will call the protected API using the send-request policy with a certificate (client_assertion)
   resource callProtectedApiUsingSendRequestWithCertificate 'operations' = {
-    name: 'call-protected-api-using-send-request-with-certificate'
+    name: 'send-request-with-certificate'
     properties: {
-      displayName: 'Call Protected API using Send Request with Certificate'
+      displayName: 'Use Send Request with Certificate'
       method: 'GET'
-      urlTemplate: '/call-protected-api-using-send-request-with-certificate'
+      urlTemplate: '/send-request-with-certificate'
     }
   
     resource policies 'policies' = {
       name: 'policy'
       properties: {
         format: 'rawxml'
-        value: loadTextContent('call-protected-api-using-send-request-with-certificate.xml')
+        value: loadTextContent('send-request-with-certificate.xml')
       }
     }
   }
