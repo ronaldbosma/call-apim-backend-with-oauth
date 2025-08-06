@@ -16,17 +16,14 @@
         <mxCell id="c-z1gGyClp4EE-uFw3N3-3" value="Protected API" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+JiN4YTsgICAgPHBhdGggZmlsbD0iIzU3YTMwMCIgZD0iTTAgMjAuODRoMTkuNTV2OC4zMkgweiIvPiYjeGE7ICAgIDxwYXRoIGZpbGw9IiM1OWI0ZDkiIGQ9Ik00MS42OCAyMC44NGgxMC4yNnY4LjMySDQxLjY4eiIvPiYjeGE7ICAgIDxjaXJjbGUgZmlsbD0iIzU3YTMwMCIgcj0iOS40NiIgY3k9IjI1IiBjeD0iMjAuMTIiLz4mI3hhOyAgICA8cGF0aCBmaWxsPSIjNTliNGQ5IiBkPSJNMjAuMTIuNDh2MTAuOTZhMSAxIDAgMCAxIDAgMjcuMTR2MTAuOTZhMSAxIDAgMCAwIDAtNDkuMDVaIi8+JiN4YTs8L3N2Zz4=;imageBackground=none;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="530" y="190" width="50" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="c-z1gGyClp4EE-uFw3N3-4" value="Microsoft Entra ID" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/other/Entra_Identity.svg;" parent="1" vertex="1">
-          <mxGeometry x="390" y="350" width="68" height="60.440000000000005" as="geometry" />
-        </mxCell>
-        <mxCell id="c-z1gGyClp4EE-uFw3N3-19" value="2b. retrieves&amp;nbsp;&lt;div&gt;token for&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="cBrDTxg3P6peZgdaZP9S-1" target="c-z1gGyClp4EE-uFw3N3-8" edge="1">
-          <mxGeometry x="-0.2471" y="6" relative="1" as="geometry">
+        <mxCell id="c-z1gGyClp4EE-uFw3N3-19" value="2b. retrieves&amp;nbsp;&lt;div&gt;token for&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="cBrDTxg3P6peZgdaZP9S-1" target="c-z1gGyClp4EE-uFw3N3-5" edge="1">
+          <mxGeometry x="-0.004" y="7" relative="1" as="geometry">
             <mxPoint x="280" y="320" as="sourcePoint" />
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-z1gGyClp4EE-uFw3N3-20" value="2a. retrieves token using:&lt;div&gt;- the&amp;nbsp;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;credential manager&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- or send-request with secret&lt;/div&gt;&lt;div&gt;- or send-request with certificate&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.75;exitDx=0;exitDy=0;align=left;" parent="1" source="cBrDTxg3P6peZgdaZP9S-1" target="c-z1gGyClp4EE-uFw3N3-9" edge="1">
-          <mxGeometry x="0.0411" y="-85" relative="1" as="geometry">
+        <mxCell id="c-z1gGyClp4EE-uFw3N3-20" value="2a. retrieves token for client using either:&lt;div&gt;- the&amp;nbsp;&lt;span style=&quot;background-color: light-dark(#ffffff, var(--ge-dark-color, #121212)); color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;credential manager&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- or send-request with secret&lt;/div&gt;&lt;div&gt;- or send-request with certificate&lt;/div&gt;" style="rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;align=left;" parent="1" source="cBrDTxg3P6peZgdaZP9S-1" target="c-z1gGyClp4EE-uFw3N3-10" edge="1">
+          <mxGeometry x="0.2731" y="-92" relative="1" as="geometry">
             <mxPoint x="220" y="330" as="sourcePoint" />
             <mxPoint as="offset" />
           </mxGeometry>
@@ -39,50 +36,53 @@
         <mxCell id="c-z1gGyClp4EE-uFw3N3-6" value="Client" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.user;fontStyle=0;labelBackgroundColor=default;" parent="1" vertex="1">
           <mxGeometry x="130" y="190" width="47.5" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="c-z1gGyClp4EE-uFw3N3-8" value="&lt;div&gt;- Name:&amp;nbsp;&lt;i&gt;appreg-oauth-sdc-apim-wiyuo&lt;/i&gt;&lt;/div&gt;- Application (client) ID:&amp;nbsp;&lt;div&gt;&amp;nbsp; &lt;i&gt;d03a9bf4-b880-4793-926f-95bb5ce74a77&lt;/i&gt;&lt;/div&gt;&lt;div&gt;- Application ID URI:&amp;nbsp;&lt;i&gt;api://apim-oauth-sdc-wiyuo&lt;/i&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- App roles:&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Sample.Read&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=bottom;" parent="1" vertex="1">
-          <mxGeometry x="439.5" y="460" width="270" height="220" as="geometry" />
+        <mxCell id="c-z1gGyClp4EE-uFw3N3-8" value="&lt;div&gt;- Name:&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;i&gt;appreg-oauthbackend-sdc-backend-luolm&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;- Application (client) ID:&amp;nbsp;&lt;div&gt;&amp;nbsp;&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;i&gt;58788dc7-204d-4905-827a-4b42af23c8e7&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- Application ID URI:&amp;nbsp;&lt;br&gt;&lt;i&gt;&amp;nbsp;&amp;nbsp;&lt;/i&gt;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;i&gt;api://appreg-oauthbackend-sdc-backend-luolm&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- App roles:&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Sample.Read&lt;/li&gt;&lt;/ul&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=bottom;" parent="1" vertex="1">
+          <mxGeometry x="430" y="460" width="279.5" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="c-z1gGyClp4EE-uFw3N3-5" value="API Management&lt;div&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;(app registration)&lt;/span&gt;&lt;/div&gt;" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/App_Registrations.svg;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
+        <mxCell id="c-z1gGyClp4EE-uFw3N3-5" value="Backend&lt;div&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;(app registration)&lt;/span&gt;&lt;/div&gt;" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/App_Registrations.svg;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="549.5" y="430" width="50" height="50" as="geometry" />
         </mxCell>
-        <mxCell id="c-z1gGyClp4EE-uFw3N3-9" value="&lt;div&gt;- Name:&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;i&gt;appreg-oauth-sdc-validclient-wiyuo&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;- Application (client) ID:&amp;nbsp;&lt;div&gt;&amp;nbsp;&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;i&gt;f2b24498-3c66-46cd-9a61-92acb473b959&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- Client secret: **********&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- API permissions:&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Sample.Read&lt;/li&gt;&lt;/ul&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=bottom;" parent="1" vertex="1">
+        <mxCell id="c-z1gGyClp4EE-uFw3N3-9" value="&lt;div&gt;- Name:&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;i&gt;appreg-oauthbackend-sdc-client-luolm&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;- Application (client) ID:&amp;nbsp;&lt;div&gt;&amp;nbsp;&amp;nbsp;&lt;span style=&quot;background-color: transparent;&quot;&gt;&lt;i&gt;81653145-4a54-4a4c-bad5-6d609c93c510&lt;/i&gt;&lt;/span&gt;&lt;/div&gt;&lt;div&gt;- Client secret: **********&lt;/div&gt;&lt;div&gt;- Client certificate: **********&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;- API permissions:&lt;/div&gt;&lt;div&gt;&lt;ul&gt;&lt;li&gt;Sample.Read&lt;/li&gt;&lt;/ul&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;align=left;verticalAlign=bottom;" parent="1" vertex="1">
           <mxGeometry x="138.5" y="460" width="270" height="220" as="geometry" />
         </mxCell>
         <mxCell id="c-z1gGyClp4EE-uFw3N3-10" value="Client&lt;div&gt;&lt;span style=&quot;font-weight: normal;&quot;&gt;(app registration)&lt;/span&gt;&lt;/div&gt;" style="image;sketch=0;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/mscae/App_Registrations.svg;fontStyle=1;labelBackgroundColor=none;" parent="1" vertex="1">
           <mxGeometry x="248.5" y="430" width="50" height="50" as="geometry" />
         </mxCell>
         <mxCell id="c-z1gGyClp4EE-uFw3N3-13" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="255.5" y="626" width="14.5" height="25" as="geometry" />
+          <mxGeometry x="256" y="637" width="14.5" height="14" as="geometry" />
         </mxCell>
         <mxCell id="c-z1gGyClp4EE-uFw3N3-15" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;labelPosition=left;verticalLabelPosition=middle;align=right;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="450" y="626" width="14.5" height="25" as="geometry" />
+          <mxGeometry x="444" y="637" width="14.5" height="14" as="geometry" />
         </mxCell>
-        <mxCell id="c-z1gGyClp4EE-uFw3N3-16" value="assigned subet of" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;labelBackgroundColor=none;" parent="1" source="c-z1gGyClp4EE-uFw3N3-13" target="c-z1gGyClp4EE-uFw3N3-15" edge="1">
+        <mxCell id="c-z1gGyClp4EE-uFw3N3-16" value="assigned roles" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;labelBackgroundColor=none;" parent="1" source="c-z1gGyClp4EE-uFw3N3-13" target="c-z1gGyClp4EE-uFw3N3-15" edge="1">
           <mxGeometry x="-0.1228" y="9" relative="1" as="geometry">
             <mxPoint y="1" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="c-z1gGyClp4EE-uFw3N3-17" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;flipH=1;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;" parent="1" vertex="1">
-          <mxGeometry x="564.5" y="624" width="15.5" height="44" as="geometry" />
+          <mxGeometry x="550" y="637" width="15.5" height="16" as="geometry" />
         </mxCell>
         <mxCell id="c-z1gGyClp4EE-uFw3N3-18" value="requires" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;" parent="1" source="c-z1gGyClp4EE-uFw3N3-3" target="c-z1gGyClp4EE-uFw3N3-17" edge="1">
-          <mxGeometry x="-0.6183" y="15" relative="1" as="geometry">
+          <mxGeometry x="-0.6864" y="15" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="720" y="215" />
-              <mxPoint x="720" y="646" />
+              <mxPoint x="720" y="645" />
             </Array>
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="cBrDTxg3P6peZgdaZP9S-2" value="1. call API&lt;div&gt;without authentication&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="c-z1gGyClp4EE-uFw3N3-6" target="cBrDTxg3P6peZgdaZP9S-1">
+        <mxCell id="cBrDTxg3P6peZgdaZP9S-2" value="1. call API&lt;div&gt;without authentication&lt;/div&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="c-z1gGyClp4EE-uFw3N3-6" target="cBrDTxg3P6peZgdaZP9S-1" edge="1">
           <mxGeometry x="-0.3454" y="25" relative="1" as="geometry">
             <mxPoint as="offset" />
             <mxPoint x="178" y="215" as="sourcePoint" />
             <mxPoint x="565" y="215" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="cBrDTxg3P6peZgdaZP9S-1" value="Unprotected API" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+JiN4YTsgICAgPHBhdGggZmlsbD0iIzU3YTMwMCIgZD0iTTAgMjAuODRoMTkuNTV2OC4zMkgweiIvPiYjeGE7ICAgIDxwYXRoIGZpbGw9IiM1OWI0ZDkiIGQ9Ik00MS42OCAyMC44NGgxMC4yNnY4LjMySDQxLjY4eiIvPiYjeGE7ICAgIDxjaXJjbGUgZmlsbD0iIzU3YTMwMCIgcj0iOS40NiIgY3k9IjI1IiBjeD0iMjAuMTIiLz4mI3hhOyAgICA8cGF0aCBmaWxsPSIjNTliNGQ5IiBkPSJNMjAuMTIuNDh2MTAuOTZhMSAxIDAgMCAxIDAgMjcuMTR2MTAuOTZhMSAxIDAgMCAwIDAtNDkuMDVaIi8+JiN4YTs8L3N2Zz4=;imageBackground=none;fontStyle=1" vertex="1" parent="1">
+        <mxCell id="cBrDTxg3P6peZgdaZP9S-1" value="Unprotected API" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MCA1MCI+JiN4YTsgICAgPHBhdGggZmlsbD0iIzU3YTMwMCIgZD0iTTAgMjAuODRoMTkuNTV2OC4zMkgweiIvPiYjeGE7ICAgIDxwYXRoIGZpbGw9IiM1OWI0ZDkiIGQ9Ik00MS42OCAyMC44NGgxMC4yNnY4LjMySDQxLjY4eiIvPiYjeGE7ICAgIDxjaXJjbGUgZmlsbD0iIzU3YTMwMCIgcj0iOS40NiIgY3k9IjI1IiBjeD0iMjAuMTIiLz4mI3hhOyAgICA8cGF0aCBmaWxsPSIjNTliNGQ5IiBkPSJNMjAuMTIuNDh2MTAuOTZhMSAxIDAgMCAxIDAgMjcuMTR2MTAuOTZhMSAxIDAgMCAwIDAtNDkuMDVaIi8+JiN4YTs8L3N2Zz4=;imageBackground=none;fontStyle=1" parent="1" vertex="1">
           <mxGeometry x="350" y="190" width="50" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c-z1gGyClp4EE-uFw3N3-4" value="Microsoft Entra ID" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/other/Entra_Identity.svg;" parent="1" vertex="1">
+          <mxGeometry x="390" y="350" width="68" height="60.440000000000005" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
