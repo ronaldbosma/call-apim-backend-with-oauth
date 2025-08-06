@@ -12,7 +12,7 @@
             </audiences>
             <required-claims>
                 <claim name="roles" match="any">
-                    <value>@((string)context.Variables["role"])</value>
+                    <value>Sample.Read</value>
                 </claim>
             </required-claims>
         </validate-azure-ad-token>
