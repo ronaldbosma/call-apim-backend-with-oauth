@@ -160,13 +160,3 @@ You can observe the security difference in the `azpacr` claim:
 1. **Credential Manager**: Azure manages everything automatically
 1. **Client secret**: You manage token acquisition but Azure manages the secret
 1. **Client certificate**: You manage both token acquisition and certificate lifecycle
-
-### Monitoring and troubleshooting
-
-You can monitor these requests in Application Insights. Each approach generates different trace patterns:
-
-- Credential Manager requests don't show token acquisition details
-- send-request policies don't generate any tracing by default, so the policies explicitly trace failures and return 500 responses with error details
-- Certificate-based requests include the signed client assertion in error responses (for debugging only)
-
-When token retrieval fails in the send-request scenarios, you'll see detailed error information because the policies explicitly trace failures and return 500 responses with error details.
