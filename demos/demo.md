@@ -34,7 +34,7 @@ Before you start testing the scenarios, you need to prepare the test file:
 
 Let's start by understanding what makes one API protected and the other unprotected.
 
-#### Protected API policy
+**Protected API policy**
 
 The protected API uses the `validate-azure-ad-token` policy to enforce OAuth authentication. This policy:
 - Validates that the JWT token was issued by the correct Entra ID tenant
@@ -43,7 +43,7 @@ The protected API uses the `validate-azure-ad-token` policy to enforce OAuth aut
 
 You can find this policy in [protected-api.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/protected-api/protected-api.xml).
 
-#### Unprotected API structure
+**Unprotected API structure**
 
 The unprotected API doesn't require authentication and acts as a proxy to demonstrate different ways of calling the protected API. 
 Each operation in this API forwards requests to the protected API using a different authentication approach.
@@ -51,7 +51,7 @@ Each operation in this API forwards requests to the protected API using a differ
 
 ### Demonstrate the problem
 
-#### Call protected API without authentication
+**Call protected API without authentication**
 
 Execute the first request `Operation that will call the protected API without any authentication (should fail)` in the `tests.http` file.
 
@@ -62,7 +62,7 @@ You'll receive a 401 Unauthorized response. This shows that the protected API ca
 
 ### Solution 1: Credential Manager
 
-#### Execute the Credential Manager scenario
+**Execute the Credential Manager scenario**
 
 Execute the second request `Operation that will call the protected API using the Credential Manager` in the `tests.http` file.
 
@@ -70,7 +70,7 @@ Execute the second request `Operation that will call the protected API using the
 
 You'll receive a 200 OK response with details about the bearer token used to call the protected API.
 
-#### Review the Credential Manager configuration
+**Review the Credential Manager configuration**
 
 The Credential Manager is Azure's managed solution for handling OAuth tokens. 
 You can find the configuration in [credential-manager.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/credential-manager.bicep).
@@ -82,7 +82,7 @@ When viewing the Bicep file, you'll see the configuration uses three components:
 
 In the Azure portal, navigate to your API Management service and look for the Credential Manager section. You'll see a credential provider that handles token acquisition and caching automatically.
 
-#### Review the policy implementation
+**Review the policy implementation**
 
 The policy uses the `get-authorization-context` element to retrieve an access token from the Credential Manager. 
 You can see this simple implementation in [credential-manager.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/credential-manager.xml).
@@ -92,7 +92,7 @@ The Credential Manager handles all the complexity of token acquisition, caching 
 
 ### Solution 2: send-request policy with client secret
 
-#### Execute the client secret scenario
+**Execute the client secret scenario**
 
 Execute the third request `Operation that will call the protected API using the send-request policy with a secret` in the `tests.http` file.
 
@@ -100,7 +100,7 @@ Execute the third request `Operation that will call the protected API using the 
 
 You'll receive a 200 OK response with details about the bearer token.
 
-#### Review the policy implementation
+**Review the policy implementation**
 
 Open [send-request-with-secret.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/send-request-with-secret.xml) to see how this works:
 
@@ -115,7 +115,7 @@ The client secret is retrieved from Azure Key Vault using API Management's named
 
 ### Solution 3: send-request policy with client certificate
 
-#### Execute the client certificate scenario
+**Execute the client certificate scenario**
 
 Execute the fourth request `Operation that will call the protected API using the send-request policy with a certificate (client_assertion)` in the `tests.http` file.
 
@@ -123,7 +123,7 @@ Execute the fourth request `Operation that will call the protected API using the
 
 You'll receive a 200 OK response with details about the bearer token.
 
-#### Review the JWT assertion creation
+**Review the JWT assertion creation**
 
 Open [send-request-with-certificate.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/send-request-with-certificate.xml) to see the implementation. This approach is more complex but more secure:
 
@@ -134,7 +134,7 @@ Open [send-request-with-certificate.xml](https://github.com/ronaldbosma/call-api
 1. **Token request**: The signed JWT assertion is sent to Entra ID using the client credentials flow
 1. **Error handling**: Similar to the secret approach, errors are traced and 500 responses are returned
 
-#### Understand certificate authentication
+**Understand certificate authentication**
 
 The [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) documentation explains how client assertions work. Key points:
 
@@ -145,17 +145,17 @@ The [Microsoft identity platform application authentication certificate credenti
 
 ### Compare the approaches
 
-#### Token caching behavior
+**Token caching behavior**
 
 If you execute any request multiple times, you'll notice that the `IssuedAt` value in the response doesn't change. This shows that all three approaches cache access tokens effectively.
 
-#### Security differences
+**Security differences**
 
 You can observe the security difference in the `azpacr` claim:
 - Value `1`: Client secret authentication (Credential Manager and secret scenarios)
 - Value `2`: Client certificate authentication (certificate scenario)
 
-#### Management complexity
+**Management complexity**
 
 1. **Credential Manager**: Azure manages everything automatically
 1. **Client secret**: You manage token acquisition but Azure manages the secret
