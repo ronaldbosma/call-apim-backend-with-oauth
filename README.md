@@ -113,7 +113,7 @@ The repository consists of the following files and directories:
 │       ├── protected-api      [ OAuth-protected backend API ]
 │       └── unprotected-api    [ API demonstrating OAuth authentication methods ]
 ├── tests                      
-│   ├── tests.http             [ HTTP requests to test the deployed resources ]
+│   └── tests.http             [ HTTP requests to test the deployed resources ]
 ├── azure.yaml                 [ Describes the apps and types of Azure resources ]
 └── bicepconfig.json           [ Bicep configuration file ]
 ```
