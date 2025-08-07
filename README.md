@@ -90,6 +90,35 @@ Once you're done and want to clean up, run the `azd down` command. By including 
 azd down --purge
 ```
 
+
+## Contents
+
+The repository consists of the following files and directories:
+
+```
+├── demos                      [ Demo guide(s) ]
+├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
+├── images                     [ Images used in the README and demo guide ]
+├── infra                      [ Infrastructure As Code files ]
+│   ├── functions              [ Bicep user-defined functions ]
+│   ├── modules                
+│   │   ├── entra-id           [ Modules for all Entra ID resources ]
+│   │   ├── services           [ Modules for all Azure services ]
+│   │   └── shared             [ Shared Bicep modules ]
+│   ├── types                  [ Bicep user-defined types ]
+│   ├── main.bicep             [ Main infrastructure file ]
+│   └── main.parameters.json   [ Parameters file ]
+├── src                        
+│   └── apis                   [ API Management API definitions ]
+│       ├── protected-api      [ OAuth-protected backend API ]
+│       └── unprotected-api    [ API demonstrating OAuth authentication methods ]
+├── tests                      
+│   ├── tests.http             [ HTTP requests to test the deployed resources ]
+├── azure.yaml                 [ Describes the apps and types of Azure resources ]
+└── bicepconfig.json           [ Bicep configuration file ]
+```
+
+
 ## Hooks
 
 This template has several hooks that are executed at different stages of the deployment process. The following hooks are included:
