@@ -75,6 +75,11 @@ You'll receive a 200 OK response with details about the bearer token used to cal
 The Credential Manager is Azure's managed solution for handling OAuth tokens. 
 You can find the configuration in [credential-manager.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/credential-manager.bicep).
 
+When viewing the Bicep file, you'll see the configuration uses three components:
+- **Authorization Provider**: Defines the OAuth endpoint and authentication method
+- **Authorization** Links the provider to specific credentials
+- **Access Policy**: Controls which APIs can use the authorization
+
 In the Azure portal, navigate to your API Management service and look for the Credential Manager section. You'll see a credential provider that handles token acquisition and caching automatically.
 
 #### Review the policy implementation
@@ -122,6 +127,7 @@ You'll receive a 200 OK response with details about the bearer token.
 
 Open [send-request-with-certificate.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/send-request-with-certificate.xml) to see the implementation. This approach is more complex but more secure:
 
+1. **Certificate retrieval**: The policy uses `context.Deployment.Certificates` to retrieve the certificate from Key Vault. `context.Deployment.Certificates` is a dictionary with the thumbprint as key. You can find the certificate reference under the Certificates section of your API Management service.
 1. **JWT assertion creation**: The policy creates a JWT assertion with specific claims required by Entra ID
 1. **Certificate signing**: The JWT is signed using the client certificate's private key with PSS padding
 1. **Base64Url encoding**: The JWT uses Base64Url encoding (different from standard Base64)
