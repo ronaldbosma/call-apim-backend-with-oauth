@@ -37,7 +37,7 @@ An API Management service is deployed with two APIs:
 
 ### Prerequisites  
 
-Before you can deploy this template, make sure you have the following tools installed and the necessary permissions:  
+Before you can deploy this template, make sure you have the following tools installed and the necessary permissions.
 
 **Required Tools:**
 - [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
