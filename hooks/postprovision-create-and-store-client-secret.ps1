@@ -2,7 +2,7 @@
   This PowerShell script is executed after the infra resources are provisioned. 
   Currently, we can't create secrets for an app registration with Bicep.
   This script creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-  If the client secret already exists in Key Vault, it will not create a new one.
+  If the client secret already exists in Key Vault, it won't create a new one.
 #>
 
 param(

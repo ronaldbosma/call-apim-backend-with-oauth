@@ -1,7 +1,6 @@
 # Call API Management backend with OAuth
 
-An `azd` template using Bicep that provides the multiple examples of how to call a backend API protected with OAuth via Azure API Management. 
-The scenarios included are: using the Credential Manager, the send-request policy with a client secret and the send-request policy with a certificate (client assertion).
+An Azure Developer CLI (`azd`) template using Bicep that shows multiple ways to call OAuth-protected backend APIs through Azure API Management. This template demonstrates three authentication scenarios: Credential Manager, send-request policy with client secret and send-request policy with client certificate (client assertion).
 
 ## Overview
 
@@ -13,12 +12,12 @@ App registrations in Entra ID are created using the [Microsoft Graph Bicep Exten
 
 An API Management service is deployed with two APIs:
 
-- **Protected API**: A backend API that is protected with OAuth. 
-  It requires an access token to be retrieved from Entra ID (formerly Azure AD) before it can be called.  
-  _(We've used an API in the same API Management service, but this can be any API that requires OAuth authentication.)_
+- **Protected API**: A backend API that's protected with OAuth. 
+  It requires an access token to be retrieved from Entra ID before it can be called.  
+  _(This example uses an API in the same API Management service, but this can be any API that requires OAuth authentication.)_
 
-- **Unprotected API**: An API that is not protected with OAuth. 
-  It can be called without an access token. This API is used to demonstrate how to call the protected API using the following methods:
+- **Unprotected API**: An API that's not protected with OAuth. 
+  It can be called without an access token. This API demonstrates how to call the protected API using the following methods:
 
   1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
     See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [call-protected-api-using-credential-manager.xml](src/apis/unprotected-api/call-protected-api-using-credential-manager.xml) on how to use it in an API Management policy.
@@ -40,12 +39,15 @@ An API Management service is deployed with two APIs:
 
 Before you can deploy this template, make sure you have the following tools installed and the necessary permissions:  
 
+**Required Tools:**
 - [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
   - Installing `azd` also installs the following tools:  
-    - [GitHub CLI](https://cli.github.com)  
-    - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
+- [GitHub CLI](https://cli.github.com)  
+- [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
 - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell) 
   _(This template has several hooks. See [this section](#hooks) for more information.)_
+  
+**Required Permissions:**
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
 - You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
@@ -60,7 +62,7 @@ Once the prerequisites are installed on your machine, you can deploy this templa
     azd init --template ronaldbosma/call-apim-backend-with-oauth
     ```
 
-    When prompted, specify the name of the environment, for example, `oauthbackend`. The maximum length is 32 characters.
+    When prompted, specify the name of the environment (for example, `oauthbackend`). The maximum length is 32 characters.
 
 1. Run the `azd auth login` command to authenticate to your Azure subscription _(if you haven't already)_.
 
@@ -96,17 +98,17 @@ This template has several hooks that are executed at different stages of the dep
 
 ### Post-provision hooks
 
-These PowerShell scripts are executed after the infra resources are provisioned.
+These PowerShell scripts are executed after the infrastructure resources are provisioned.
 
 - [postprovision-create-and-store-client-certificate.ps1](hooks/postprovision-create-and-store-client-certificate.ps1): 
   Currently, we can't create certificates for an app registration with Bicep.
   This script creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-  If the client certificate already exists in Key Vault, it will not create a new one.
+  If the client certificate already exists in Key Vault, it won't create a new one.
 
 - [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1): 
   Currently, we can't create secrets for an app registration with Bicep.
   This script creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
-  If the client secret already exists in Key Vault, it will not create a new one.
+  If the client secret already exists in Key Vault, it won't create a new one.
 
 - [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
   The APIs are defined in a [separate module](src/apis/apis.bicep) from the infrastructure 
@@ -119,12 +121,12 @@ These PowerShell scripts are executed after the infra resources are provisioned.
 These PowerShell scripts are executed before the resources are removed.
 
 - [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
-  It removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
+  Removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
   See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
   We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
   
 - [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
-  It permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
+  Permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
   Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
   A predown hook is used and not a postdown hook because permanent deletion of the workspace doesn't work
   if it's already in the soft-deleted state after azd has removed it.
