@@ -30,9 +30,9 @@ Before you start testing the scenarios, you need to prepare the test file:
 1. Replace `<your-api-management-service-name>` with the name of your API Management service.
 
 
-### Review the API policies
+### Review the API policies and app registrations
 
-Let's start by understanding what makes one API protected and the other unprotected.
+Let's start by understanding what makes one API protected and the other unprotected and how the app registrations are configured.
 
 **Protected API policy**
 
@@ -42,6 +42,12 @@ The protected API uses the `validate-azure-ad-token` policy to enforce OAuth aut
 - Requires the `Sample.Read` role in the token's claims
 
 You can find this policy in [protected-api.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/protected-api/protected-api.xml).
+
+**App registration role assignment**
+
+For the OAuth authentication to work, the client app registration has been granted the `Sample.Read` role on the backend app registration.
+
+You can see how this role assignment is configured in [assign-app-roles.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/infra/modules/entra-id/assign-app-roles.bicep).
 
 **Unprotected API structure**
 
