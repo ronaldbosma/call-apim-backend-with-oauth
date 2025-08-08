@@ -43,6 +43,11 @@ The protected API uses the `validate-azure-ad-token` policy to enforce OAuth aut
 
 You can find this policy in [protected-api.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/protected-api/protected-api.xml).
 
+**App registration**
+
+The [backend-app-registration.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/infra/modules/entra-id/backend-app-registration.bicep) file creates an Entra ID app registration for the protected API. 
+This app registration defines the Application ID URI (used as the OAuth audience) and the available app roles (`Sample.Read`).
+
 **App registration role assignment**
 
 For the OAuth authentication to work, the client app registration has been granted the `Sample.Read` role on the backend app registration.
