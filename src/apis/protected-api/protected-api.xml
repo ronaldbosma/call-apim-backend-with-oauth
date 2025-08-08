@@ -19,7 +19,7 @@
 
         <!-- 
             Return the JWT token that was received in the Authorization header.
-            Don't do this in a real world scenario, as it would expose the token to the client.
+            Don't do this in a real world scenario, as it exposes sensitive information.
          -->
         <return-response>
             <set-status code="200" />
