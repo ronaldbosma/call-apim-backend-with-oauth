@@ -78,7 +78,7 @@ Once the prerequisites are installed on your machine, you can deploy this templa
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
 
-### Demo
+### Demo and Test
 
 The [Demo Guide](demos/demo.md) provides a step-by-step walkthrough on how to test and demonstrate the deployed resources.
 
