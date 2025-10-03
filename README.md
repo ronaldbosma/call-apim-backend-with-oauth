@@ -30,6 +30,7 @@ An API Management service is deployed with two APIs:
      See [send-request-with-certificate.xml](src/apis/unprotected-api/send-request-with-certificate.xml) for the implementation of this policy. 
      [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.
 
+We're using the BasicV2 tier because the Consumption tier doesn't support caching, which is important for token management. 
 Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes.
 
 > [!NOTE]
