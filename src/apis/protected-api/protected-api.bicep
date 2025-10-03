@@ -69,6 +69,11 @@ resource protectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' 
       format: 'rawxml'
       value: loadTextContent('protected-api.xml')
     }
+
+    dependsOn: [
+      tenantIdNamedValue
+      oauthAudienceNamedValue
+    ]
   }
 
   resource getOperation 'operations' = {
@@ -79,9 +84,4 @@ resource protectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' 
       urlTemplate: '/'
     }
   }
-
-  dependsOn: [
-    tenantIdNamedValue
-    oauthAudienceNamedValue
-  ]
 }

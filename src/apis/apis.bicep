@@ -44,4 +44,8 @@ module unprotectedApi 'unprotected-api/unprotected-api.bicep' = {
     keyVaultName: keyVaultName
     clientId: clientId
   }
+
+  dependsOn: [
+    protectedApi // The tenant-id named value is deployed with the protected API, but also used in the unprotected API
+  ]
 }

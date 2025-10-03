@@ -142,6 +142,10 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       format: 'rawxml'
       value: loadTextContent('unprotected-api.xml')
     }
+
+    dependsOn: [
+      apimGatewayUrlNamedValue
+    ]
   }
 
   // Operation that will call the protected API without any authentication
@@ -169,6 +173,10 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
         format: 'rawxml'
         value: loadTextContent('credential-manager.xml')
       }
+
+      dependsOn: [
+        credentialManager
+      ]
     }
   }
 
@@ -187,6 +195,12 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
         format: 'rawxml'
         value: loadTextContent('send-request-with-secret.xml')
       }
+
+      dependsOn: [
+        clientIdNamedValue
+        clientSecretNamedValue
+        oauthScopeNamedValue
+      ]
     }
   }
 
@@ -205,12 +219,12 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
         format: 'rawxml'
         value: loadTextContent('send-request-with-certificate.xml')
       }
+
+      dependsOn: [
+        clientIdNamedValue
+        clientCertificateThumbprintNamedValue
+        oauthScopeNamedValue
+      ]
     }
   }
-
-  dependsOn: [
-    apimGatewayUrlNamedValue
-    oauthScopeNamedValue
-    credentialManager
-  ]
 }
