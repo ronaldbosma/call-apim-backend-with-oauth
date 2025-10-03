@@ -61,7 +61,7 @@ var rolesToAssign = [
 //=============================================================================
 
 resource assignAppRole 'Microsoft.Graph/appRoleAssignedTo@v1.0' = [for role in rolesToAssign: {
-  resourceId: apimServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(apimAppRegistration.appRoles, role)
+  resourceId: backendServicePrincipal.id
+  appRoleId: getAppRoleIdByValue(backendAppRegistration.appRoles, role)
   principalId: clientServicePrincipal.id
 }]
