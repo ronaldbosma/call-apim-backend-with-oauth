@@ -45,7 +45,7 @@ You can find this policy in [protected-api.xml](https://github.com/ronaldbosma/c
 
 **App registration**
 
-The [backend-app-registration.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/infra/modules/entra-id/backend-app-registration.bicep) file creates an Entra ID app registration for the Protected Backend API. 
+The [backend-app-registration.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/infra/modules/entra-id/backend-app-registration.bicep) file creates an Entra ID app registration for the protected backend. 
 This app registration defines the Application ID URI (used as the OAuth audience) and the available app roles (`Sample.Read`).
 
 **App registration role assignment**
@@ -56,30 +56,30 @@ You can see how this role assignment is configured in [assign-app-roles.bicep](h
 
 **Unprotected API structure**
 
-The unprotected API doesn't require authentication and acts as a proxy to demonstrate different ways of calling the Protected Backend API. 
-Each operation in this API forwards requests to the Protected Backend API using a different authentication approach.
+The unprotected API doesn't require authentication and acts as a proxy to demonstrate different ways of calling the protected backend. 
+Each operation in this API forwards requests to the protected backend using a different authentication approach.
 
 
 ### Demonstrate the problem
 
-**Call Protected Backend API without authentication**
+**Call protected backend without authentication**
 
-Execute the first request `Operation that will call the Protected Backend API without any authentication (should fail)` in the `tests.http` file.
+Execute the first request `Operation that will call the protected backend without any authentication (should fail)` in the `tests.http` file.
 
 ![Sequence Diagram - Without Authentication](https://raw.githubusercontent.com/ronaldbosma/call-apim-backend-with-oauth/refs/heads/main/images/diagrams-without-authentication.png)
 
-You'll receive a 401 Unauthorized response. This shows that the Protected Backend API can't be called without proper OAuth authentication.
+You'll receive a 401 Unauthorized response. This shows that the protected backend can't be called without proper OAuth authentication.
 
 
 ### Solution 1: Credential Manager
 
 **Execute the Credential Manager scenario**
 
-Execute the second request `Operation that will call the Protected Backend API using the Credential Manager` in the `tests.http` file.
+Execute the second request `Operation that will call the protected backend using the Credential Manager` in the `tests.http` file.
 
 ![Sequence Diagram - Credential Manager](https://raw.githubusercontent.com/ronaldbosma/call-apim-backend-with-oauth/refs/heads/main/images/diagrams-credential-manager.png)
 
-You'll receive a 200 OK response with details about the bearer token used to call the Protected Backend API.
+You'll receive a 200 OK response with details about the bearer token used to call the protected backend.
 
 **Review the Credential Manager configuration**
 
@@ -105,7 +105,7 @@ The Credential Manager handles all the complexity of token acquisition, caching 
 
 **Execute the client secret scenario**
 
-Execute the third request `Operation that will call the Protected Backend API using the send-request policy with a secret` in the `tests.http` file.
+Execute the third request `Operation that will call the protected backend using the send-request policy with a secret` in the `tests.http` file.
 
 ![Sequence Diagram - Send Request with Secret](https://raw.githubusercontent.com/ronaldbosma/call-apim-backend-with-oauth/refs/heads/main/images/diagrams-send-request-with-secret.png)
 
@@ -119,7 +119,7 @@ Open [send-request-with-secret.xml](https://github.com/ronaldbosma/call-apim-bac
 1. **Token acquisition**: If no cached token exists, it uses `send-request` to call the Entra ID token endpoint with the client credentials flow
 1. **Error handling**: If token retrieval fails, the error is traced and a 500 response is returned (this explicit error tracing doesn't happen by default)
 1. **Caching**: Successful tokens are cached for 90% of their lifetime to prevent expiration issues
-1. **Authorization header**: The token is added to the Authorization header before calling the Protected Backend API
+1. **Authorization header**: The token is added to the Authorization header before calling the protected backend
 
 The client secret is retrieved from Azure Key Vault using API Management's named values feature.
 
@@ -128,7 +128,7 @@ The client secret is retrieved from Azure Key Vault using API Management's named
 
 **Execute the client certificate scenario**
 
-Execute the fourth request `Operation that will call the Protected Backend API using the send-request policy with a certificate (client_assertion)` in the `tests.http` file.
+Execute the fourth request `Operation that will call the protected backend using the send-request policy with a certificate (client_assertion)` in the `tests.http` file.
 
 ![Sequence Diagram - Send Request with Certificate](https://raw.githubusercontent.com/ronaldbosma/call-apim-backend-with-oauth/refs/heads/main/images/diagrams-send-request-with-certificate.png)
 

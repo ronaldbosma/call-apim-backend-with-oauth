@@ -22,7 +22,7 @@ param oauthAudience string
 @description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
 param oauthTargetResource string
 
-@description('The ID of the client used for connecting to the Protected Backend API.')
+@description('The ID of the client used for connecting to the protected backend.')
 param clientId string
 
 //=============================================================================

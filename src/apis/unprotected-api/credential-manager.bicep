@@ -15,10 +15,10 @@ param apiManagementServiceName string
 @description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
 param oauthTargetResource string
 
-@description('The ID of the client used for connecting to the Protected Backend API.')
+@description('The ID of the client used for connecting to the protected backend.')
 param clientId string
 
-@description('The secret of the client used for connecting to the Protected Backend API.')
+@description('The secret of the client used for connecting to the protected backend.')
 @secure()
 param clientSecret string
 
@@ -34,7 +34,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 // Resources
 //=============================================================================
 
-// Create a Credential Provider that will be used to retrieve the access token for the Protected Backend API.
+// Create a Credential Provider that will be used to retrieve the access token for the protected backend.
 resource credentialProvider 'Microsoft.ApiManagement/service/authorizationProviders@2024-06-01-preview' = {
   parent: apiManagementService
   name: 'credential-provider'

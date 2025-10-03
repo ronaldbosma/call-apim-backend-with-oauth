@@ -18,7 +18,7 @@ An API Management service is deployed with two APIs:
   _(This example uses an API in the same API Management service, but this can be any API that requires OAuth authentication.)_
 
 - **Unprotected API**: An API that's not protected with OAuth. 
-  It can be called without an access token. This API demonstrates how to call the Protected Backend API using the following methods:
+  It can be called without an access token. This API demonstrates how to call the protected backend using the following methods:
 
   1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
      See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [credential-manager.xml](src/apis/unprotected-api/credential-manager.xml) on how to use it in an API Management policy.

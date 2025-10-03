@@ -24,7 +24,7 @@ param oauthTargetResource string
 @description('The name of the Key Vault that contains the secrets')
 param keyVaultName string
 
-@description('The ID of the client used for connecting to the Protected Backend API.')
+@description('The ID of the client used for connecting to the protected backend.')
 param clientId string
 
 //=============================================================================
@@ -148,7 +148,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     ]
   }
 
-  // Operation that will call the Protected Backend API without any authentication
+  // Operation that will call the protected backend without any authentication
   resource callProtectedApiWithoutAuthentication 'operations' = {
     name: 'without-authentication'
     properties: {
@@ -158,7 +158,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
-  // Operation that will call the Protected Backend API using the Credential Manager
+  // Operation that will call the protected backend using the Credential Manager
   resource callProtectedApiUsingCredentialManager 'operations' = {
     name: 'credential-manager'
     properties: {
@@ -180,7 +180,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
-  // Operation that will call the Protected Backend API using the send-request policy with a secret
+  // Operation that will call the protected backend using the send-request policy with a secret
   resource callProtectedApiUsingSendRequestWithSecret 'operations' = {
     name: 'send-request-with-secret'
     properties: {
@@ -204,7 +204,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
-  // Operation that will call the Protected Backend API using the send-request policy with a certificate (client_assertion)
+  // Operation that will call the protected backend using the send-request policy with a certificate (client_assertion)
   resource callProtectedApiUsingSendRequestWithCertificate 'operations' = {
     name: 'send-request-with-certificate'
     properties: {
