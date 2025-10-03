@@ -30,6 +30,8 @@ An API Management service is deployed with two APIs:
      See [send-request-with-certificate.xml](src/apis/unprotected-api/send-request-with-certificate.xml) for the implementation of this policy. 
      [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.
 
+Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes.
+
 > [!NOTE]
 > If your client has a managed identity, have a look at [Call API Management with Managed Identity](https://github.com/ronaldbosma/call-apim-with-managed-identity) instead.
 
