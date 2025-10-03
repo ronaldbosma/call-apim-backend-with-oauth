@@ -2,7 +2,7 @@
 // Unprotected API in API Management
 //
 // The operations of this API demonstrate different ways to call a backend API
-// that is protected by OAuth. The protected API is used as the backend.
+// that is protected by OAuth. The Protected Backend API is used as the backend.
 //=============================================================================
 
 //=============================================================================
@@ -24,7 +24,7 @@ param oauthTargetResource string
 @description('The name of the Key Vault that contains the secrets')
 param keyVaultName string
 
-@description('The ID of the client used for connecting to the protected API.')
+@description('The ID of the client used for connecting to the Protected Backend API.')
 param clientId string
 
 //=============================================================================
@@ -148,7 +148,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     ]
   }
 
-  // Operation that will call the protected API without any authentication
+  // Operation that will call the Protected Backend API without any authentication
   resource callProtectedApiWithoutAuthentication 'operations' = {
     name: 'without-authentication'
     properties: {
@@ -158,7 +158,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
-  // Operation that will call the protected API using the Credential Manager
+  // Operation that will call the Protected Backend API using the Credential Manager
   resource callProtectedApiUsingCredentialManager 'operations' = {
     name: 'credential-manager'
     properties: {
@@ -180,7 +180,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
-  // Operation that will call the protected API using the send-request policy with a secret
+  // Operation that will call the Protected Backend API using the send-request policy with a secret
   resource callProtectedApiUsingSendRequestWithSecret 'operations' = {
     name: 'send-request-with-secret'
     properties: {
@@ -204,7 +204,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
     }
   }
 
-  // Operation that will call the protected API using the send-request policy with a certificate (client_assertion)
+  // Operation that will call the Protected Backend API using the send-request policy with a certificate (client_assertion)
   resource callProtectedApiUsingSendRequestWithCertificate 'operations' = {
     name: 'send-request-with-certificate'
     properties: {

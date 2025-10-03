@@ -2,7 +2,7 @@
     <inbound>
         <base />
 
-        <!-- Forward requests to the Protected API. -->
+        <!-- Forward requests to the Protected Backend API. -->
         <set-backend-service base-url="{{apim-gateway-url}}/protected" />
         <rewrite-uri template="/" />
     </inbound>

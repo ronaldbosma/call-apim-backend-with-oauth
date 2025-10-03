@@ -22,7 +22,7 @@ param oauthAudience string
 @description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
 param oauthTargetResource string
 
-@description('The ID of the client used for connecting to the protected API.')
+@description('The ID of the client used for connecting to the Protected Backend API.')
 param clientId string
 
 //=============================================================================
@@ -46,6 +46,6 @@ module unprotectedApi 'unprotected-api/unprotected-api.bicep' = {
   }
 
   dependsOn: [
-    protectedApi // The tenant-id named value is deployed with the protected API, but also used in the unprotected API
+    protectedApi // The tenant-id named value is deployed with the Protected Backend API, but also used in the unprotected API
   ]
 }

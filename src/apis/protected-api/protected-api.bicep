@@ -1,5 +1,5 @@
 //=============================================================================
-// Protected API in API Management
+// Protected Backend API in API Management
 //
 // Represents a backend that is protected by OAuth.
 //=============================================================================
@@ -51,11 +51,11 @@ resource oauthAudienceNamedValue 'Microsoft.ApiManagement/service/namedValues@20
 
 // API
 
-resource protectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' = {
-  name: 'protected-api'
+resource protectedBackendApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' = {
+  name: 'protected-backend-api'
   parent: apiManagementService
   properties: {
-    displayName: 'Protected API'
+    displayName: 'Protected Backend API'
     path: 'protected'
     protocols: [ 
       'https' 

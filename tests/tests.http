@@ -9,25 +9,25 @@
 ###
 
 
-# 1. Operation that will call the protected API without any authentication (should fail)
+# 1. Operation that will call the Protected Backend API without any authentication (should fail)
 GET https://{{apimHostname}}/unprotected/without-authentication HTTP/1.1
 
 ###
 
 
-# 2. Operation that will call the protected API using the Credential Manager
+# 2. Operation that will call the Protected Backend API using the Credential Manager
 GET https://{{apimHostname}}/unprotected/credential-manager HTTP/1.1
 
 ###
 
 
-# 3. Operation that will call the protected API using the send-request policy with a secret
+# 3. Operation that will call the Protected Backend API using the send-request policy with a secret
 GET https://{{apimHostname}}/unprotected/send-request-with-secret HTTP/1.1
 
 ###
 
 
-# 4. Operation that will call the protected API using the send-request policy with a certificate (client_assertion)
+# 4. Operation that will call the Protected Backend API using the send-request policy with a certificate (client_assertion)
 GET https://{{apimHostname}}/unprotected/send-request-with-certificate HTTP/1.1
 
 ###

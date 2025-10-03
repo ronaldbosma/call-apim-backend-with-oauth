@@ -13,12 +13,12 @@ A secret and certificate are created for the client app registration and stored 
 
 An API Management service is deployed with two APIs:
 
-- **Protected API**: A backend API that's protected with OAuth. 
+- **Protected Backend API**: A backend API that's protected with OAuth. 
   It requires an access token to be retrieved from Entra ID before it can be called.  
   _(This example uses an API in the same API Management service, but this can be any API that requires OAuth authentication.)_
 
 - **Unprotected API**: An API that's not protected with OAuth. 
-  It can be called without an access token. This API demonstrates how to call the protected API using the following methods:
+  It can be called without an access token. This API demonstrates how to call the Protected Backend API using the following methods:
 
   1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
      See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [credential-manager.xml](src/apis/unprotected-api/credential-manager.xml) on how to use it in an API Management policy.
