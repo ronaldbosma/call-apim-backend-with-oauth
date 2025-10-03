@@ -67,7 +67,7 @@ resource protectedBackendApi 'Microsoft.ApiManagement/service/apis@2024-06-01-pr
     name: 'policy'
     properties: {
       format: 'rawxml'
-      value: loadTextContent('protected-api.xml')
+      value: loadTextContent('protected-backend-api.xml')
     }
 
     dependsOn: [

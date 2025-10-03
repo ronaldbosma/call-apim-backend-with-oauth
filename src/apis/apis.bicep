@@ -29,7 +29,7 @@ param clientId string
 // Resources
 //=============================================================================
 
-module protectedApi 'protected-api/protected-api.bicep' = {
+module protectedBackendApi 'protected-backend-api/protected-backend-api.bicep' = {
   params: {
     apiManagementServiceName: apiManagementServiceName
     tenantId: subscription().tenantId
@@ -46,6 +46,6 @@ module unprotectedApi 'unprotected-api/unprotected-api.bicep' = {
   }
 
   dependsOn: [
-    protectedApi // The tenant-id named value is deployed with the Protected Backend API, but also used in the unprotected API
+    protectedBackendApi // The tenant-id named value is deployed with the Protected Backend API, but also used in the unprotected API
   ]
 }
