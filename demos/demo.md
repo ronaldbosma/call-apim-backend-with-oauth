@@ -21,14 +21,6 @@ The deployed resources follow the naming convention: `<resource-type>-<environme
 
 ## 2. What you can demo after deployment
 
-### Setup
-
-Before you start testing the scenarios, you need to prepare the test file:
-
-1. Open the [tests.http](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/tests/tests.http) file in Visual Studio Code.
-
-1. Replace `<your-api-management-service-name>` with the name of your API Management service.
-
 
 ### Review the API policies and app registrations
 
@@ -61,6 +53,15 @@ Each operation in this API forwards requests to the protected backend using a di
 
 
 ### Demonstrate the problem
+
+**Setup**
+
+Before you start testing the scenarios, you need to prepare the test file:
+
+1. Open the [tests.http](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/tests/tests.http) file in Visual Studio Code.
+
+1. Replace `<your-api-management-service-name>` with the name of your API Management service.
+
 
 **Call protected backend without authentication**
 
