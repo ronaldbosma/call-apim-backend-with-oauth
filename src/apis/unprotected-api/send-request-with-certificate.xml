@@ -1,8 +1,10 @@
 <policies>
     <inbound>
         <base />
+
         <!-- Get access token from cache if it exists-->
         <cache-lookup-value key="access-token-from-certificate" variable-name="access-token" caching-type="internal" />
+        
         <choose>
             <!-- Retrieve new access token from Entra ID if it was not found in the cache. -->
             <when condition="@(!context.Variables.ContainsKey("access-token"))">
@@ -135,6 +137,7 @@
                 </choose>
             </when>
         </choose>
+
         <set-header name="Authorization" exists-action="override">
             <value>@("Bearer " + (string)context.Variables["access-token"])</value>
         </set-header>
