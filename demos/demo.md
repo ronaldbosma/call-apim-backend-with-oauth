@@ -117,7 +117,7 @@ You'll receive a 200 OK response with details about the bearer token.
 Open [send-request-with-secret.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/send-request-with-secret.xml) to see how this works:
 
 1. **Cache lookup**: The policy first checks if an access token already exists in the cache
-1. **Token acquisition**: If no cached token exists, it uses `send-request` to call the Entra ID token endpoint with the client credentials flow
+1. **Token acquisition**: If no cached token exists, it uses `send-request` to call the Entra ID token endpoint with the OAuth 2.0 Client Credentials Flow
 1. **Error handling**: If token retrieval fails, the error is traced and a 500 response is returned (this explicit error tracing doesn't happen by default)
 1. **Caching**: Successful tokens are cached for 90% of their lifetime to prevent expiration issues
 1. **Authorization header**: The token is added to the Authorization header before calling the protected backend
@@ -144,7 +144,7 @@ Open [send-request-with-certificate.xml](https://github.com/ronaldbosma/call-api
 1. **JWT assertion creation**: The policy creates a JWT assertion with specific claims required by Entra ID
 1. **Certificate signing**: The JWT is signed using the client certificate's private key with PSS padding
 1. **Base64Url encoding**: The JWT uses Base64Url encoding (different from standard Base64)
-1. **Token request**: The signed JWT assertion is sent to Entra ID using the client credentials flow
+1. **Token request**: The signed JWT assertion is sent to Entra ID using the OAuth 2.0 Client Credentials Flow
 1. **Error handling**: Similar to the secret approach, errors are traced and 500 responses are returned
 1. **Cache invalidation**: If a 401 Unauthorized or 403 Forbidden response is returned, the access token is removed from the cache to force re-acquisition on the next request
 
