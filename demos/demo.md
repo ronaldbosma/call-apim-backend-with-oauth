@@ -121,6 +121,7 @@ Open [send-request-with-secret.xml](https://github.com/ronaldbosma/call-apim-bac
 1. **Error handling**: If token retrieval fails, the error is traced and a 500 response is returned (this explicit error tracing doesn't happen by default)
 1. **Caching**: Successful tokens are cached for 90% of their lifetime to prevent expiration issues
 1. **Authorization header**: The token is added to the Authorization header before calling the protected backend
+1. **Cache invalidation**: If a 401 Unauthorized or 403 Forbidden response is returned, the access token is removed from the cache to force re-acquisition on the next request
 
 The client secret is retrieved from Azure Key Vault using API Management's named values feature.
 
@@ -145,6 +146,7 @@ Open [send-request-with-certificate.xml](https://github.com/ronaldbosma/call-api
 1. **Base64Url encoding**: The JWT uses Base64Url encoding (different from standard Base64)
 1. **Token request**: The signed JWT assertion is sent to Entra ID using the client credentials flow
 1. **Error handling**: Similar to the secret approach, errors are traced and 500 responses are returned
+1. **Cache invalidation**: If a 401 Unauthorized or 403 Forbidden response is returned, the access token is removed from the cache to force re-acquisition on the next request
 
 **Understand certificate authentication**
 
