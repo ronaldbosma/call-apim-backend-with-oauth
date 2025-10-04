@@ -145,6 +145,12 @@
 
     <outbound>
         <base />
+        
+        <choose>
+            <when condition="@(context.Response.StatusCode == 401 || context.Response.StatusCode == 403)">
+                <cache-remove-value key="access-token-from-certificate" caching-type="internal" />
+            </when>
+        </choose>
     </outbound>
 
     <on-error>
