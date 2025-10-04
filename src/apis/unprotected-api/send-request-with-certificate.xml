@@ -82,13 +82,11 @@
                         <value>application/x-www-form-urlencoded</value>
                     </set-header>
                     <set-body>@{
+                        var scope = "{{oauth-scope}}";
                         var clientId = "{{client-id}}";
                         var clientAssertion = (string)context.Variables["signed-client-assertion"];
-                        var clientAssertionType = "urn:ietf:params:oauth:client-assertion-type:jwt-bearer";
-                        var scope = "{{oauth-scope}}";
-                        var grantType = "client_credentials";
 
-                        return $"client_id={clientId}&client_assertion_type={clientAssertionType}&client_assertion={clientAssertion}&scope={scope}&grant_type={grantType}";
+                        return $"scope={scope}&client_id={clientId}&client_assertion={clientAssertion}&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&grant_type=client_credentials";
                     }</set-body>
                 </send-request>
 
