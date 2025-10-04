@@ -99,8 +99,10 @@
                     <when condition="@(((IResponse)context.Variables["get-access-token-response"])?.StatusCode == 200)">
                         <set-variable name="access-token" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<string>("access_token"))" />
                         <set-variable name="access-token-expires-in" value="@(((JObject)context.Variables["get-access-token-response-body"]).Value<int>("expires_in"))" />
+
+                        <!-- Cache the access token for 95% of its lifetime to prevent expiration issues -->
                         <cache-store-value key="access-token-from-certificate" value="@((string)context.Variables["access-token"])" 
-                                           duration="@((int)(0.9 * (int)context.Variables["access-token-expires-in"]))" />
+                                           duration="@((int)(0.95 * (int)context.Variables["access-token-expires-in"]))" />
                     </when>
                     
                     <!-- If access token retrieval failed, log error and return a 500 Internal Server Error -->
