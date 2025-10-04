@@ -18,6 +18,9 @@ import * as helpers from '../../../infra/functions/helpers.bicep'
 @description('The name of the API Management service')
 param apiManagementServiceName string
 
+@description('The tenant ID for OAuth authentication')
+param tenantId string
+
 @description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
 param oauthTargetResource string
 
@@ -64,6 +67,15 @@ resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2
   properties: {
     displayName: 'apim-gateway-url'
     value: helpers.getApiManagementGatewayUrl(apiManagementServiceName)
+  }
+}
+
+resource oauthTokenUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'oauth-token-url'
+  parent: apiManagementService
+  properties: {
+    displayName: 'oauth-token-url'
+    value: '${environment().authentication.loginEndpoint}${tenantId}/oauth2/v2.0/token'
   }
 }
 
@@ -197,9 +209,10 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       }
 
       dependsOn: [
+        oauthTokenUrlNamedValue
+        oauthScopeNamedValue
         clientIdNamedValue
         clientSecretNamedValue
-        oauthScopeNamedValue
       ]
     }
   }
@@ -221,9 +234,10 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       }
 
       dependsOn: [
+        oauthTokenUrlNamedValue
+        oauthScopeNamedValue
         clientIdNamedValue
         clientCertificateThumbprintNamedValue
-        oauthScopeNamedValue
       ]
     }
   }

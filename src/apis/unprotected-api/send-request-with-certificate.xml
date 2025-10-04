@@ -31,7 +31,7 @@
 
                     var claims = new JObject
                     {
-                        { "aud", "https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token" },
+                        { "aud", "{{oauth-token-url}}" },
                         { "exp", exp },
                         { "iss", "{{client-id}}" },
                         { "jti", Guid.NewGuid().ToString() },
@@ -76,7 +76,7 @@
                 }" />
 
                 <send-request mode="new" timeout="20" response-variable-name="get-access-token-response" ignore-error="false">
-                    <set-url>https://login.microsoftonline.com/{{tenant-id}}/oauth2/v2.0/token</set-url>
+                    <set-url>{{oauth-token-url}}</set-url>
                     <set-method>POST</set-method>
                     <set-header name="Content-Type" exists-action="override">
                         <value>application/x-www-form-urlencoded</value>

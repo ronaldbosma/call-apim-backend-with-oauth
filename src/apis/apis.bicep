@@ -40,12 +40,9 @@ module protectedBackendApi 'protected-backend-api/protected-backend-api.bicep' =
 module unprotectedApi 'unprotected-api/unprotected-api.bicep' = {
   params: {
     apiManagementServiceName: apiManagementServiceName
+    tenantId: subscription().tenantId
     oauthTargetResource: oauthTargetResource
     keyVaultName: keyVaultName
     clientId: clientId
   }
-
-  dependsOn: [
-    protectedBackendApi // The tenant-id named value is deployed with the Protected Backend API, but also used in the unprotected API
-  ]
 }
