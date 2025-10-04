@@ -2,7 +2,7 @@
     <inbound>
         <base />
         <!-- Get access token from cache if it exists-->
-        <cache-lookup-value key="access-token-from-certificate" variable-name="access-token" />
+        <cache-lookup-value key="access-token-from-certificate" variable-name="access-token" caching-type="internal" />
         <choose>
             <!-- Retrieve new access token from Entra ID if it was not found in the cache. -->
             <when condition="@(!context.Variables.ContainsKey("access-token"))">
@@ -102,7 +102,8 @@
 
                         <!-- Cache the access token for 95% of its lifetime to prevent expiration issues -->
                         <cache-store-value key="access-token-from-certificate" value="@((string)context.Variables["access-token"])" 
-                                           duration="@((int)(0.95 * (int)context.Variables["access-token-expires-in"]))" />
+                                           duration="@((int)(0.95 * (int)context.Variables["access-token-expires-in"]))"
+                                           caching-type="internal" />
                     </when>
                     
                     <!-- If access token retrieval failed, log error and return a 500 Internal Server Error -->
