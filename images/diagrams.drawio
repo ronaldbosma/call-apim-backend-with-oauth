@@ -108,7 +108,7 @@
         <mxCell id="SDoTEkgOmAo_s1_UZNhC-4" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="SDoTEkgOmAo_s1_UZNhC-3" vertex="1">
           <mxGeometry x="62.5" y="105" width="10" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="SDoTEkgOmAo_s1_UZNhC-7" value="Unrotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="SDoTEkgOmAo_s1_UZNhC-1" vertex="1">
+        <mxCell id="SDoTEkgOmAo_s1_UZNhC-7" value="Unprotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="SDoTEkgOmAo_s1_UZNhC-1" vertex="1">
           <mxGeometry x="160" y="80" width="110" height="190" as="geometry" />
         </mxCell>
         <mxCell id="SDoTEkgOmAo_s1_UZNhC-8" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="SDoTEkgOmAo_s1_UZNhC-7" vertex="1">
@@ -158,7 +158,7 @@
         <mxCell id="F5zAozDiTsI9lOzsHRhq-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-7wcxMzF_2Zg92gLCawP-5" vertex="1">
           <mxGeometry x="58.5" y="110" width="10" height="180" as="geometry" />
         </mxCell>
-        <mxCell id="-7wcxMzF_2Zg92gLCawP-7" value="Unrotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-7wcxMzF_2Zg92gLCawP-1" vertex="1">
+        <mxCell id="-7wcxMzF_2Zg92gLCawP-7" value="Unprotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-7wcxMzF_2Zg92gLCawP-1" vertex="1">
           <mxGeometry x="160" y="80" width="110" height="400" as="geometry" />
         </mxCell>
         <mxCell id="-7wcxMzF_2Zg92gLCawP-8" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-7wcxMzF_2Zg92gLCawP-7" vertex="1">
@@ -250,7 +250,7 @@
         <mxCell id="0RmOqdITF_pL-Moo39bk-8" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="MTBBnn2Q58c1l2iHvtrN-7" vertex="1">
           <mxGeometry x="68.5" y="140" width="10" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="0RmOqdITF_pL-Moo39bk-0" value="Unrotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="MTBBnn2Q58c1l2iHvtrN-1" vertex="1">
+        <mxCell id="0RmOqdITF_pL-Moo39bk-0" value="Unprotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="MTBBnn2Q58c1l2iHvtrN-1" vertex="1">
           <mxGeometry x="160" y="80" width="110" height="340" as="geometry" />
         </mxCell>
         <mxCell id="0RmOqdITF_pL-Moo39bk-1" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="0RmOqdITF_pL-Moo39bk-0" vertex="1">
@@ -326,7 +326,7 @@
         <mxCell id="-4lEJ_geIK8xlLHNkzah-6" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-4lEJ_geIK8xlLHNkzah-5" vertex="1">
           <mxGeometry x="68.5" y="195" width="10" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="-4lEJ_geIK8xlLHNkzah-7" value="Unrotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-4lEJ_geIK8xlLHNkzah-1" vertex="1">
+        <mxCell id="-4lEJ_geIK8xlLHNkzah-7" value="Unprotected API&lt;div&gt;&lt;i&gt;(API Management)&lt;/i&gt;&lt;/div&gt;" style="shape=umlLifeline;perimeter=lifelinePerimeter;whiteSpace=wrap;html=1;container=1;dropTarget=0;collapsible=0;recursiveResize=0;outlineConnect=0;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-4lEJ_geIK8xlLHNkzah-1" vertex="1">
           <mxGeometry x="160" y="80" width="110" height="410" as="geometry" />
         </mxCell>
         <mxCell id="-4lEJ_geIK8xlLHNkzah-8" value="" style="html=1;points=[[0,0,0,0,5],[0,1,0,0,-5],[1,0,0,0,5],[1,1,0,0,-5]];perimeter=orthogonalPerimeter;outlineConnect=0;targetShapes=umlLifeline;portConstraint=eastwest;newEdgeStyle={&quot;curved&quot;:0,&quot;rounded&quot;:0};" parent="-4lEJ_geIK8xlLHNkzah-7" vertex="1">
