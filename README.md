@@ -38,6 +38,9 @@ Additionally, Application Insights and Log Analytics Workspace are deployed for 
 > [!NOTE]
 > If your client has a managed identity, have a look at [Call API Management with Managed Identity](https://github.com/ronaldbosma/call-apim-with-managed-identity) instead.
 
+> [!IMPORTANT]  
+> This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
+
 
 ## Getting Started
 
