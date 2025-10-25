@@ -61,6 +61,10 @@ var keyVaultName = getResourceName('keyVault', environmentName, location, instan
 var tags = {
   'azd-env-name': environmentName
   'azd-template': 'ronaldbosma/call-apim-backend-with-oauth'
+
+  // The SecurityControl tag is added to Trainer Demo Deploy projects so resources can run in MTT managed subscriptions without being blocked by default security policies.
+  // DO NOT USE this tag in production or customer subscriptions.
+  SecurityControl: 'Ignore'
 }
 
 //=============================================================================
