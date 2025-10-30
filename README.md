@@ -35,11 +35,10 @@ An API Management service is deployed with two APIs:
      [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.  
      For a detailed explanation, see the blog post [Call OAuth-Protected Backends from API Management using Send-Request Policy with Client Certificate](https://ronaldbosma.github.io/blog/2025/10/20/call-oauth-protected-backends-from-api-management-using-send-request-policy-with-client-certificate/).
 
+  If your client has a managed identity, have a look at [Call API Management with Managed Identity](https://github.com/ronaldbosma/call-apim-with-managed-identity) instead.
+
 We're using the BasicV2 tier because the Consumption tier doesn't support caching, which is important for token management. 
 Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes.
-
-> [!NOTE]
-> If your client has a managed identity, have a look at [Call API Management with Managed Identity](https://github.com/ronaldbosma/call-apim-with-managed-identity) instead.
 
 > [!IMPORTANT]  
 > This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
