@@ -23,14 +23,17 @@ An API Management service is deployed with two APIs:
   It can be called without an access token. This API demonstrates how to call the protected backend using the following methods:
 
   1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
-     See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [credential-manager.xml](src/apis/unprotected-api/credential-manager.xml) on how to use it in an API Management policy.
+     See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [credential-manager.xml](src/apis/unprotected-api/credential-manager.xml) on how to use it in an API Management policy.  
+     For a detailed explanation, see the blog post [Call OAuth-Protected Backends from API Management using Credential Manager](https://ronaldbosma.github.io/blog/2025/10/06/call-oauth-protected-backends-from-api-management-using-credential-manager/).
 
   1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a client secret.
-     See [send-request-with-secret.xml](src/apis/unprotected-api/send-request-with-secret.xml) for the implementation of this policy.
+     See [send-request-with-secret.xml](src/apis/unprotected-api/send-request-with-secret.xml) for the implementation of this policy.  
+     For a detailed explanation, see the blog post [Call OAuth-Protected Backends from API Management using Send-Request Policy with Client Secret](https://ronaldbosma.github.io/blog/2025/10/13/call-oauth-protected-backends-from-api-management-using-send-request-policy-with-client-secret/).
 
   1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a certificate (client assertion).  
      See [send-request-with-certificate.xml](src/apis/unprotected-api/send-request-with-certificate.xml) for the implementation of this policy. 
-     [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.
+     [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.  
+     For a detailed explanation, see the blog post [Call OAuth-Protected Backends from API Management using Send-Request Policy with Client Certificate](https://ronaldbosma.github.io/blog/2025/10/20/call-oauth-protected-backends-from-api-management-using-send-request-policy-with-client-certificate/).
 
 We're using the BasicV2 tier because the Consumption tier doesn't support caching, which is important for token management. 
 Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes.
