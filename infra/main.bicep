@@ -172,3 +172,7 @@ output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsN
 output AZURE_KEY_VAULT_NAME string = keyVaultName
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = appInsightsSettings.logAnalyticsWorkspaceName
 output AZURE_RESOURCE_GROUP string = resourceGroupName
+
+// Return resource endpoints
+output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.outputs.gatewayUrl
+output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri

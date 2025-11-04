@@ -47,3 +47,10 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' = {
     enabledForTemplateDeployment: true 
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output vaultUri string = keyVault.properties.vaultUri
+
