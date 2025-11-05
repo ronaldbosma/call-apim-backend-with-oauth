@@ -64,7 +64,7 @@ Before you can deploy this template, make sure you have the following tools inst
 - You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
 
-#### Optional Prerequisites
+**Optional Prerequisites:**
 
 To build and run the [integration tests](#integration-tests) locally, you need the following additional tools:
 - [.NET 9 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)  
