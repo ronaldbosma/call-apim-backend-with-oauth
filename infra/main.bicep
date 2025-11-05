@@ -58,8 +58,13 @@ var clientAppRegistrationName = getResourceName('appRegistration', environmentNa
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
 
+// Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
+// The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
+var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
+
 var tags = {
   'azd-env-name': environmentName
+  'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/call-apim-backend-with-oauth'
 
   // The SecurityControl tag is added to Trainer Demo Deploy projects so resources can run in MTT managed subscriptions without being blocked by default security policies.
@@ -158,6 +163,10 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
 //=============================================================================
 // Outputs
 //=============================================================================
+
+
+// Return the azd environment id
+output AZURE_ENV_ID string = azdEnvironmentId
 
 // Return names of the Entra ID resources
 output ENTRA_ID_BACKEND_APP_REGISTRATION_NAME string = backendAppRegistrationSettings.appRegistrationName
