@@ -117,3 +117,9 @@ resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@20
     httpCorrelationProtocol: 'W3C' // Enable logging to app insights in W3C format
   }
 }
+
+//=============================================================================
+// Outputs
+//=============================================================================
+
+output gatewayUrl string = apiManagementService.properties.gatewayUrl

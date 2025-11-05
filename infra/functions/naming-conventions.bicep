@@ -122,6 +122,7 @@ func getPrefixMap() object => {
   
   // Custom prefixes not specified on the Microsoft site
   appRegistration: 'appreg'
+  azdEnvironment: 'azd'
   client: 'client'
   webtest: 'webtest'
 }

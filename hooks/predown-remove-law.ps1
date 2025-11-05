@@ -1,6 +1,6 @@
 <#
-  This PowerShell script is executed before the resources are removed. 
-  It permanently deletes the Log Analytics workspace to prevent issues with future deployments. 
+  This PowerShell script is executed before the resources are removed.
+  It permanently deletes all Log Analytics workspaces in the resource group to prevent issues with future deployments.
   Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
   A predown hook is used and not a postdown hook because permanent deletion of the workspace doesn't work
   if it's already in the soft-deleted state after azd has removed it.
@@ -11,10 +11,7 @@ param(
     [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$ResourceGroup = $env:AZURE_RESOURCE_GROUP,
-    
-    [Parameter(Mandatory = $false)]
-    [string]$LogAnalyticsWorkspaceName = $env:AZURE_LOG_ANALYTICS_WORKSPACE_NAME
+    [string]$ResourceGroup = $env:AZURE_RESOURCE_GROUP
 )
 
 # Validate required parameters
@@ -26,10 +23,6 @@ if ([string]::IsNullOrEmpty($ResourceGroup)) {
     throw "ResourceGroup parameter is required. Please provide it as a parameter or set the AZURE_RESOURCE_GROUP environment variable."
 }
 
-if ([string]::IsNullOrEmpty($LogAnalyticsWorkspaceName)) {
-    throw "LogAnalyticsWorkspaceName parameter is required. Please provide it as a parameter or set the AZURE_LOG_ANALYTICS_WORKSPACE_NAME environment variable."
-}
-
 
 # First, ensure the Azure CLI is logged in and set to the correct subscription
 az account set --subscription $SubscriptionId
@@ -38,6 +31,11 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 
-# Delete the Log Analytics workspace
-Write-Host "Deleting Log Analytics workspace $LogAnalyticsWorkspaceName"
-az monitor log-analytics workspace delete --subscription $SubscriptionId --resource-group $ResourceGroup --workspace-name $LogAnalyticsWorkspaceName --force --yes
+# Find all Log Analytics workspaces in the resource group and delete them
+Write-Host "Looking for Log Analytics workspaces in resource group $ResourceGroup"
+$workspaces = az monitor log-analytics workspace list --subscription $SubscriptionId --resource-group $ResourceGroup | ConvertFrom-Json
+
+foreach ($workspace in $workspaces) {
+    Write-Host "Deleting Log Analytics workspace $($workspace.name)"
+    az monitor log-analytics workspace delete --subscription $SubscriptionId --resource-group $ResourceGroup --workspace-name $workspace.name --force --yes
+}

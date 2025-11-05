@@ -58,8 +58,13 @@ var clientAppRegistrationName = getResourceName('appRegistration', environmentNa
 
 var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
 
+// Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
+// The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
+var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
+
 var tags = {
   'azd-env-name': environmentName
+  'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/call-apim-backend-with-oauth'
 
   // The SecurityControl tag is added to Trainer Demo Deploy projects so resources can run in MTT managed subscriptions without being blocked by default security policies.
@@ -159,6 +164,10 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
 // Outputs
 //=============================================================================
 
+
+// Return the azd environment id
+output AZURE_ENV_ID string = azdEnvironmentId
+
 // Return names of the Entra ID resources
 output ENTRA_ID_BACKEND_APP_REGISTRATION_NAME string = backendAppRegistrationSettings.appRegistrationName
 output ENTRA_ID_BACKEND_APP_REGISTRATION_APP_ID string = backendAppRegistration.outputs.appId
@@ -172,3 +181,7 @@ output AZURE_APPLICATION_INSIGHTS_NAME string = appInsightsSettings.appInsightsN
 output AZURE_KEY_VAULT_NAME string = keyVaultName
 output AZURE_LOG_ANALYTICS_WORKSPACE_NAME string = appInsightsSettings.logAnalyticsWorkspaceName
 output AZURE_RESOURCE_GROUP string = resourceGroupName
+
+// Return resource endpoints
+output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.outputs.gatewayUrl
+output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri
