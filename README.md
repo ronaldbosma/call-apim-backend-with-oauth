@@ -169,8 +169,8 @@ These PowerShell scripts are executed before the resources are removed.
 
 - [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
   Removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
-  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
-  We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
+  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724. 
+  The Entra ID resources have a custom tag "azd-env-id: <environment-id>", so we can find and delete them.
   
 - [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
   Permanently deletes all Log Analytics workspaces in the resource group to prevent issues with future deployments.
