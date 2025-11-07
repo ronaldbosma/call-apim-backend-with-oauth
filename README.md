@@ -238,6 +238,41 @@ They automatically locate your azd environment's `.env` file if available, to re
 
 ## Troubleshooting
 
+### Cannot create API management account since another account is using the same apim service
+
+If you've previously deployed this template, deleted the resources and then deployed it again shortly after, you may encounter the following error when redeploying the template. 
+I believe this error occurs because resources for the Credential Manager scenario are deployed on shared infrastructure and are not entirely removed yet.
+
+```json
+{
+    "status": "Failed",
+    "error": {
+        "code": "DeploymentFailed",
+        "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/oauthbackend-apis-1762513345",
+        "message": "The resource write operation failed to complete successfully, because it reached terminal provisioning state 'Failed'.",
+        "details": [
+            {
+                "code": "DeploymentFailed",
+                "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/credentialManager-tzllwar74ckkc",
+                "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https: //aka.ms/arm-deployment-operations for usage details.",
+                "details": [
+                    {
+                        "code": "AuthorizationGatewayBadRequestException",
+                        "message": "Cannot create API management account cf-00000000000000000000000000000000-apim-oauthbackend-sdc-wiyuo since another account is using the same apim service name apim-oauthbackend-sdc-wiyuo."
+                    }
+                ]
+            }
+        ]
+    }
+}
+```
+
+To work around this issue, follow these steps:
+1. First run `azd down --purge` to remove the resources that were deployed.
+1. Change the environment name and/or region to ensure a unique API Management service name.
+1. Redeploy the template using `azd up`.
+
+
 ### API Management deployment failed because the service already exists in soft-deleted state
 
 If you've previously deployed this template and deleted the resources, you may encounter the following error when redeploying the template. This error occurs because the API Management service is in a soft-deleted state and needs to be purged before you can create a new service with the same name.
