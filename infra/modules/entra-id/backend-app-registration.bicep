@@ -36,7 +36,12 @@ param identifierUri string
 // Variables
 //=============================================================================
 
-var appRoles = [
+type appRoleType = {
+  name: string
+  description: string
+}
+
+var appRoles appRoleType[] = [
   {
     name: 'Sample.Read'
     description: 'Sample read application role'

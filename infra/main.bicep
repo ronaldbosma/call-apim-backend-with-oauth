@@ -10,6 +10,7 @@ targetScope = 'subscription'
 //=============================================================================
 
 import { getResourceName, getInstanceId } from './functions/naming-conventions.bicep'
+import { apiManagementSettingsType, appInsightsSettingsType, backendSettingsType } from './types/settings.bicep'
 
 //=============================================================================
 // Parameters
@@ -33,36 +34,36 @@ param instance string = ''
 //=============================================================================
 
 // Determine the instance id based on the provided instance or by generating a new one
-var instanceId = getInstanceId(environmentName, location, instance)
+var instanceId string = getInstanceId(environmentName, location, instance)
 
-var resourceGroupName = getResourceName('resourceGroup', environmentName, location, instanceId)
+var resourceGroupName string = getResourceName('resourceGroup', environmentName, location, instanceId)
 
-var apiManagementSettings = {
+var apiManagementSettings apiManagementSettingsType = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
   // Because the Consumption tier does not support internal cache, we use the Basic V2 tier
   sku: 'BasicV2'
 }
 
-var appInsightsSettings = {
+var appInsightsSettings appInsightsSettingsType = {
   appInsightsName: getResourceName('applicationInsights', environmentName, location, instanceId)
   logAnalyticsWorkspaceName: getResourceName('logAnalyticsWorkspace', environmentName, location, instanceId)
   retentionInDays: 30
 }
 
-var backendAppRegistrationSettings = {
+var backendAppRegistrationSettings backendSettingsType = {
   appRegistrationName: getResourceName('appRegistration', environmentName, location, 'backend-${instanceId}')
   appRegistrationIdentifierUri: 'api://${getResourceName('appRegistration', environmentName, location, 'backend-${instanceId}')}'
 }
 
-var clientAppRegistrationName = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
+var clientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
 
-var keyVaultName = getResourceName('keyVault', environmentName, location, instanceId)
+var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
 // Generate a unique ID for the azd environment so we can identity the Entra ID resources created for this environment
 // The environment name is not unique enough as multiple environments can have the same name in different subscriptions, regions, etc.
 var azdEnvironmentId string = getResourceName('azdEnvironment', environmentName, location, instanceId)
 
-var tags = {
+var tags { *: string } = {
   'azd-env-name': environmentName
   'azd-env-id': azdEnvironmentId
   'azd-template': 'ronaldbosma/call-apim-backend-with-oauth'
