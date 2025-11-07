@@ -51,7 +51,7 @@ func getAppRoleIdByValue(appRoles array, value string) string =>
 // Variables
 //=============================================================================
 
-var rolesToAssign = [
+var rolesToAssign string[] = [
   'Sample.Read'
   'Sample.Write'
 ]
