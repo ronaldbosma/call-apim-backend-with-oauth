@@ -39,8 +39,8 @@ var resourceGroupName = getResourceName('resourceGroup', environmentName, locati
 
 var apiManagementSettings = {
   serviceName: getResourceName('apiManagement', environmentName, location, instanceId)
-  publisherName: 'admin@example.org'
-  publisherEmail: 'admin@example.org'
+  // Because the Consumption tier does not support internal cache, we use the Basic V2 tier
+  sku: 'BasicV2'
 }
 
 var appInsightsSettings = {
