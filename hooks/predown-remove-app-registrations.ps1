@@ -48,6 +48,10 @@ if ($apps) {
             Write-Host "Deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
             # Delete the service principal (moves the service principal to the deleted items)
             az ad sp delete --id $sp.id
+
+            Write-Host "Get deleted service principal $($sp.id) of application with unique name $($app.uniqueName)"
+            # Get the deleted service principal to ensure it's in the deleted items
+            az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
             
             Write-Host "Permanently deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
             # Permanently delete the service principal. If we don't do this, we can't create a new service principal with the same name.
