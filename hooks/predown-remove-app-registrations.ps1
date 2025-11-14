@@ -1,8 +1,10 @@
-# The Azure Developer CLI doesn't support deleting Entra ID resources yet, so we have to do it in a hook.
-# Related GitHub issue: https://github.com/Azure/azure-dev/issues/4724
-#
-# We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
-# The Entra ID resources have a custom tag "azd-env-id: <environment-id>", so we can find and delete them.
+<# 
+  The Azure Developer CLI doesn't support deleting Entra ID resources yet, so we have to do it in a hook.
+  Related GitHub issue: https://github.com/Azure/azure-dev/issues/4724
+  
+  We're using a predown hook because the environment variables are (sometimes) empty in a postdown hook.
+  The Entra ID resources have a custom tag "azd-env-id: <environment-id>", so we can find and delete them.
+#>
 
 param(
     [Parameter(Mandatory = $false)]
