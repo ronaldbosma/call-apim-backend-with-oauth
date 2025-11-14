@@ -66,6 +66,7 @@ do {
         --id $ClientAppId `
         --display-name $SecretDisplayName `
         --query "password" `
+        --append `
         --output tsv
 
     if ($LASTEXITCODE -ne 0) {
