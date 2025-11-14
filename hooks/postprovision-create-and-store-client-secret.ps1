@@ -58,16 +58,25 @@ if ($LASTEXITCODE -eq 0 -and ![string]::IsNullOrEmpty($existingSecret)) {
 
 
 # Create client secret for the app registration
+# Retry if the secret starts with '-' as this can cause issues with Key Vault storage
+# See also https://github.com/Azure/azure-cli/issues/23016
 Write-Host "Creating client secret for app registration '$ClientAppId'"
-$secretResult = az ad app credential reset `
-    --id $ClientAppId `
-    --display-name $SecretDisplayName `
-    --query "password" `
-    --output tsv
+do {
+    $secretResult = az ad app credential reset `
+        --id $ClientAppId `
+        --display-name $SecretDisplayName `
+        --query "password" `
+        --append `
+        --output tsv
 
-if ($LASTEXITCODE -ne 0) {
-    throw "Failed to create client secret for app registration: $ClientAppId"
-}
+    if ($LASTEXITCODE -ne 0) {
+        throw "Failed to create client secret for app registration: $ClientAppId"
+    }
+
+    if ($secretResult.StartsWith('-')) {
+        Write-Host "Generated secret starts with '-', regenerating..."
+    }
+} while ($secretResult.StartsWith('-'))
 
 Write-Host "Client secret created successfully"
 
