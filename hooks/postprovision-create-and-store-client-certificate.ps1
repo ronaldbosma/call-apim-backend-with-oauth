@@ -65,8 +65,7 @@ az ad app credential reset `
     --keyvault $KeyVaultName `
     --cert $CertificateName `
     --display-name $CertificateDisplayName `
-    --append `
-    --output none
+    --append 
 
 if ($LASTEXITCODE -ne 0) {
     throw "Failed to create certificate '$CertificateName' in Key Vault '$KeyVaultName' and add to app registration '$ClientAppId'."
