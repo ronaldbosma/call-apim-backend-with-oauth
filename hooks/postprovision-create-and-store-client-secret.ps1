@@ -65,8 +65,8 @@ do {
     $secretResult = az ad app credential reset `
         --id $ClientAppId `
         --display-name $SecretDisplayName `
-        --query "password" `
         --append `
+        --query "password" `
         --output tsv
 
     if ($LASTEXITCODE -ne 0) {
