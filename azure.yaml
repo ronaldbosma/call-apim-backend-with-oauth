@@ -6,10 +6,10 @@ metadata:
 hooks:
   postprovision:
     - shell: pwsh
-      run: ./hooks/postprovision-create-and-store-client-certificate.ps1
+      run: ./hooks/postprovision-create-and-store-client-secret.ps1
       interactive: true
     - shell: pwsh
-      run: ./hooks/postprovision-create-and-store-client-secret.ps1
+      run: ./hooks/postprovision-create-and-store-client-certificate.ps1
       interactive: true
     - shell: pwsh
       run: ./hooks/postprovision-deploy-apis.ps1
