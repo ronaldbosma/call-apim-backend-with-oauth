@@ -48,7 +48,16 @@ if ($apps) {
             Write-Host "Deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
             # Delete the service principal (moves the service principal to the deleted items)
             az ad sp delete --id $sp.id
-            
+        }
+        else {
+            Write-Host "Unable to delete service principal for application with unique name $($app.uniqueName). Service principal not found."
+        }
+
+        Write-Host "Deleting application $($app.id) with unique name $($app.uniqueName)"
+        # Delete the application (moves the application to the deleted items)
+        az ad app delete --id $app.id
+        
+        if ($sp) {
             # Verify service principal is in deleted items before permanent deletion
             # If we don't do this, permanent deletion may fail
             Write-Host "Verifying service principal $($sp.id) is in deleted items..."
@@ -74,15 +83,7 @@ if ($apps) {
             # Permanently delete the service principal. If we don't do this, we can't create a new service principal with the same name.
             az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
         }
-        else {
-            Write-Host "Unable to delete service principal for application with unique name $($app.uniqueName). Service principal not found."
-        }
 
-
-        Write-Host "Deleting application $($app.id) with unique name $($app.uniqueName)"
-        # Delete the application (moves the application to the deleted items)
-        az ad app delete --id $app.id
-        
         # Verify application is in deleted items before permanent deletion
         # If we don't do this, permanent deletion may fail
         Write-Host "Verifying application $($app.id) is in deleted items..."
