@@ -78,7 +78,7 @@ Write-Host "Certificate created and added successfully"
 # Verify certificate exists in app registration
 # We retry a few times as there can be a delay before the certificate is visible in the app registration
 # If we don't do this, another hook might overwrite the credentials before they are actually registered
-Write-Host "Verifying certificate is registered in Entra ID..."
+Write-Host "Verifying certificate is registered in app registration..."
 $maxAttempts = 6
 $delay = 1
 
