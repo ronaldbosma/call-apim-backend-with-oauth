@@ -53,7 +53,7 @@ if ($apps) {
             # If we don't do this, permanent deletion may fail
             Write-Host "Verifying service principal $($sp.id) is in deleted items..."
             $maxAttempts = 6
-            $delay = 1
+            $delay = 2
             
             for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
                 $deletedSp = az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)" 2>$null | ConvertFrom-Json
@@ -87,7 +87,7 @@ if ($apps) {
         # If we don't do this, permanent deletion may fail
         Write-Host "Verifying application $($app.id) is in deleted items..."
         $maxAttempts = 6
-        $delay = 1
+        $delay = 2
         
         for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
             $deletedApp = az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)" 2>$null | ConvertFrom-Json
