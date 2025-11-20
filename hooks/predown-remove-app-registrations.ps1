@@ -21,14 +21,13 @@ function Invoke-WithRetry {
         [scriptblock]$ScriptBlock,
         
         [Parameter(Mandatory = $false)]
-        [int]$MaxAttempts = 5,
+        [int]$MaxAttempts = 15,
         
         [Parameter(Mandatory = $false)]
-        [int]$InitialDelaySeconds = 1
+        [int]$DelayInSeconds = 2
     )
     
     $attempt = 1
-    $delay = $InitialDelaySeconds
     
     while ($attempt -le $MaxAttempts) {
         $result = & $ScriptBlock
@@ -43,10 +42,9 @@ function Invoke-WithRetry {
             return
         }
         
-        Write-Host "Operation failed (attempt $attempt/$MaxAttempts, exit code: $LASTEXITCODE). Retrying in $delay seconds..."
-        Start-Sleep -Seconds $delay
+        Write-Host "Operation failed (attempt $attempt/$MaxAttempts, exit code: $LASTEXITCODE). Retrying in $DelayInSeconds seconds..."
+        Start-Sleep -Seconds $DelayInSeconds
         $attempt++
-        $delay = $delay * 2  # Exponential backoff
     }
 }
 
