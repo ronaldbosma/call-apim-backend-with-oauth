@@ -32,7 +32,7 @@ function Invoke-WithRetry {
     $attempt = 1
     
     while ($attempt -le $MaxAttempts) {
-        $result = & $ScriptBlock
+        & $ScriptBlock
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host "Operation succeeded on attempt $attempt"
