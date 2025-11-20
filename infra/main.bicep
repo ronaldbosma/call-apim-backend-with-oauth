@@ -111,20 +111,20 @@ module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = 
 //   ]
 // }
 
-// resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
-//   name: resourceGroupName
-//   location: location
-//   tags: tags
-// }
+resource resourceGroup 'Microsoft.Resources/resourceGroups@2024-07-01' = {
+  name: resourceGroupName
+  location: location
+  tags: tags
+}
 
-// module keyVault 'modules/services/key-vault.bicep' = {
-//   scope: resourceGroup
-//   params: {
-//     location: location
-//     tags: tags
-//     keyVaultName: keyVaultName
-//   }
-// }
+module keyVault 'modules/services/key-vault.bicep' = {
+  scope: resourceGroup
+  params: {
+    location: location
+    tags: tags
+    keyVaultName: keyVaultName
+  }
+}
 
 // module appInsights 'modules/services/app-insights.bicep' = {
 //   scope: resourceGroup
@@ -186,7 +186,7 @@ output AZURE_RESOURCE_GROUP string = resourceGroupName
 
 // Return resource endpoints
 // output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.outputs.gatewayUrl
-// output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri
+output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri
 
 // Return the service management reference
 output AZURE_SERVICE_MANAGEMENT_REFERENCE string? = serviceManagementReference
