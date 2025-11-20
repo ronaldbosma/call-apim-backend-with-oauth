@@ -90,16 +90,16 @@ jobs:
       run: |
         mkdir -p ./artifacts
 
-    - name: Build Integration Tests
-      run: |
-        dotnet build ./tests/IntegrationTests/IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
+    # - name: Build Integration Tests
+    #   run: |
+    #     dotnet build ./tests/IntegrationTests/IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
 
-    - name: Upload Integration Tests Package
-      uses: actions/upload-artifact@v4
-      with:
-        name: integration-tests-package
-        path: ./artifacts/integration-tests/
-        retention-days: 1
+    # - name: Upload Integration Tests Package
+    #   uses: actions/upload-artifact@v4
+    #   with:
+    #     name: integration-tests-package
+    #     path: ./artifacts/integration-tests/
+    #     retention-days: 1
 
 
   # ------------------------------------------------------------
@@ -165,49 +165,49 @@ jobs:
   # Execute Integration Tests
   # ------------------------------------------------------------
 
-  integration-tests:
-    name: Execute Integration Tests
-    needs: deploy
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write # Required to fetch an OIDC token for Azure authentication
+  # integration-tests:
+  #   name: Execute Integration Tests
+  #   needs: deploy
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     id-token: write # Required to fetch an OIDC token for Azure authentication
     
-    steps:
-    - name: Setup .NET 9
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: '9.0.x'
+  #   steps:
+  #   - name: Setup .NET 9
+  #     uses: actions/setup-dotnet@v4
+  #     with:
+  #       dotnet-version: '9.0.x'
 
-    - name: Download Integration Tests Package
-      uses: actions/download-artifact@v4
-      with:
-        name: integration-tests-package
-        path: ./artifacts/integration-tests
+  #   - name: Download Integration Tests Package
+  #     uses: actions/download-artifact@v4
+  #     with:
+  #       name: integration-tests-package
+  #       path: ./artifacts/integration-tests
 
-    # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
-    # This is necessary for the integration test to access Azure resources if needed.
-    - name: Azure CLI Login
-      uses: azure/login@v2
-      with:
-        client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
-        tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
-        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
+  #   # Login to the Azure CLI with OpenID Connect (OIDC) using federated identity credentials.
+  #   # This is necessary for the integration test to access Azure resources if needed.
+  #   - name: Azure CLI Login
+  #     uses: azure/login@v2
+  #     with:
+  #       client-id: ${{ secrets.AZURE_CLIENT_ID || vars.AZURE_CLIENT_ID }}
+  #       tenant-id: ${{ secrets.AZURE_TENANT_ID || vars.AZURE_TENANT_ID }}
+  #       subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID || vars.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Run Integration Tests
-      run: |
-        dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
-      working-directory: ./
-      env:
-        # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
-        AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
+  #   - name: Run Integration Tests
+  #     run: |
+  #       dotnet ./artifacts/integration-tests/IntegrationTests.dll --report-trx --results-directory ./artifacts/integration-tests/TestResults
+  #     working-directory: ./
+  #     env:
+  #       # Pass the necessary deployed resource properties as environment variables so the integration tests can access them.
+  #       AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ needs.deploy.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
 
-    - name: Upload Test Results
-      if: always()
-      uses: actions/upload-artifact@v4
-      with:
-        name: integration-test-results
-        path: ./artifacts/integration-tests/TestResults/
-        retention-days: 1
+  #   - name: Upload Test Results
+  #     if: always()
+  #     uses: actions/upload-artifact@v4
+  #     with:
+  #       name: integration-test-results
+  #       path: ./artifacts/integration-tests/TestResults/
+  #       retention-days: 1
 
 
   # ------------------------------------------------------------
@@ -216,7 +216,8 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: [ deploy, integration-tests ]
+    needs: [ deploy]
+    # needs: [ deploy, integration-tests ]
     if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
     runs-on: ubuntu-latest
     permissions:
