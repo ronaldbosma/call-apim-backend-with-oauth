@@ -26,6 +26,9 @@ param tags object
 @description('The name of the client app registration')
 param name string
 
+@description('The service management reference. Required for tenants with Entra IDs enabled by Service Tree management and must be a valid Service Tree ID in this case.')
+param serviceManagementReference string
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -36,6 +39,10 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
 
   // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
   tags: concat(helpers.flattenTags(tags), ['HideApp'])
+  
+  // The service management reference is required for tenants with Entra IDs enabled by Service Tree management 
+  // and must be a valid Service Tree ID in this case
+  serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
 
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {

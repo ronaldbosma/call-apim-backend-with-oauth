@@ -25,6 +25,9 @@ param location string
 @description('The name of the environment to deploy to')
 param environmentName string
 
+@description('The service management reference. Required for tenants with Entra IDs enabled by Service Tree management and must be a valid Service Tree ID in this case.')
+param serviceManagementReference string = ''
+
 //=============================================================================
 // Variables
 //=============================================================================
@@ -79,6 +82,7 @@ module backendAppRegistration 'modules/entra-id/backend-app-registration.bicep' 
     tags: tags
     name: backendAppRegistrationSettings.appRegistrationName
     identifierUri: backendAppRegistrationSettings.appRegistrationIdentifierUri
+    serviceManagementReference: serviceManagementReference
   }
 }
 
@@ -86,6 +90,7 @@ module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = 
   params: {
     tags: tags
     name: clientAppRegistrationName
+    serviceManagementReference: serviceManagementReference
   }
   dependsOn: [
     backendAppRegistration
@@ -182,3 +187,6 @@ output AZURE_RESOURCE_GROUP string = resourceGroupName
 // Return resource endpoints
 output AZURE_API_MANAGEMENT_GATEWAY_URL string = apiManagement.outputs.gatewayUrl
 output AZURE_KEY_VAULT_URI string = keyVault.outputs.vaultUri
+
+// Return the service management reference
+output AZURE_SERVICE_MANAGEMENT_REFERENCE string? = serviceManagementReference
