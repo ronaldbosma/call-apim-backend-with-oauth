@@ -90,7 +90,7 @@ if ($apps) {
             Write-Host "Verifying service principal $($sp.id) is in deleted items..."
             # Wait for the service principal to appear in deleted items
             Invoke-WithRetry -ScriptBlock {
-                az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
+                $deletedSp = az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
             }
             
             Write-Host "Permanently deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
@@ -112,7 +112,7 @@ if ($apps) {
         Write-Host "Verifying application $($app.id) is in deleted items..."
         # Wait for the application to appear in deleted items
         Invoke-WithRetry -ScriptBlock {
-            az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)"
+            $deletedApp = az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)"
         }
         
         Write-Host "Permanently deleting application $($app.id) with unique name $($app.uniqueName)"
