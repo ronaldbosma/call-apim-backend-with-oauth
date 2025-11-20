@@ -296,3 +296,28 @@ Use the [az apim deletedservice list](https://learn.microsoft.com/en-us/cli/azur
 ```cmd
 az apim deletedservice purge --location "swedencentral" --service-name "apim-oauthbackend-sdc-wiyuo"
 ```
+
+### Deployment fails with BadRequest: ServiceManagementReference field is required for Update, but is missing in the request
+
+In an enterprise environment (for tenants with Entra IDs enabled by Service Tree management), the `ServiceManagementReference` field on an application (app registration) is mandatory.
+If you're deploying this template in such an environment, you may encounter the following error during deployment:
+
+```
+ERROR: error executing step command 'provision': deployment failed: error deploying infrastructure: deploying to subscription:
+Deployment Error Details:
+BadRequest: ServiceManagementReference field is required for Update, but is missing in the request. 
+Refer to the TSG `https://aka.ms/service-management-reference-error` for resolving the error 
+Graph client request id: <request-id>. 
+Graph request time: 2025-11-20T12:34:56.789Z.
+TraceID: <trace-id>
+```
+
+This template provides an optional parameter to set the `ServiceManagementReference` field on app registrations if required by your tenant.
+Use the following command to set the `AZURE_SERVICE_MANAGEMENT_REFERENCE` environment variable in your azd environment:
+
+```cmd
+azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <id>
+```
+
+Replace `<id>` with the valid Service Tree ID. 
+If you don't provide a valid ID, the deployment will fail with the following error: `Value for ServiceManagementReference must be a valid GUID`.
