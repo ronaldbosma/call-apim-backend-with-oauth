@@ -91,10 +91,6 @@ if ($apps) {
             $resSP = Invoke-WithRetry -ScriptBlock {
                 az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
             }
-
-            Write-Host "Last exit code: $LASTEXITCODE"
-            Write-Host "Response: $resSP"
-            Write-Host "Type of res: $(if ($resSP) { $resSP.GetType().FullName } else { 'null' })"
         }
         else {
             Write-Host "Unable to delete service principal for application with unique name $($app.uniqueName). Service principal not found."
@@ -111,10 +107,6 @@ if ($apps) {
         $resApp = Invoke-WithRetry -ScriptBlock {
             az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)"
         }
-        
-        Write-Host "Last exit code: $LASTEXITCODE"
-        Write-Host "Response: $resApp"
-        Write-Host "Type of res: $(if ($resApp) { $resApp.GetType().FullName } else { 'null' })"
     }
 } else {
     Write-Host "No app registrations found with tag: '$targetTag'"
