@@ -7,6 +7,9 @@
     },
     "location": {
       "value": "${AZURE_LOCATION}"
+    },
+    "serviceManagementReference": {
+      "value": "${AZURE_SERVICE_MANAGEMENT_REFERENCE}"
     }
   }
 }
