@@ -14,7 +14,9 @@ param(
     [string]$AzureEnvironmentId = $env:AZURE_ENV_ID
 )
 
-# Retry function with exponential backoff
+# This retry function is included because Entra ID operations can be eventually consistent,
+# leading to transient failures when trying to delete or verify deletions.
+# The function retries the provided script block up to MaxAttempts times.
 function Invoke-WithRetry {
     param(
         [Parameter(Mandatory = $true)]
