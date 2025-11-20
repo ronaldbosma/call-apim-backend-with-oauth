@@ -86,6 +86,12 @@ if ($apps) {
             Invoke-WithRetry -ScriptBlock {
                 az ad sp delete --id $sp.id
             }
+
+            Write-Host "Verifying service principal $($sp.id) is in deleted items..."
+            # Wait for the service principal to appear in deleted items
+            Invoke-WithRetry -ScriptBlock {
+                az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
+            }
             
             Write-Host "Permanently deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
             # Permanently delete the service principal. If we don't do this, we can't create a new service principal with the same name.
@@ -101,6 +107,12 @@ if ($apps) {
         # Delete the application (moves the application to the deleted items)
         Invoke-WithRetry -ScriptBlock {
             az ad app delete --id $app.id
+        }
+
+        Write-Host "Verifying application $($app.id) is in deleted items..."
+        # Wait for the application to appear in deleted items
+        Invoke-WithRetry -ScriptBlock {
+            az rest --method GET --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)"
         }
         
         Write-Host "Permanently deleting application $($app.id) with unique name $($app.uniqueName)"
