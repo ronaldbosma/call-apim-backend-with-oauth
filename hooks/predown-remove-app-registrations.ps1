@@ -35,12 +35,12 @@ function Invoke-WithRetry {
         
         if ($LASTEXITCODE -eq 0) {
             Write-Host "Operation succeeded on attempt $attempt"
-            return $result
+            return
         }
         
         if ($attempt -eq $MaxAttempts) {
             Write-Host "Operation failed after $MaxAttempts attempts (exit code: $LASTEXITCODE)"
-            return $result
+            return
         }
         
         Write-Host "Operation failed (attempt $attempt/$MaxAttempts, exit code: $LASTEXITCODE). Retrying in $delay seconds..."
@@ -95,7 +95,7 @@ if ($apps) {
             
             Write-Host "Permanently deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
             # Permanently delete the service principal. If we don't do this, we can't create a new service principal with the same name.
-            $resSP = Invoke-WithRetry -ScriptBlock {
+            Invoke-WithRetry -ScriptBlock {
                 az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
             }
         }
@@ -117,7 +117,7 @@ if ($apps) {
         
         Write-Host "Permanently deleting application $($app.id) with unique name $($app.uniqueName)"
         # Permanently delete the application. If we don't do this, we can't create a new application with the same name.
-        $resApp = Invoke-WithRetry -ScriptBlock {
+        Invoke-WithRetry -ScriptBlock {
             az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)"
         }
     }
