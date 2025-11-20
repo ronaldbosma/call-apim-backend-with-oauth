@@ -34,6 +34,7 @@ function Invoke-WithRetry {
         $result = & $ScriptBlock
         
         if ($LASTEXITCODE -eq 0) {
+            Write-Host "Operation succeeded on attempt $attempt"
             return $result
         }
         
