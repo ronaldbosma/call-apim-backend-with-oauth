@@ -14,6 +14,41 @@ param(
     [string]$AzureEnvironmentId = $env:AZURE_ENV_ID
 )
 
+# Retry function with exponential backoff
+function Invoke-WithRetry {
+    param(
+        [Parameter(Mandatory = $true)]
+        [scriptblock]$ScriptBlock,
+        
+        [Parameter(Mandatory = $false)]
+        [int]$MaxAttempts = 5,
+        
+        [Parameter(Mandatory = $false)]
+        [int]$InitialDelaySeconds = 1
+    )
+    
+    $attempt = 1
+    $delay = $InitialDelaySeconds
+    
+    while ($attempt -le $MaxAttempts) {
+        $result = & $ScriptBlock
+        
+        if ($LASTEXITCODE -eq 0) {
+            return $result
+        }
+        
+        if ($attempt -eq $MaxAttempts) {
+            Write-Host "Operation failed after $MaxAttempts attempts (exit code: $LASTEXITCODE)"
+            return $result
+        }
+        
+        Write-Host "Operation failed (attempt $attempt/$MaxAttempts, exit code: $LASTEXITCODE). Retrying in $delay seconds..."
+        Start-Sleep -Seconds $delay
+        $attempt++
+        $delay = $delay * 2  # Exponential backoff
+    }
+}
+
 # Validate required parameters
 if ([string]::IsNullOrEmpty($SubscriptionId)) {
     throw "SubscriptionId parameter is required. Please provide it as a parameter or set the AZURE_SUBSCRIPTION_ID environment variable."
@@ -47,11 +82,15 @@ if ($apps) {
         if ($sp) {
             Write-Host "Deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
             # Delete the service principal (moves the service principal to the deleted items)
-            az ad sp delete --id $sp.id
+            Invoke-WithRetry -ScriptBlock {
+                az ad sp delete --id $sp.id
+            }
             
             Write-Host "Permanently deleting service principal $($sp.id) of application with unique name $($app.uniqueName)"
             # Permanently delete the service principal. If we don't do this, we can't create a new service principal with the same name.
-            $resSP = az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
+            $resSP = Invoke-WithRetry -ScriptBlock {
+                az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($sp.id)"
+            }
 
             Write-Host "Last exit code: $LASTEXITCODE"
             Write-Host "Response: $resSP"
@@ -63,11 +102,15 @@ if ($apps) {
 
         Write-Host "Deleting application $($app.id) with unique name $($app.uniqueName)"
         # Delete the application (moves the application to the deleted items)
-        az ad app delete --id $app.id
+        Invoke-WithRetry -ScriptBlock {
+            az ad app delete --id $app.id
+        }
         
         Write-Host "Permanently deleting application $($app.id) with unique name $($app.uniqueName)"
         # Permanently delete the application. If we don't do this, we can't create a new application with the same name.
-        $resApp = az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)"
+        $resApp = Invoke-WithRetry -ScriptBlock {
+            az rest --method DELETE --url "https://graph.microsoft.com/beta/directory/deleteditems/$($app.id)"
+        }
         
         Write-Host "Last exit code: $LASTEXITCODE"
         Write-Host "Response: $resApp"
