@@ -150,17 +150,17 @@ module keyVault 'modules/services/key-vault.bicep' = {
 //   ]
 // }
 
-// module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
-//   scope: resourceGroup
-//   params: {
-//     principalId: deployer().objectId
-//     isAdmin: true
-//     keyVaultName: keyVaultName
-//   }
-//   dependsOn: [
-//     keyVault
-//   ]
-// }
+module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = {
+  scope: resourceGroup
+  params: {
+    principalId: deployer().objectId
+    isAdmin: true
+    keyVaultName: keyVaultName
+  }
+  dependsOn: [
+    keyVault
+  ]
+}
 
 //=============================================================================
 // Outputs
