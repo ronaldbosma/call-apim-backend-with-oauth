@@ -117,7 +117,6 @@ jobs:
     outputs:
       AZURE_ENV_ID: ${{ steps.get-outputs.outputs.AZURE_ENV_ID }}
       AZURE_RESOURCE_GROUP: ${{ steps.get-outputs.outputs.AZURE_RESOURCE_GROUP }}
-      AZURE_API_MANAGEMENT_GATEWAY_URL: ${{ steps.get-outputs.outputs.AZURE_API_MANAGEMENT_GATEWAY_URL }}
 
     steps:
     - name: Checkout code
@@ -155,8 +154,7 @@ jobs:
       run: |
         $variableNames = @(
           "AZURE_ENV_ID",
-          "AZURE_RESOURCE_GROUP",
-          "AZURE_API_MANAGEMENT_GATEWAY_URL"
+          "AZURE_RESOURCE_GROUP"
         )
         .\.github\workflows\scripts\export-azd-env-variables.ps1 -VariableNames $variableNames
 
