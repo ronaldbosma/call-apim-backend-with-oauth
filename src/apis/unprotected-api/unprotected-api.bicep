@@ -27,8 +27,12 @@ param oauthTargetResource string
 @description('The name of the Key Vault that contains the secrets')
 param keyVaultName string
 
-@description('The ID of the client used for connecting to the protected backend.')
-param clientId string
+@description('The ID of the client with a certificate used for connecting to the protected backend.')
+param clientWithCertificateId string
+
+@description('The ID of the client with a secret used for connecting to the protected backend.')
+#disable-next-line secure-secrets-in-params
+param clientWithSecretId string
 
 //=============================================================================
 // Existing resources
@@ -88,12 +92,32 @@ resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-
   }
 }
 
-resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
-  name: 'client-id'
+resource clientWithCertificateIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-with-certificate-id'
   parent: apiManagementService
   properties: {
-    displayName: 'client-id'
-    value: clientId
+    displayName: 'client-with-certificate-id'
+    value: clientWithCertificateId
+  }
+}
+
+// The client certificate thumbprint is used to retrieve the certificate from the 'context.Deployment.Certificates' dictionary.
+// So, we store the thumbprint in a named value.
+resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-certificate-thumbprint'
+  parent: apiManagementService
+  properties: {
+    displayName: 'client-certificate-thumbprint'
+    value: clientCertificate.properties.thumbprint
+  }
+}
+
+resource clientWithSecretIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-with-secret-id'
+  parent: apiManagementService
+  properties: {
+    displayName: 'client-with-secret-id'
+    value: clientWithSecretId
   }
 }
 
@@ -109,17 +133,6 @@ resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@202
   }
 }
 
-// The client certificate thumbprint is used to retrieve the certificate from the 'context.Deployment.Certificates' dictionary.
-// So, we store the thumbprint in a named value.
-resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
-  name: 'client-certificate-thumbprint'
-  parent: apiManagementService
-  properties: {
-    displayName: 'client-certificate-thumbprint'
-    value: clientCertificate.properties.thumbprint
-  }
-}
-
 
 // Credential Manager
 
@@ -127,7 +140,7 @@ module credentialManager 'credential-manager.bicep' = {
   params: {
     apiManagementServiceName: apiManagementServiceName
     oauthTargetResource: oauthTargetResource
-    clientId: clientId
+    clientId: clientWithSecretId
     clientSecret: keyVault.getSecret('client-secret')
   }
 }
@@ -211,7 +224,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       dependsOn: [
         oauthTokenUrlNamedValue
         oauthScopeNamedValue
-        clientIdNamedValue
+        clientWithSecretIdNamedValue
         clientSecretNamedValue
       ]
     }
@@ -236,7 +249,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       dependsOn: [
         oauthTokenUrlNamedValue
         oauthScopeNamedValue
-        clientIdNamedValue
+        clientWithCertificateIdNamedValue
         clientCertificateThumbprintNamedValue
       ]
     }
