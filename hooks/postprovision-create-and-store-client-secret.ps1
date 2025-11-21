@@ -10,7 +10,7 @@ param(
     [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$ClientAppId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID,
+    [string]$ClientAppId = $env:ENTRA_ID_CLIENT_WITH_SECRET_APP_REGISTRATION_CLIENT_ID,
     
     [Parameter(Mandatory = $false)]
     [string]$KeyVaultName = $env:AZURE_KEY_VAULT_NAME,
@@ -28,7 +28,7 @@ if ([string]::IsNullOrEmpty($SubscriptionId)) {
 }
 
 if ([string]::IsNullOrEmpty($ClientAppId)) {
-    throw "ClientAppId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID environment variable."
+    throw "ClientAppId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_WITH_SECRET_APP_REGISTRATION_CLIENT_ID environment variable."
 }
 
 if ([string]::IsNullOrEmpty($KeyVaultName)) {
@@ -94,33 +94,3 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Client secret stored successfully"
-
-
-# Verify secret exists in app registration
-# We retry a few times as there can be a delay before the secret is visible in the app registration
-# If we don't do this, another hook might overwrite the credentials before they are actually registered
-Write-Host "Verifying secret is registered in app registration..."
-$maxAttempts = 6
-$delay = 1
-
-for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
-    $credentials = az ad app credential list --id $ClientAppId 2>$null | ConvertFrom-Json
-    
-    if ($LASTEXITCODE -eq 0 -and $credentials) {
-        # Password credentials don't have customKeyIdentifier (certificates do)
-        $secrets = $credentials | Where-Object { $_.keyId -and !$_.customKeyIdentifier }
-        $matchingSecret = $secrets | Where-Object { $_.displayName -eq $SecretDisplayName }
-        if ($matchingSecret) {
-            Write-Host "Secret verified in app registration"
-            exit 0
-        }
-    }
-    
-    if ($attempt -lt $maxAttempts) {
-        Write-Host "Secret not found yet, waiting $delay seconds... (attempt $attempt/$maxAttempts)"
-        Start-Sleep -Seconds $delay
-        $delay = $delay * 2
-    }
-}
-
-Write-Warning "Secret was created but could not be verified in app registration after $maxAttempts attempts"

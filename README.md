@@ -8,8 +8,8 @@ This template deploys the following resources:
 
 ![Overview of the template](images/diagrams-overview.png)
 
-App registrations in Entra ID are created using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension) that represent the backend and the client.
-A secret and certificate are created for the client app registration and stored in Azure Key Vault.
+App registrations in Entra ID are created using the [Microsoft Graph Bicep Extension](https://learn.microsoft.com/en-us/community/content/microsoft-graph-bicep-extension) that represent the backend, the client with certificate and the client with secret.
+A certificate and secret are created for the corresponding client app registration and stored in Azure Key Vault.
 
 All authentication scenarios use the **OAuth 2.0 Client Credentials Flow**, which is ideal for server-to-server authentication where no user interaction is required.
 

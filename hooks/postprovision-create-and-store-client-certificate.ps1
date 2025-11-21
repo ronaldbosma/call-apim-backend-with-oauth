@@ -10,7 +10,7 @@ param(
     [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$ClientAppId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID,
+    [string]$ClientAppId = $env:ENTRA_ID_CLIENT_WITH_CERTIFICATE_APP_REGISTRATION_CLIENT_ID,
     
     [Parameter(Mandatory = $false)]
     [string]$KeyVaultName = $env:AZURE_KEY_VAULT_NAME,
@@ -28,7 +28,7 @@ if ([string]::IsNullOrEmpty($SubscriptionId)) {
 }
 
 if ([string]::IsNullOrEmpty($ClientAppId)) {
-    throw "ClientAppId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID environment variable."
+    throw "ClientAppId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_WITH_CERTIFICATE_APP_REGISTRATION_CLIENT_ID environment variable."
 }
 
 if ([string]::IsNullOrEmpty($KeyVaultName)) {
@@ -73,31 +73,3 @@ if ($LASTEXITCODE -ne 0) {
 }
 
 Write-Host "Certificate created and added successfully"
-
-
-# Verify certificate exists in app registration
-# We retry a few times as there can be a delay before the certificate is visible in the app registration
-# If we don't do this, another hook might overwrite the credentials before they are actually registered
-Write-Host "Verifying certificate is registered in app registration..."
-$maxAttempts = 6
-$delay = 1
-
-for ($attempt = 1; $attempt -le $maxAttempts; $attempt++) {
-    $credentials = az ad app credential list --id $ClientAppId --cert 2>$null | ConvertFrom-Json
-    
-    if ($LASTEXITCODE -eq 0 -and $credentials) {
-        $matchingCert = $credentials | Where-Object { $_.displayName -eq $CertificateDisplayName }
-        if ($matchingCert) {
-            Write-Host "Certificate verified in app registration"
-            exit 0
-        }
-    }
-    
-    if ($attempt -lt $maxAttempts) {
-        Write-Host "Certificate not found yet, waiting $delay seconds... (attempt $attempt/$maxAttempts)"
-        Start-Sleep -Seconds $delay
-        $delay = $delay * 2
-    }
-}
-
-Write-Warning "Certificate was created but could not be verified in app registration after $maxAttempts attempts"
