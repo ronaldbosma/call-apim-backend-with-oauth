@@ -215,7 +215,7 @@ azd pipeline config
 Follow the instructions and choose **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline, and only a **service principal** can be granted the necessary permissions in Entra ID.
 
 After the service principal has been created:
-- Add the Microsoft Graph permissions **Application.ReadWrite.All** and **AppRoleAssignment.ReadWrite.All*** to the app registration of the service principal, and grant admin consent for these permissions. Use the **application permissions** type, not delegated permissions type. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
+- Add the Microsoft Graph permissions **Application.ReadWrite.All** and **AppRoleAssignment.ReadWrite.All** to the app registration of the service principal, and grant admin consent for these permissions. Use the **application permissions** type, not delegated permissions type. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
 - Assign the service principal either the **Application Administrator** or **Cloud Application Administrator** role if it's not already assigned. One of these roles is necessary for the [hooks](#hooks) to successfully remove the Entra ID resources during cleanup.
 
 For detailed guidance, refer to:
@@ -321,3 +321,4 @@ azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <id>
 
 Replace `<id>` with the valid Service Tree ID. 
 If you don't provide a valid ID, the deployment will fail with the following error: `Value for ServiceManagementReference must be a valid GUID`.
+
