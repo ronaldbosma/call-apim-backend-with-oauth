@@ -25,6 +25,10 @@ param oauthTargetResource string
 @description('The ID of the client used for connecting to the protected backend.')
 param clientId string
 
+@description('The ID of the client with a secret used for connecting to the protected backend.')
+#disable-next-line secure-secrets-in-params
+param clientWithSecretId string
+
 //=============================================================================
 // Resources
 //=============================================================================
@@ -44,5 +48,6 @@ module unprotectedApi 'unprotected-api/unprotected-api.bicep' = {
     oauthTargetResource: oauthTargetResource
     keyVaultName: keyVaultName
     clientId: clientId
+    clientWithSecretId: clientWithSecretId
   }
 }

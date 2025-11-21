@@ -29,7 +29,10 @@ param(
     [string]$OAuthTargetResource = $env:ENTRA_ID_BACKEND_APP_REGISTRATION_IDENTIFIER_URI,
     
     [Parameter(Mandatory = $false)]
-    [string]$ClientId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID
+    [string]$ClientId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID,
+    
+    [Parameter(Mandatory = $false)]
+    [string]$ClientWithSecretId = $env:ENTRA_ID_CLIENT_WITH_SECRET_APP_REGISTRATION_CLIENT_ID
 )
 
 # Validate required parameters
@@ -65,6 +68,10 @@ if ([string]::IsNullOrEmpty($ClientId)) {
     throw "ClientId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID environment variable."
 }
 
+if ([string]::IsNullOrEmpty($ClientWithSecretId)) {
+    throw "ClientWithSecretId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_WITH_SECRET_APP_REGISTRATION_CLIENT_ID environment variable."
+}
+
 
 $scriptDirectory = Split-Path -Parent $MyInvocation.MyCommand.Definition
 
@@ -88,6 +95,7 @@ az deployment group create `
       oauthAudience=$OAuthAudience `
       oauthTargetResource=$OAuthTargetResource `
       clientId=$ClientId `
+      clientWithSecretId=$ClientWithSecretId `
   --verbose
 
 if ($LASTEXITCODE -ne 0) {

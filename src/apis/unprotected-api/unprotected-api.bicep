@@ -30,6 +30,10 @@ param keyVaultName string
 @description('The ID of the client used for connecting to the protected backend.')
 param clientId string
 
+@description('The ID of the client with a secret used for connecting to the protected backend.')
+#disable-next-line secure-secrets-in-params
+param clientWithSecretId string
+
 //=============================================================================
 // Existing resources
 //=============================================================================
@@ -97,6 +101,15 @@ resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06
   }
 }
 
+resource clientWithSecretIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-with-secret-id'
+  parent: apiManagementService
+  properties: {
+    displayName: 'client-with-secret-id'
+    value: clientWithSecretId
+  }
+}
+
 resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
   name: 'client-secret'
   parent: apiManagementService
@@ -127,7 +140,7 @@ module credentialManager 'credential-manager.bicep' = {
   params: {
     apiManagementServiceName: apiManagementServiceName
     oauthTargetResource: oauthTargetResource
-    clientId: clientId
+    clientId: clientWithSecretId
     clientSecret: keyVault.getSecret('client-secret')
   }
 }
