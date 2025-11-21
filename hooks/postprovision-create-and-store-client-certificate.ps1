@@ -10,7 +10,7 @@ param(
     [string]$SubscriptionId = $env:AZURE_SUBSCRIPTION_ID,
     
     [Parameter(Mandatory = $false)]
-    [string]$ClientAppId = $env:ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID,
+    [string]$ClientAppId = $env:ENTRA_ID_CLIENT_WITH_CERTIFICATE_APP_REGISTRATION_CLIENT_ID,
     
     [Parameter(Mandatory = $false)]
     [string]$KeyVaultName = $env:AZURE_KEY_VAULT_NAME,
@@ -28,7 +28,7 @@ if ([string]::IsNullOrEmpty($SubscriptionId)) {
 }
 
 if ([string]::IsNullOrEmpty($ClientAppId)) {
-    throw "ClientAppId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID environment variable."
+    throw "ClientAppId parameter is required. Please provide it as a parameter or set the ENTRA_ID_CLIENT_WITH_CERTIFICATE_APP_REGISTRATION_CLIENT_ID environment variable."
 }
 
 if ([string]::IsNullOrEmpty($KeyVaultName)) {

@@ -35,10 +35,10 @@
                     {
                         { "aud", "{{oauth-token-url}}" },
                         { "exp", exp },
-                        { "iss", "{{client-id}}" },
+                        { "iss", "{{client-with-certificate-id}}" },
                         { "jti", Guid.NewGuid().ToString() },
                         { "nbf", nbf },
-                        { "sub", "{{client-id}}" },
+                        { "sub", "{{client-with-certificate-id}}" },
                         { "iat", nbf }
                     };
 
@@ -85,7 +85,7 @@
                     </set-header>
                     <set-body>@{
                         var scope = "{{oauth-scope}}";
-                        var clientId = "{{client-id}}";
+                        var clientId = "{{client-with-certificate-id}}";
                         var clientAssertion = (string)context.Variables["signed-client-assertion"];
 
                         return $"scope={scope}&client_id={clientId}&client_assertion={clientAssertion}&client_assertion_type=urn:ietf:params:oauth:client-assertion-type:jwt-bearer&grant_type=client_credentials";

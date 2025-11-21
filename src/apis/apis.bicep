@@ -22,8 +22,8 @@ param oauthAudience string
 @description('The OAuth target resource for which a JWT token is requested by the APIM managed identity')
 param oauthTargetResource string
 
-@description('The ID of the client used for connecting to the protected backend.')
-param clientId string
+@description('The ID of the client with a certificate used for connecting to the protected backend.')
+param clientWithCertificateId string
 
 @description('The ID of the client with a secret used for connecting to the protected backend.')
 #disable-next-line secure-secrets-in-params
@@ -47,7 +47,7 @@ module unprotectedApi 'unprotected-api/unprotected-api.bicep' = {
     tenantId: subscription().tenantId
     oauthTargetResource: oauthTargetResource
     keyVaultName: keyVaultName
-    clientId: clientId
+    clientWithCertificateId: clientWithCertificateId
     clientWithSecretId: clientWithSecretId
   }
 }

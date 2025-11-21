@@ -27,8 +27,8 @@ param oauthTargetResource string
 @description('The name of the Key Vault that contains the secrets')
 param keyVaultName string
 
-@description('The ID of the client used for connecting to the protected backend.')
-param clientId string
+@description('The ID of the client with a certificate used for connecting to the protected backend.')
+param clientWithCertificateId string
 
 @description('The ID of the client with a secret used for connecting to the protected backend.')
 #disable-next-line secure-secrets-in-params
@@ -92,12 +92,12 @@ resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-
   }
 }
 
-resource clientIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
-  name: 'client-id'
+resource clientWithCertificateIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+  name: 'client-with-certificate-id'
   parent: apiManagementService
   properties: {
-    displayName: 'client-id'
-    value: clientId
+    displayName: 'client-with-certificate-id'
+    value: clientWithCertificateId
   }
 }
 
@@ -224,7 +224,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       dependsOn: [
         oauthTokenUrlNamedValue
         oauthScopeNamedValue
-        clientIdNamedValue
+        clientWithCertificateIdNamedValue
         clientSecretNamedValue
       ]
     }
@@ -249,7 +249,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview
       dependsOn: [
         oauthTokenUrlNamedValue
         oauthScopeNamedValue
-        clientIdNamedValue
+        clientWithCertificateIdNamedValue
         clientCertificateThumbprintNamedValue
       ]
     }

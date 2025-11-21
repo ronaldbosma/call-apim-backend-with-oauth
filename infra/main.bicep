@@ -54,7 +54,7 @@ var backendAppRegistrationSettings backendSettingsType = {
   appRegistrationIdentifierUri: 'api://${getResourceName('appRegistration', environmentName, location, 'backend-${instanceId}')}'
 }
 
-var clientAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'client-${instanceId}')
+var clientWithCertificateAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'clientwithcertificate-${instanceId}')
 var clientWithSecretAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'clientwithsecret-${instanceId}')
 
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
@@ -87,10 +87,10 @@ module backendAppRegistration 'modules/entra-id/backend-app-registration.bicep' 
   }
 }
 
-module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = {
+module clientAppWithCertificateRegistration 'modules/entra-id/client-app-registration.bicep' = {
   params: {
     tags: tags
-    name: clientAppRegistrationName
+    name: clientWithCertificateAppRegistrationName
     serviceManagementReference: serviceManagementReference
   }
   dependsOn: [
@@ -98,14 +98,14 @@ module clientAppRegistration 'modules/entra-id/client-app-registration.bicep' = 
   ]
 }
 
-module assignAppRolesToClient 'modules/entra-id/assign-app-roles.bicep' = {
+module assignAppRolesToClientWithCertificate 'modules/entra-id/assign-app-roles.bicep' = {
   params: {
     backendAppRegistrationName: backendAppRegistrationSettings.appRegistrationName
-    clientAppRegistrationName: clientAppRegistrationName
+    clientAppRegistrationName: clientWithCertificateAppRegistrationName
   }
   dependsOn: [
     backendAppRegistration
-    clientAppRegistration
+    clientAppWithCertificateRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
     apiManagement 
@@ -200,8 +200,8 @@ output AZURE_ENV_ID string = azdEnvironmentId
 output ENTRA_ID_BACKEND_APP_REGISTRATION_NAME string = backendAppRegistrationSettings.appRegistrationName
 output ENTRA_ID_BACKEND_APP_REGISTRATION_APP_ID string = backendAppRegistration.outputs.appId
 output ENTRA_ID_BACKEND_APP_REGISTRATION_IDENTIFIER_URI string = backendAppRegistrationSettings.appRegistrationIdentifierUri
-output ENTRA_ID_CLIENT_APP_REGISTRATION_NAME string = clientAppRegistrationName
-output ENTRA_ID_CLIENT_APP_REGISTRATION_CLIENT_ID string = clientAppRegistration.outputs.appId
+output ENTRA_ID_CLIENT_WITH_CERTIFICATE_APP_REGISTRATION_NAME string = clientWithCertificateAppRegistrationName
+output ENTRA_ID_CLIENT_WITH_CERTIFICATE_APP_REGISTRATION_CLIENT_ID string = clientAppWithCertificateRegistration.outputs.appId
 output ENTRA_ID_CLIENT_WITH_SECRET_APP_REGISTRATION_NAME string = clientWithSecretAppRegistrationName
 output ENTRA_ID_CLIENT_WITH_SECRET_APP_REGISTRATION_CLIENT_ID string = clientWithSecretAppRegistration.outputs.appId
 
