@@ -23,7 +23,7 @@ jobs:
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-    - name: Create azd env
+    - name: Generate secret and certificate for app registration
       run: |
         $clientAppId = "df4364d3-7ee2-42f8-ad12-73d5932782d9"
         $keyVaultName = "kvoauthbackendsdcluolm"
