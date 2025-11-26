@@ -29,7 +29,7 @@ jobs:
         $keyVaultName = "kvoauthbackendsdcluolm"
 
         # Create certificate in Key Vault and add to app registration
-        az ad app credential reset --id $clientAppId --create-cert --keyvault $keyVaultName --cert "client-certificate" --display-name "Client Certificate" --append --output none
+        az ad app credential reset --id $clientAppId --create-cert --keyvault $keyVaultName --cert "client-certificate" --display-name "Client Certificate" --append --output none --debug
 
         # Create secret on app registration
-        $existingSecret = az ad app credential reset --id $clientAppId --display-name "Client Secret" --query "password" --append --output tsv
+        $existingSecret = az ad app credential reset --id $clientAppId --display-name "Client Secret" --query "password" --append --output tsv --debug
