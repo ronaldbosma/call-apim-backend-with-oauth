@@ -8,8 +8,8 @@ defaults:
     shell: pwsh # Use PowerShell Core for all scripts (the azd hooks are written in PowerShell)
 
 jobs:
-  generate:
-    name: Deploy to Azure
+  test:
+    name: Test
     runs-on: ubuntu-latest
     permissions:
       id-token: write # Required to fetch an OIDC token for Azure authentication
