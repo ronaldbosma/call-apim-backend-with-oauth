@@ -16,6 +16,10 @@ jobs:
       contents: read  # Required to checkout code if needed
 
     steps:
+    - name: Print Azure CLI version
+      run: |
+        az --version
+        
     - name: Azure CLI Login
       uses: azure/login@v2
       with:
