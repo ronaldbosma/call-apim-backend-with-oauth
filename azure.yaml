@@ -2,7 +2,7 @@
 
 name: call-apim-backend-with-oauth
 metadata:
-  template: tdd-call-apim-backend-with-oauth@1.1.0
+  template: tdd-call-apim-backend-with-oauth@1.2.0
 hooks:
   postprovision:
     - shell: pwsh
