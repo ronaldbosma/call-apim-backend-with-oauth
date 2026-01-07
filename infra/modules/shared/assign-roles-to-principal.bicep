@@ -31,7 +31,7 @@ var keyVaultRole string = isAdmin
 // Existing Resources
 //=============================================================================
 
-resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
+resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
   name: keyVaultName
 }
 
