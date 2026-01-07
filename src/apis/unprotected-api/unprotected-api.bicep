@@ -38,7 +38,7 @@ param clientWithSecretId string
 // Existing resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' existing = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
   name: apiManagementServiceName
 }
 
@@ -52,7 +52,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2024-11-01' existing = {
 
 // Certificates
 
-resource clientCertificate 'Microsoft.ApiManagement/service/certificates@2024-06-01-preview' = {
+resource clientCertificate 'Microsoft.ApiManagement/service/certificates@2024-10-01-preview' = {
   name: 'client-certificate'
   parent: apiManagementService
   properties: {
@@ -65,7 +65,7 @@ resource clientCertificate 'Microsoft.ApiManagement/service/certificates@2024-06
 
 // Named Values
 
-resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'apim-gateway-url'
   parent: apiManagementService
   properties: {
@@ -74,7 +74,7 @@ resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2
   }
 }
 
-resource oauthTokenUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource oauthTokenUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'oauth-token-url'
   parent: apiManagementService
   properties: {
@@ -83,7 +83,7 @@ resource oauthTokenUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@20
   }
 }
 
-resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'oauth-scope'
   parent: apiManagementService
   properties: {
@@ -92,7 +92,7 @@ resource oauthScopeNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-
   }
 }
 
-resource clientWithCertificateIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource clientWithCertificateIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'client-with-certificate-id'
   parent: apiManagementService
   properties: {
@@ -103,7 +103,7 @@ resource clientWithCertificateIdNamedValue 'Microsoft.ApiManagement/service/name
 
 // The client certificate thumbprint is used to retrieve the certificate from the 'context.Deployment.Certificates' dictionary.
 // So, we store the thumbprint in a named value.
-resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'client-certificate-thumbprint'
   parent: apiManagementService
   properties: {
@@ -112,7 +112,7 @@ resource clientCertificateThumbprintNamedValue 'Microsoft.ApiManagement/service/
   }
 }
 
-resource clientWithSecretIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource clientWithSecretIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'client-with-secret-id'
   parent: apiManagementService
   properties: {
@@ -121,7 +121,7 @@ resource clientWithSecretIdNamedValue 'Microsoft.ApiManagement/service/namedValu
   }
 }
 
-resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'client-secret'
   parent: apiManagementService
   properties: {
@@ -148,7 +148,7 @@ module credentialManager 'credential-manager.bicep' = {
 
 // API
 
-resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' = {
+resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' = {
   name: 'unprotected-api'
   parent: apiManagementService
   properties: {

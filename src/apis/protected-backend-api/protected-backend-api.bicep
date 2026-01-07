@@ -21,7 +21,7 @@ param oauthAudience string
 // Existing resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' existing = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
   name: apiManagementServiceName
 }
 
@@ -31,7 +31,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 
 // Named Values
 
-resource tenantIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource tenantIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'tenant-id'
   parent: apiManagementService
   properties: {
@@ -40,7 +40,7 @@ resource tenantIdNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06
   }
 }
 
-resource oauthAudienceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource oauthAudienceNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'oauth-audience'
   parent: apiManagementService
   properties: {
@@ -51,7 +51,7 @@ resource oauthAudienceNamedValue 'Microsoft.ApiManagement/service/namedValues@20
 
 // API
 
-resource protectedBackendApi 'Microsoft.ApiManagement/service/apis@2024-06-01-preview' = {
+resource protectedBackendApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' = {
   name: 'protected-backend-api'
   parent: apiManagementService
   properties: {
