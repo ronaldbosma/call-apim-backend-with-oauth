@@ -69,7 +69,7 @@ resource appInsights 'Microsoft.Insights/components@2020-02-02' existing = {
 // Resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-preview' = {
   name: apiManagementSettings.serviceName
   location: location
   tags: serviceTags
@@ -100,7 +100,7 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
 
 // Store the app insights connection string in a named value
 
-resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-06-01-preview' = {
+resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
   name: 'appinsights-connection-string'
   parent: apiManagementService
   properties: {
@@ -114,7 +114,7 @@ resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/
 // - we need a logger that is connected to the App Insights instance
 // - we need diagnostics settings that specify what to log to the logger
 
-resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-06-01-preview' = {
+resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-10-01-preview' = {
   name: appInsightsName
   parent: apiManagementService
   properties: {
@@ -128,7 +128,7 @@ resource apimAppInsightsLogger 'Microsoft.ApiManagement/service/loggers@2024-06-
   }
 }
 
-resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2024-06-01-preview' = {
+resource apimInsightsDiagnostics 'Microsoft.ApiManagement/service/diagnostics@2024-10-01-preview' = {
   name: 'applicationinsights' // The name of the diagnostics resource has to be applicationinsights, because that's the logger type we chose
   parent: apiManagementService
   properties: {

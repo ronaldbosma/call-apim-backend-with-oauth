@@ -26,7 +26,7 @@ param clientSecret string
 // Existing resources
 //=============================================================================
 
-resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-preview' existing = {
+resource apiManagementService 'Microsoft.ApiManagement/service@2024-10-01-preview' existing = {
   name: apiManagementServiceName
 }
 
@@ -35,7 +35,7 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2024-06-01-previe
 //=============================================================================
 
 // Create a Credential Provider that will be used to retrieve the access token for the protected backend.
-resource credentialProvider 'Microsoft.ApiManagement/service/authorizationProviders@2024-06-01-preview' = {
+resource credentialProvider 'Microsoft.ApiManagement/service/authorizationProviders@2024-10-01-preview' = {
   parent: apiManagementService
   name: 'credential-provider'
   properties: {
