@@ -110,7 +110,7 @@ The [Demo Guide](demos/demo.md) provides a step-by-step walkthrough on how to te
 
 ### Clean up
 
-Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service doesn't remain in a soft-deleted state, which could block future deployments of the same environment.
+Once you're done and want to clean up, run the `azd down` command. By including the `--purge` parameter, you ensure that the API Management service and Log Analytics workspace don't remain in a soft-deleted state, which could cause issues with future deployments of the same environment.
 
 ```cmd
 azd down --purge
@@ -180,10 +180,6 @@ These PowerShell scripts are executed before the resources are removed.
   Removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
   See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724. 
   The Entra ID resources have a custom tag `azd-env-id: <environment-id>`, so we can find and delete them.
-  
-- [predown-remove-law.ps1](hooks/predown-remove-law.ps1): 
-  Permanently deletes all Log Analytics workspaces in the resource group to prevent issues with future deployments.
-  Sometimes the requests and traces don't show up in Application Insights & Log Analytics when removing and deploying the template multiple times.
 
 
 ## Pipeline
