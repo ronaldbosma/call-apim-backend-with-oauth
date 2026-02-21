@@ -152,11 +152,11 @@ jobs:
 
 
   # ------------------------------------------------------------
-  # Execute Integration Tests
+  # Verify Deployment
   # ------------------------------------------------------------
 
-  integration-tests:
-    name: Execute Integration Tests
+  verify-deployment:
+    name: Verify Deployment
     needs: deploy
     runs-on: ubuntu-latest
     permissions:
@@ -206,7 +206,7 @@ jobs:
 
   cleanup:
     name: Clean Up Resources
-    needs: [ deploy, integration-tests ]
+    needs: [ deploy, verify-deployment ]
     if: ${{ success() && (github.event_name != 'workflow_dispatch' || github.event.inputs.cleanup-resources == 'true') }}
     runs-on: ubuntu-latest
     permissions:
