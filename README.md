@@ -123,6 +123,7 @@ The repository consists of the following files and directories:
 ```
 ├── .github
 │   └── workflows              [ GitHub Actions workflow(s) ]
+├── .vscode                    [ Visual Studio Code configuration files ]
 ├── demos                      [ Demo guide(s) ]
 ├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                     [ Images used in the README and demo guide ]
