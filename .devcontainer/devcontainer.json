@@ -20,6 +20,7 @@
         "terminal.integrated.defaultProfile.linux": "pwsh"
       },
       "extensions": [
+        "editorconfig.editorconfig",
         "GitHub.copilot",
         "GitHub.vscode-github-actions",
         "humao.rest-client",
