@@ -1,0 +1,13 @@
+{
+  "recommendations": [
+    "editorconfig.editorconfig",
+    "GitHub.copilot",
+    "GitHub.vscode-github-actions",
+    "humao.rest-client",
+    "ms-azuretools.azure-dev",
+    "ms-azuretools.vscode-azure-github-copilot",
+    "ms-azuretools.vscode-bicep",
+    "ms-dotnettools.csharp",
+    "ms-vscode.powershell"
+  ]
+}
