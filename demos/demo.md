@@ -18,9 +18,7 @@ The following app registrations are created in your Entra ID tenant:
 
 The deployed resources follow the naming convention: `<resource-type>-<environment-name>-<region>-<instance>`.
 
-
 ## 2. What you can demo after deployment
-
 
 ### Review the API policies and app registrations
 
@@ -29,15 +27,16 @@ Let's start by understanding what makes one API protected and the other unprotec
 **Protected Backend API policy**
 
 The Protected Backend API uses the `validate-azure-ad-token` policy to enforce OAuth authentication. This policy:
+
 - Validates that the JWT token was issued by the correct Entra ID tenant
-- Checks that the token's audience matches the backend app registration 
+- Checks that the token's audience matches the backend app registration
 - Requires the `Sample.Read` role in the token's claims
 
 You can find this policy in [protected-api.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/protected-api/protected-api.xml).
 
 **App registration**
 
-The [backend-app-registration.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/infra/modules/entra-id/backend-app-registration.bicep) file creates an Entra ID app registration for the protected backend. 
+The [backend-app-registration.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/infra/modules/entra-id/backend-app-registration.bicep) file creates an Entra ID app registration for the protected backend.
 This app registration defines the Application ID URI (used as the OAuth audience) and the available app roles (`Sample.Read`).
 
 **App registration role assignment**
@@ -48,9 +47,8 @@ You can see how this role assignment is configured in [assign-app-roles.bicep](h
 
 **Unprotected API structure**
 
-The unprotected API doesn't require authentication and acts as a proxy to demonstrate different ways of calling the protected backend. 
+The unprotected API doesn't require authentication and acts as a proxy to demonstrate different ways of calling the protected backend.
 Each operation in this API forwards requests to the protected backend using a different authentication approach.
-
 
 ### Demonstrate the problem
 
@@ -62,7 +60,6 @@ Before you start testing the scenarios, you need to prepare the test file:
 
 1. Replace `<your-api-management-service-name>` with the name of your API Management service.
 
-
 **Call protected backend without authentication**
 
 Execute the first request `Operation that will call the protected backend without any authentication (should fail)` in the `tests.http` file.
@@ -70,7 +67,6 @@ Execute the first request `Operation that will call the protected backend withou
 ![Sequence Diagram - Without Authentication](https://raw.githubusercontent.com/ronaldbosma/call-apim-backend-with-oauth/refs/heads/main/images/diagrams-without-authentication.png)
 
 You'll receive a 401 Unauthorized response. This shows that the protected backend can't be called without proper OAuth authentication.
-
 
 ### Solution 1: Credential Manager
 
@@ -84,10 +80,11 @@ You'll receive a 200 OK response with details about the bearer token used to cal
 
 **Review the Credential Manager configuration**
 
-The Credential Manager is Azure's managed solution for handling OAuth tokens. 
+The Credential Manager is Azure's managed solution for handling OAuth tokens.
 You can find the configuration in [credential-manager.bicep](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/credential-manager.bicep).
 
 When viewing the Bicep file, you'll see the configuration uses three components:
+
 - **Authorization Provider**: Defines the OAuth endpoint and authentication method
 - **Authorization** Links the provider to specific credentials
 - **Access Policy**: Controls which APIs can use the authorization
@@ -96,11 +93,10 @@ In the Azure portal, navigate to your API Management service and look for the Cr
 
 **Review the policy implementation**
 
-The policy uses the `get-authorization-context` element to retrieve an access token from the Credential Manager. 
+The policy uses the `get-authorization-context` element to retrieve an access token from the Credential Manager.
 You can see this simple implementation in [credential-manager.xml](https://github.com/ronaldbosma/call-apim-backend-with-oauth/blob/main/src/apis/unprotected-api/credential-manager.xml).
 
 The Credential Manager handles all the complexity of token acquisition, caching and refresh automatically.
-
 
 ### Solution 2: send-request policy with client secret
 
@@ -124,7 +120,6 @@ Open [send-request-with-secret.xml](https://github.com/ronaldbosma/call-apim-bac
 1. **Cache invalidation**: If a 401 Unauthorized or 403 Forbidden response is returned, the access token is removed from the cache to force re-acquisition on the next request
 
 The client secret is retrieved from Azure Key Vault using API Management's named values feature.
-
 
 ### Solution 3: send-request policy with client certificate
 
@@ -156,7 +151,6 @@ The [Microsoft identity platform application authentication certificate credenti
 - The JWT assertion proves possession of the private key without transmitting it
 - Entra ID validates the assertion using the public key from the certificate
 
-
 ### Compare the approaches
 
 **Token caching behavior**
@@ -166,6 +160,7 @@ If you execute any request multiple times, you'll notice that the `IssuedAt` val
 **Security differences**
 
 You can observe the security difference in the `azpacr` claim:
+
 - Value `1`: Client secret authentication (Credential Manager and secret scenarios)
 - Value `2`: Client certificate authentication (certificate scenario)
 

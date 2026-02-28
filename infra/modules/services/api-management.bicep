@@ -98,7 +98,6 @@ module assignRolesToApimSystemAssignedIdentity '../shared/assign-roles-to-princi
   }
 }
 
-
 // Store the app insights connection string in a named value
 
 resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
@@ -109,7 +108,6 @@ resource appInsightsConnectionStringNamedValue 'Microsoft.ApiManagement/service/
     value: appInsights.properties.ConnectionString
   }
 }
-
 
 // Configure API Management to log to App Insights
 // - we need a logger that is connected to the App Insights instance

@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 
 namespace IntegrationTests.Handlers
 {
@@ -29,7 +29,7 @@ namespace IntegrationTests.Handlers
         {
             Console.WriteLine($"[Request]: {request.Method} {request.RequestUri}");
             Console.WriteLine(await GetContentAsync(request.Content, cancellationToken));
-            
+
             var response = await base.SendAsync(request, cancellationToken);
 
             Console.WriteLine($"[Response]: {(int)response.StatusCode} {response.ReasonPhrase}");

@@ -57,12 +57,12 @@ resource protectedBackendApi 'Microsoft.ApiManagement/service/apis@2024-10-01-pr
   properties: {
     displayName: 'Protected Backend API'
     path: 'protected'
-    protocols: [ 
-      'https' 
+    protocols: [
+      'https'
     ]
     subscriptionRequired: false // API is protected with OAuth
   }
-  
+
   resource policies 'policies' = {
     name: 'policy'
     properties: {

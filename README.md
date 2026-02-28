@@ -15,92 +15,92 @@ All authentication scenarios use the **OAuth 2.0 Client Credentials Flow**, whic
 
 An API Management service is deployed with two APIs:
 
-- **Protected Backend API**: A backend API that's protected with OAuth. 
+- **Protected Backend API**: A backend API that's protected with OAuth.
   It requires an access token to be retrieved from Entra ID before it can be called.  
   _(This example uses an API in the same API Management service, but this can be any API that requires OAuth authentication.)_
 
-- **Unprotected API**: An API that's not protected with OAuth. 
+- **Unprotected API**: An API that's not protected with OAuth.
   It can be called without an access token. This API demonstrates how to call the protected backend using the following methods:
-
   1. Use the [Credential Manager](https://learn.microsoft.com/en-us/azure/api-management/credentials-overview) to retrieve an access token for the backend API.  
-     See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [credential-manager.xml](src/apis/unprotected-api/credential-manager.xml) on how to use it in an API Management policy. 
+     See [credential-manager.bicep](src/apis/unprotected-api/credential-manager.bicep) for the Credential Manager configuration and [credential-manager.xml](src/apis/unprotected-api/credential-manager.xml) on how to use it in an API Management policy.
      For a detailed explanation, see the blog post [Call OAuth-Protected Backends from API Management using Credential Manager](https://ronaldbosma.github.io/blog/2025/10/06/call-oauth-protected-backends-from-api-management-using-credential-manager/).
 
   1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a client secret.  
-     See [send-request-with-secret.xml](src/apis/unprotected-api/send-request-with-secret.xml) for the implementation of this policy. 
+     See [send-request-with-secret.xml](src/apis/unprotected-api/send-request-with-secret.xml) for the implementation of this policy.
      For a detailed explanation, see the blog post [Call OAuth-Protected Backends from API Management using Send-Request Policy with Client Secret](https://ronaldbosma.github.io/blog/2025/10/13/call-oauth-protected-backends-from-api-management-using-send-request-policy-with-client-secret/).
 
   1. Use the [send-request policy](https://learn.microsoft.com/en-us/azure/api-management/send-request-policy) to retrieve an access token for the backend API using the client credentials flow with a certificate (client assertion).  
-     See [send-request-with-certificate.xml](src/apis/unprotected-api/send-request-with-certificate.xml) for the implementation of this policy. 
-     [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID. 
+     See [send-request-with-certificate.xml](src/apis/unprotected-api/send-request-with-certificate.xml) for the implementation of this policy.
+     [Microsoft identity platform application authentication certificate credentials](https://learn.microsoft.com/en-us/entra/identity-platform/certificate-credentials) explains how to create a signed client assertion that can be used to retrieve an access token from Entra ID.
      For a detailed explanation, see the blog post [Call OAuth-Protected Backends from API Management using Send-Request Policy with Client Certificate](https://ronaldbosma.github.io/blog/2025/10/20/call-oauth-protected-backends-from-api-management-using-send-request-policy-with-client-certificate/).
 
   If your client has a managed identity, have a look at [Call API Management with Managed Identity](https://github.com/ronaldbosma/call-apim-with-managed-identity) instead.
 
-We're using the BasicV2 tier because the Consumption tier doesn't support caching, which is important for token management. 
+We're using the BasicV2 tier because the Consumption tier doesn't support caching, which is important for token management.
 Additionally, Application Insights and Log Analytics Workspace are deployed for monitoring and logging purposes.
 
 > [!IMPORTANT]  
 > This template is not production-ready; it uses minimal cost SKUs and omits network isolation, advanced security, governance and resiliency. Harden security, implement enterprise controls and/or replace modules with [Azure Verified Modules](https://azure.github.io/Azure-Verified-Modules/) before any production use.
 
-
 ## Getting Started
 
-### Prerequisites  
+### Prerequisites
 
 Before you can deploy this template, make sure you have the following tools installed and the necessary permissions.
 
 **Required Tools:**
+
 - [Azure Developer CLI (azd)](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/install-azd)  
-  Installing `azd` also installs the following tools:  
-  - [GitHub CLI](https://cli.github.com)  
-  - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)  
+  Installing `azd` also installs the following tools:
+  - [GitHub CLI](https://cli.github.com)
+  - [Bicep CLI](https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/install)
 - This template includes several hooks that run at different stages of the deployment process and require the following tools. For more details, see [Hooks](#hooks).
   - [PowerShell](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell)
   - [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest)
-  
+
 **Required Permissions:**
+
 - You need **Owner** permissions, or a combination of **Contributor** and **Role Based Access Control Administrator** permissions on an Azure Subscription to deploy this template.
-- You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations. 
+- You need **Application Administrator** or **Cloud Application Administrator** permissions to register the Entra ID app registrations.
   _(You already have enough permissions if 'Users can register applications' is enabled in your Entra tenant.)_
 
 **Optional Prerequisites:**
 
 To build and run the [integration tests](#integration-tests) locally, you need the following additional tools:
-- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)  
 
+- [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/10.0)
 
 ### Deployment
 
 Once the prerequisites are installed on your machine, you can deploy this template using the following steps:
 
-1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.  
+1. Run the `azd init` command in an empty directory with the `--template` parameter to clone this template into the current directory.
 
-    ```cmd
-    azd init --template ronaldbosma/call-apim-backend-with-oauth
-    ```
+   ```cmd
+   azd init --template ronaldbosma/call-apim-backend-with-oauth
+   ```
 
-    When prompted, specify the name of the environment (for example, `oauthbackend`). The maximum length is 32 characters.
+   When prompted, specify the name of the environment (for example, `oauthbackend`). The maximum length is 32 characters.
 
 1. Run the `azd auth login` command to authenticate to your Azure subscription using the **Azure Developer CLI** _(if you haven't already)_.
 
-    ```cmd
-    azd auth login
-    ```
+   ```cmd
+   azd auth login
+   ```
 
 1. Run the `az login` command to authenticate to your Azure subscription using the **Azure CLI** _(if you haven't already)_. This is required for the [hooks](#hooks) to function properly. Make sure to log into the same tenant as the Azure Developer CLI.
 
-    ```cmd
-    az login
-    ```
+   ```cmd
+   az login
+   ```
 
 1. Run the `azd up` command to provision the resources in your Azure subscription and Entra ID tenant. This deployment typically takes around 4 minutes to complete.
 
-    ```cmd
-    azd up
-    ```
+   ```cmd
+   azd up
+   ```
 
-    See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
+   See [Troubleshooting](#troubleshooting) if you encounter any issues during deployment.
 
 1. Once the deployment is complete, you can locally modify the application or infrastructure and run `azd up` again to update the resources in Azure.
 
@@ -116,37 +116,35 @@ Once you're done and want to clean up, run the `azd down` command. By including 
 azd down --purge
 ```
 
-
 ## Contents
 
 The repository consists of the following files and directories:
 
 ```
-├── .github                    
+├── .github
 │   └── workflows              [ GitHub Actions workflow(s) ]
 ├── demos                      [ Demo guide(s) ]
 ├── hooks                      [ AZD Hooks to execute at different stages of the deployment process ]
 ├── images                     [ Images used in the README and demo guide ]
 ├── infra                      [ Infrastructure As Code files ]
 │   ├── functions              [ Bicep user-defined functions ]
-│   ├── modules                
+│   ├── modules
 │   │   ├── entra-id           [ Modules for all Entra ID resources ]
 │   │   ├── services           [ Modules for all Azure services ]
 │   │   └── shared             [ Shared Bicep modules ]
 │   ├── types                  [ Bicep user-defined types ]
 │   ├── main.bicep             [ Main infrastructure file ]
 │   └── main.parameters.json   [ Parameters file ]
-├── src                        
+├── src
 │   └── apis                   [ API Management API definitions ]
 │       ├── protected-api      [ OAuth-protected backend API ]
 │       └── unprotected-api    [ API demonstrating OAuth authentication methods ]
-├── tests                      
+├── tests
 │   ├── IntegrationTests       [ Integration tests for automatically verifying different scenarios ]
 │   └── tests.http             [ HTTP requests to test the deployed resources ]
 ├── azure.yaml                 [ Describes the apps and types of Azure resources ]
 └── bicepconfig.json           [ Bicep configuration file ]
 ```
-
 
 ## Hooks
 
@@ -156,31 +154,30 @@ This template has several hooks that are executed at different stages of the dep
 
 These PowerShell scripts are executed after the infrastructure resources are provisioned.
 
-- [postprovision-create-and-store-client-certificate.ps1](hooks/postprovision-create-and-store-client-certificate.ps1): 
+- [postprovision-create-and-store-client-certificate.ps1](hooks/postprovision-create-and-store-client-certificate.ps1):
   Currently, we can't create certificates for an app registration with Bicep.
-  This script creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+  This script creates a self-signed client certificate for the client app registration in Entra ID and stores it securely in Azure Key Vault.
   If the client certificate already exists in Key Vault, it won't create a new one.
 
-- [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1): 
+- [postprovision-create-and-store-client-secret.ps1](hooks/postprovision-create-and-store-client-secret.ps1):
   Currently, we can't create secrets for an app registration with Bicep.
-  This script creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault. 
+  This script creates a client secret for the client app registration in Entra ID and stores it securely in Azure Key Vault.
   If the client secret already exists in Key Vault, it won't create a new one.
 
-- [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1): 
-  The APIs are defined in a [separate module](src/apis/apis.bicep) from the infrastructure 
+- [postprovision-deploy-apis.ps1](hooks/postprovision-deploy-apis.ps1):
+  The APIs are defined in a [separate module](src/apis/apis.bicep) from the infrastructure
   because the client secret and certificate must exist in Key Vault before deployment of the APIs.
-  This script deploys the APIs to Azure API Management after the hooks that generate 
+  This script deploys the APIs to Azure API Management after the hooks that generate
   the client secret and certificate have completed.
 
 ### Pre-down hooks
 
 These PowerShell scripts are executed before the resources are removed.
 
-- [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1): 
-  Removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet. 
-  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724. 
+- [predown-remove-app-registrations.ps1](hooks/predown-remove-app-registrations.ps1):
+  Removes the app registrations created during the deployment process, because `azd` doesn't support deleting Entra ID resources yet.
+  See the related GitHub issue: https://github.com/Azure/azure-dev/issues/4724.
   The Entra ID resources have a custom tag `azd-env-id: <environment-id>`, so we can find and delete them.
-
 
 ## Pipeline
 
@@ -193,12 +190,11 @@ The pipeline consists of the following jobs:
 - **Build, Verify and Package**: This job sets up the build environment, validates the Bicep template and packages the integration tests.
 - **Deploy to Azure**: This job provisions the Azure infrastructure and deploys the packaged applications to the created resources.
 - **Verify Deployment**: This job runs automated [integration tests](#integration-tests) on the deployed resources to verify correct functionality.
-- **Clean Up Resources**: This job removes all deployed Azure resources.  
+- **Clean Up Resources**: This job removes all deployed Azure resources.
 
   By default, cleanup runs automatically after the deployment. This can be disabled via an input parameter when the workflow is triggered manually.
 
   ![GitHub Actions Manual Trigger](images/github-actions-workflow-manual-trigger.png)
-
 
 ### Setting Up the Pipeline
 
@@ -211,12 +207,14 @@ azd pipeline config
 Follow the instructions and choose **Federated Service Principal (SP + OIDC)**, as OpenID Connect (OIDC) is the authentication method used by the pipeline, and only a **service principal** can be granted the necessary permissions in Entra ID.
 
 After the service principal has been created:
+
 - Add the Microsoft Graph permissions **Application.ReadWrite.All** and **AppRoleAssignment.ReadWrite.All** to the app registration of the service principal, and grant admin consent for these permissions. Use the **application permissions** type, not delegated permissions type. These permissions are necessary to deploy the Entra ID resources with the Microsoft Graph Bicep Extension.
 - Assign the service principal either the **Application Administrator** or **Cloud Application Administrator** role if it's not already assigned. One of these roles is necessary for the [hooks](#hooks) to successfully remove the Entra ID resources during cleanup.
 
 For detailed guidance, refer to:
+
 - [Explore Azure Developer CLI support for CI/CD pipelines](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/configure-devops-pipeline)
-- [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)  
+- [Create a GitHub Actions CI/CD pipeline using the Azure Developer CLI](https://learn.microsoft.com/en-us/azure/developer/azure-developer-cli/pipeline-github-actions)
 
 > [!TIP]
 > By default, `AZURE_CLIENT_ID`, `AZURE_TENANT_ID` and `AZURE_SUBSCRIPTION_ID` are created as variables in GitHub when running `azd pipeline config`. However, [Microsoft recommends](https://learn.microsoft.com/en-us/azure/developer/github/connect-from-azure-openid-connect) using secrets for these values to avoid exposing them in logs. The workflow supports both approaches, so you can manually create secrets and remove the variables if desired.
@@ -224,50 +222,48 @@ For detailed guidance, refer to:
 > [!NOTE]
 > In the GitHub Actions workflow, the environment name in the `AZURE_ENV_NAME` variable is suffixed with `-pr{id}` for pull requests. This prevents conflicts when multiple PRs are open and avoids accidental removal of environments, because the environment name tag is used when removing resources.
 
-
 ## Integration Tests
 
-The project includes integration tests built with **.NET 10** that validate various scenarios through the deployed Azure services. 
+The project includes integration tests built with **.NET 10** that validate various scenarios through the deployed Azure services.
 The tests implement the same scenarios described in the [Demo](./demos/demo.md) and are located in [UnprotectedApiTests.cs](tests/IntegrationTests/UnprotectedApiTests.cs).
 They automatically locate your azd environment's `.env` file if available, to retrieve necessary configuration. In the [pipeline](#pipeline) they rely on environment variables set in the workflow.
-
 
 ## Troubleshooting
 
 ### Cannot create API management account since another account is using the same apim service
 
-If you've previously deployed this template, deleted the resources and then deployed it again shortly after, you may encounter the following error when redeploying the template. 
+If you've previously deployed this template, deleted the resources and then deployed it again shortly after, you may encounter the following error when redeploying the template.
 I believe this error occurs because resources for the Credential Manager scenario are deployed on shared infrastructure and are not entirely removed yet.
 
 ```json
 {
-    "status": "Failed",
-    "error": {
+  "status": "Failed",
+  "error": {
+    "code": "DeploymentFailed",
+    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/oauthbackend-apis-1762513345",
+    "message": "The resource write operation failed to complete successfully, because it reached terminal provisioning state 'Failed'.",
+    "details": [
+      {
         "code": "DeploymentFailed",
-        "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/oauthbackend-apis-1762513345",
-        "message": "The resource write operation failed to complete successfully, because it reached terminal provisioning state 'Failed'.",
+        "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/credentialManager-tzllwar74ckkc",
+        "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https: //aka.ms/arm-deployment-operations for usage details.",
         "details": [
-            {
-                "code": "DeploymentFailed",
-                "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/credentialManager-tzllwar74ckkc",
-                "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https: //aka.ms/arm-deployment-operations for usage details.",
-                "details": [
-                    {
-                        "code": "AuthorizationGatewayBadRequestException",
-                        "message": "Cannot create API management account cf-00000000000000000000000000000000-apim-oauthbackend-sdc-wiyuo since another account is using the same apim service name apim-oauthbackend-sdc-wiyuo."
-                    }
-                ]
-            }
+          {
+            "code": "AuthorizationGatewayBadRequestException",
+            "message": "Cannot create API management account cf-00000000000000000000000000000000-apim-oauthbackend-sdc-wiyuo since another account is using the same apim service name apim-oauthbackend-sdc-wiyuo."
+          }
         ]
-    }
+      }
+    ]
+  }
 }
 ```
 
 To work around this issue, follow these steps:
+
 1. First run `azd down --purge` to remove the resources that were deployed.
 1. Change the environment name and/or region to ensure a unique API Management service name.
 1. Redeploy the template using `azd up`.
-
 
 ### API Management deployment failed because the service already exists in soft-deleted state
 
@@ -275,15 +271,15 @@ If you've previously deployed this template and deleted the resources, you may e
 
 ```json
 {
-    "code": "DeploymentFailed",
-    "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/apiManagement",
-    "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
-    "details": [
-        {
-            "code": "ServiceAlreadyExistsInSoftDeletedState",
-            "message": "Api service apim-oauthbackend-sdc-wiyuo was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
-        }
-    ]
+  "code": "DeploymentFailed",
+  "target": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/rg-oauthbackend-sdc-wiyuo/providers/Microsoft.Resources/deployments/apiManagement",
+  "message": "At least one resource deployment operation failed. Please list deployment operations for details. Please see https://aka.ms/arm-deployment-operations for usage details.",
+  "details": [
+    {
+      "code": "ServiceAlreadyExistsInSoftDeletedState",
+      "message": "Api service apim-oauthbackend-sdc-wiyuo was soft-deleted. In order to create the new service with the same name, you have to either undelete the service or purge it. See https://aka.ms/apimsoftdelete."
+    }
+  ]
 }
 ```
 
@@ -301,9 +297,9 @@ If you're deploying this template in such an environment, you may encounter the 
 ```
 ERROR: error executing step command 'provision': deployment failed: error deploying infrastructure: deploying to subscription:
 Deployment Error Details:
-BadRequest: ServiceManagementReference field is required for Update, but is missing in the request. 
-Refer to the TSG `https://aka.ms/service-management-reference-error` for resolving the error 
-Graph client request id: <request-id>. 
+BadRequest: ServiceManagementReference field is required for Update, but is missing in the request.
+Refer to the TSG `https://aka.ms/service-management-reference-error` for resolving the error
+Graph client request id: <request-id>.
 Graph request time: 2025-11-20T12:34:56.789Z.
 TraceID: <trace-id>
 ```
@@ -315,6 +311,5 @@ Use the following command to set the `AZURE_SERVICE_MANAGEMENT_REFERENCE` enviro
 azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <id>
 ```
 
-Replace `<id>` with the valid Service Tree ID. 
+Replace `<id>` with the valid Service Tree ID.
 If you don't provide a valid ID, the deployment will fail with the following error: `Value for ServiceManagementReference must be a valid GUID`.
-
