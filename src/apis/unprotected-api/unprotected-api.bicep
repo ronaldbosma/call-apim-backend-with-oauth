@@ -62,7 +62,6 @@ resource clientCertificate 'Microsoft.ApiManagement/service/certificates@2024-10
   }
 }
 
-
 // Named Values
 
 resource apimGatewayUrlNamedValue 'Microsoft.ApiManagement/service/namedValues@2024-10-01-preview' = {
@@ -129,10 +128,9 @@ resource clientSecretNamedValue 'Microsoft.ApiManagement/service/namedValues@202
     keyVault: {
       secretIdentifier: helpers.getKeyVaultSecretUri(keyVaultName, 'client-secret')
     }
-    secret: true    
+    secret: true
   }
 }
-
 
 // Credential Manager
 
@@ -145,7 +143,6 @@ module credentialManager 'credential-manager.bicep' = {
   }
 }
 
-
 // API
 
 resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview' = {
@@ -154,12 +151,12 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview
   properties: {
     displayName: 'Unprotected API'
     path: 'unprotected'
-    protocols: [ 
-      'https' 
+    protocols: [
+      'https'
     ]
     subscriptionRequired: false // API is unprotected
   }
-  
+
   // API scoped policy
   resource policies 'policies' = {
     name: 'policy'
@@ -191,7 +188,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview
       method: 'GET'
       urlTemplate: '/credential-manager'
     }
-  
+
     resource policies 'policies' = {
       name: 'policy'
       properties: {
@@ -213,7 +210,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview
       method: 'GET'
       urlTemplate: '/send-request-with-secret'
     }
-  
+
     resource policies 'policies' = {
       name: 'policy'
       properties: {
@@ -238,7 +235,7 @@ resource unprotectedApi 'Microsoft.ApiManagement/service/apis@2024-10-01-preview
       method: 'GET'
       urlTemplate: '/send-request-with-certificate'
     }
-  
+
     resource policies 'policies' = {
       name: 'policy'
       properties: {

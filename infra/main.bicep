@@ -54,8 +54,18 @@ var backendAppRegistrationSettings backendSettingsType = {
   appRegistrationIdentifierUri: 'api://${getResourceName('appRegistration', environmentName, location, 'backend-${instanceId}')}'
 }
 
-var clientWithCertificateAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'clientwithcertificate-${instanceId}')
-var clientWithSecretAppRegistrationName string = getResourceName('appRegistration', environmentName, location, 'clientwithsecret-${instanceId}')
+var clientWithCertificateAppRegistrationName string = getResourceName(
+  'appRegistration',
+  environmentName,
+  location,
+  'clientwithcertificate-${instanceId}'
+)
+var clientWithSecretAppRegistrationName string = getResourceName(
+  'appRegistration',
+  environmentName,
+  location,
+  'clientwithsecret-${instanceId}'
+)
 
 var keyVaultName string = getResourceName('keyVault', environmentName, location, instanceId)
 
@@ -108,7 +118,7 @@ module assignAppRolesToClientWithCertificate 'modules/entra-id/assign-app-roles.
     clientAppWithCertificateRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
-    apiManagement 
+    apiManagement
   ]
 }
 
@@ -133,7 +143,7 @@ module assignAppRolesToClientWithSecret 'modules/entra-id/assign-app-roles.bicep
     clientWithSecretAppRegistration
     // Assignment of the app roles fails if we do this immediately after creating the app registrations.
     // By adding a dependency on the API Management module, we ensure that enough time has passed for the app role assignments to succeed.
-    apiManagement 
+    apiManagement
   ]
 }
 
@@ -193,7 +203,6 @@ module assignRolesToDeployer 'modules/shared/assign-roles-to-principal.bicep' = 
 //=============================================================================
 // Outputs
 //=============================================================================
-
 
 // Return the azd environment id
 output AZURE_ENV_ID string = azdEnvironmentId

@@ -13,7 +13,6 @@ type apiManagementSettingsType = {
   sku: apimSkuType
 }
 
-
 // Application Insights
 
 @description('Retention options for Application Insights')
@@ -32,13 +31,11 @@ type appInsightsSettingsType = {
   retentionInDays: appInsightsRetentionInDaysType
 }
 
-
 // Backend App Registration
 
 @description('The settings for the backend app registration')
 @export()
 type backendSettingsType = {
-
   @description('The name of the backend app registration in Entra ID')
   appRegistrationName: string
 

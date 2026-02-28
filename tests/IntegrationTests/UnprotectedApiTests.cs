@@ -1,6 +1,7 @@
-﻿using IntegrationTests.Configuration;
-using IntegrationTests.Handlers;
 using System.Net;
+
+using IntegrationTests.Configuration;
+using IntegrationTests.Handlers;
 
 namespace IntegrationTests;
 

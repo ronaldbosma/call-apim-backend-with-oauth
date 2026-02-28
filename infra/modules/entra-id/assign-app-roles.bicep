@@ -60,8 +60,10 @@ var rolesToAssign string[] = [
 // Resources
 //=============================================================================
 
-resource assignAppRole 'Microsoft.Graph/appRoleAssignedTo@v1.0' = [for role in rolesToAssign: {
-  resourceId: backendServicePrincipal.id
-  appRoleId: getAppRoleIdByValue(backendAppRegistration.appRoles, role)
-  principalId: clientServicePrincipal.id
-}]
+resource assignAppRole 'Microsoft.Graph/appRoleAssignedTo@v1.0' = [
+  for role in rolesToAssign: {
+    resourceId: backendServicePrincipal.id
+    appRoleId: getAppRoleIdByValue(backendAppRegistration.appRoles, role)
+    principalId: clientServicePrincipal.id
+  }
+]
