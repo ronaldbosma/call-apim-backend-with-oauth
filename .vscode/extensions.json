@@ -1,7 +1,7 @@
 {
   "recommendations": [
     "editorconfig.editorconfig",
-    "GitHub.copilot",
+    "GitHub.copilot-chat",
     "GitHub.vscode-github-actions",
     "humao.rest-client",
     "ms-azuretools.azure-dev",
