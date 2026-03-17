@@ -116,6 +116,22 @@ Once you're done and want to clean up, run the `azd down` command. By including 
 azd down --purge
 ```
 
+## Configuration
+
+### Service Management Reference
+
+In an enterprise environment (for tenants with Entra IDs enabled by Service Tree management), the `ServiceManagementReference` field on an application (app registration) is mandatory.
+If you're deploying this template in such an environment, you can set this field through the `serviceManagementReference` parameter in [main.parameters.json](/infra/main.parameters.json). The default is an empty string.
+
+Use the following command to set a valid Service Management Reference ID before deploying the template:
+
+```cmd
+azd env set AZURE_SERVICE_MANAGEMENT_REFERENCE <id>
+```
+
+Replace `<id>` with the valid Service Tree ID.
+If you don't provide a valid ID, the deployment will fail with the following error: `Value for ServiceManagementReference must be a valid GUID`.
+
 ## Contents
 
 The repository consists of the following files and directories:
