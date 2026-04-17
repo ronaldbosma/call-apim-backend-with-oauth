@@ -25,11 +25,9 @@ param keyVaultName string
 // Variables
 //=============================================================================
 
-var keyVaultRole string = isAdmin
-  ? '00482a5a-887f-4fb3-b363-3b7fe8e74483' // Key Vault Administrator
-  : '4633458b-17de-408a-b874-0445c86b69e6' // Key Vault Secrets User
+var keyVaultRoleName string = isAdmin ? 'Key Vault Administrator' : 'Key Vault Secrets User'
 
-var monitoringMetricsPublisher string = '3913510d-42f4-4e42-8a64-420c390055eb' // Monitoring Metrics Publisher
+var monitoringMetricsPublisherRoleName string = 'Monitoring Metrics Publisher'
 
 //=============================================================================
 // Existing Resources
@@ -50,14 +48,11 @@ resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
 // Assign role Application Insights to the principal
 
 resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(
-    principalId,
-    appInsights.id,
-    subscriptionResourceId('Microsoft.Authorization/roleDefinitions', monitoringMetricsPublisher)
-  )
+  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisherRoleName).id)
   scope: appInsights
   properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', monitoringMetricsPublisher)
+    #disable-next-line use-resource-id-functions
+    roleDefinitionId: roleDefinitions(monitoringMetricsPublisherRoleName).id
     principalId: principalId
     principalType: principalType
   }
@@ -66,10 +61,11 @@ resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignmen
 // Assign role on Key Vault to the principal
 
 resource assignRolesOnKeyVaultToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, keyVault.id, subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultRole))
+  name: guid(principalId, keyVault.id, roleDefinitions(keyVaultRoleName).id)
   scope: keyVault
   properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', keyVaultRole)
+    #disable-next-line use-resource-id-functions
+    roleDefinitionId: roleDefinitions(keyVaultRoleName).id
     principalId: principalId
     principalType: principalType
   }
