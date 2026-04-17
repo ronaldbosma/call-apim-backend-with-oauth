@@ -25,9 +25,9 @@ param keyVaultName string
 // Variables
 //=============================================================================
 
-var keyVaultRole string = isAdmin ? 'Key Vault Administrator' : 'Key Vault Secrets User'
+var keyVaultRoleName string = isAdmin ? 'Key Vault Administrator' : 'Key Vault Secrets User'
 
-var monitoringMetricsPublisher string = 'Monitoring Metrics Publisher'
+var monitoringMetricsPublisherRoleName string = 'Monitoring Metrics Publisher'
 
 //=============================================================================
 // Existing Resources
@@ -48,11 +48,11 @@ resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
 // Assign role Application Insights to the principal
 
 resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisher).id)
+  name: guid(principalId, appInsights.id, roleDefinitions(monitoringMetricsPublisherRoleName).id)
   scope: appInsights
   properties: {
     #disable-next-line use-resource-id-functions
-    roleDefinitionId: roleDefinitions(monitoringMetricsPublisher).id
+    roleDefinitionId: roleDefinitions(monitoringMetricsPublisherRoleName).id
     principalId: principalId
     principalType: principalType
   }
@@ -61,11 +61,11 @@ resource assignAppInsightRolesToPrincipal 'Microsoft.Authorization/roleAssignmen
 // Assign role on Key Vault to the principal
 
 resource assignRolesOnKeyVaultToPrincipal 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(principalId, keyVault.id, roleDefinitions(keyVaultRole).id)
+  name: guid(principalId, keyVault.id, roleDefinitions(keyVaultRoleName).id)
   scope: keyVault
   properties: {
     #disable-next-line use-resource-id-functions
-    roleDefinitionId: roleDefinitions(keyVaultRole).id
+    roleDefinitionId: roleDefinitions(keyVaultRoleName).id
     principalId: principalId
     principalType: principalType
   }
