@@ -42,9 +42,9 @@ resource apiManagementService 'Microsoft.ApiManagement/service@2025-03-01-previe
   name: apiManagementServiceName
 }
 
-resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
-  name: keyVaultName
-}
+// resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' existing = {
+//   name: keyVaultName
+// }
 
 //=============================================================================
 // Resources
@@ -139,7 +139,10 @@ module credentialManager 'credential-manager.bicep' = {
     apiManagementServiceName: apiManagementServiceName
     oauthTargetResource: oauthTargetResource
     clientId: clientWithSecretId
-    clientSecret: keyVault.getSecret('client-secret')
+    // clientSecret: keyVault.getSecret('client-secret')
+    clientSecret: '{{client-secret}}'
+    // clientSecret: helpers.getKeyVaultSecretUri(keyVaultName, 'client-secret')
+    // clientSecret: helpers.getKeyVaultSecretReference(keyVaultName, 'client-secret')
   }
 }
 
