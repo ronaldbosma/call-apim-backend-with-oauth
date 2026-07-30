@@ -1,7 +1,7 @@
 //=============================================================================
 // APIs in API Management
 //
-// The APIs has been split of in a separete module from the infra because we need
+// The APIs has been split of in a separate module from the infra because we need
 // the client secret and certificate to be stored in Key Vault.
 // They are created in a postprovision script after the inra is created.
 //=============================================================================
