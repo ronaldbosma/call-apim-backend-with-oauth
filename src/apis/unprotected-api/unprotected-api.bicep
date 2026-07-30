@@ -31,7 +31,7 @@ param keyVaultName string
 param clientWithCertificateId string
 
 @description('The ID of the client with a secret used for connecting to the protected backend.')
-#disable-next-line secure-secrets-in-params
+#disable-next-line secure-secrets-in-params // Contains ID of client with secret, not the secret itself.
 param clientWithSecretId string
 
 //=============================================================================
