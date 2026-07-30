@@ -1,7 +1,7 @@
 //=============================================================================
 // APIs in API Management
 //
-// The APIs has been split of in a separete module from the infra because we need 
+// The APIs has been split of in a separete module from the infra because we need
 // the client secret and certificate to be stored in Key Vault.
 // They are created in a postprovision script after the inra is created.
 //=============================================================================
@@ -26,7 +26,7 @@ param oauthTargetResource string
 param clientWithCertificateId string
 
 @description('The ID of the client with a secret used for connecting to the protected backend.')
-#disable-next-line secure-secrets-in-params
+#disable-next-line secure-secrets-in-params // Contains ID of client with secret, not the secret itself.
 param clientWithSecretId string
 
 //=============================================================================
