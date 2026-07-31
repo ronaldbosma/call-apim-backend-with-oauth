@@ -3,6 +3,12 @@
 //=============================================================================
 
 //=============================================================================
+// Imports
+//=============================================================================
+
+import { tagsType } from '../../types/shared-types.bicep'
+
+//=============================================================================
 // Parameters
 //=============================================================================
 
@@ -13,7 +19,7 @@ param tenantId string = subscription().tenantId
 param location string
 
 @description('The tags to associate with the resource')
-param tags object
+param tags tagsType
 
 @description('The name of the Key Vault that will contain the secrets')
 @maxLength(24)
@@ -41,7 +47,7 @@ resource keyVault 'Microsoft.KeyVault/vaults@2025-05-01' = {
       bypass: 'AzureServices'
     }
 
-    // Set enabled for template deployment to true so we can retrieve secrets from Key Vault using Bicep. 
+    // Set enabled for template deployment to true so we can retrieve secrets from Key Vault using Bicep.
     // For example: keyVault.getSecret('client-secret')
     // Documentation: https://learn.microsoft.com/en-us/azure/azure-resource-manager/bicep/bicep-functions-resource#getsecret
     enabledForTemplateDeployment: true
