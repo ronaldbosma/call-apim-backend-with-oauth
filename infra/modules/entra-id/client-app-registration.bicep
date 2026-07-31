@@ -15,13 +15,14 @@ extension microsoftGraphV1
 //=============================================================================
 
 import * as helpers from '../../functions/helpers.bicep'
+import { tagsType } from '../../types/shared-types.bicep'
 
 //=============================================================================
 // Parameters
 //=============================================================================
 
 @description('The tags to associate with the resource')
-param tags object
+param tags tagsType
 
 @description('The name of the client app registration')
 param name string
@@ -40,7 +41,7 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   // Add a 'HideApp' tag to hide the app from the end-users in the My Apps portal
   tags: concat(helpers.flattenTags(tags), ['HideApp'])
 
-  // The service management reference is required for tenants with Entra IDs enabled by Service Tree management 
+  // The service management reference is required for tenants with Entra IDs enabled by Service Tree management
   // and must be a valid Service Tree ID in this case
   serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
