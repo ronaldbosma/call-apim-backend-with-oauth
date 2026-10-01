@@ -40,8 +40,11 @@ param serviceManagementReference string
 // Variables
 //=============================================================================
 
+@description('The type representing an application role for the backend app registration')
 type appRoleType = {
+  @description('The name of the application role')
   name: string
+  @description('The description of the application role')
   description: string
 }
 
