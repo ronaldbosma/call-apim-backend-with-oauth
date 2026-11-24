@@ -39,6 +39,9 @@
         "no-conflicting-metadata": {
           "level": "error"
         },
+        "no-conflicting-version-constraints": {
+          "level": "error"
+        },
         "no-deployments-resources": {
           "level": "error"
         },
@@ -52,6 +55,9 @@
           "level": "error"
         },
         "no-hardcoded-outputs": {
+          "level": "error"
+        },
+        "no-incompatible-entrypoint-version": {
           "level": "error"
         },
         "no-loc-expr-outside-params": {
