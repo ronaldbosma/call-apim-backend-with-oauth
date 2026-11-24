@@ -46,6 +46,7 @@ resource clientAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
 
+@retryOn(['DeploymentOperationFailed']) // Retry on failure because the app registration might not be immediately available after creation
 resource clientServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: clientAppRegistration.appId
 
