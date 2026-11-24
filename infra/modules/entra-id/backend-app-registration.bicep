@@ -96,6 +96,7 @@ resource backendAppRegistration 'Microsoft.Graph/applications@v1.0' = {
   serviceManagementReference: serviceManagementReference != '' ? serviceManagementReference : null
 }
 
+@retryOn(['BadRequest']) // Retry on failure because the app registration might not be immediately available after creation
 resource backendServicePrincipal 'Microsoft.Graph/servicePrincipals@v1.0' = {
   appId: backendAppRegistration.appId
   appRoleAssignmentRequired: true // When true, clients must have an app role assigned in order to retrieve an access token
