@@ -95,7 +95,8 @@ jobs:
 
       - name: Build Integration Tests
         run: |
-          dotnet build ./tests/IntegrationTests/IntegrationTests.csproj --configuration Release --output ./artifacts/integration-tests
+          dotnet restore ./tests/IntegrationTests/IntegrationTests.csproj --locked-mode
+          dotnet build ./tests/IntegrationTests/IntegrationTests.csproj --no-restore --configuration Release --output ./artifacts/integration-tests
 
       - name: Upload Integration Tests Package
         uses: actions/upload-artifact@v7
